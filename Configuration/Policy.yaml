@@ -1,0 +1,11 @@
+privilegeTargets:
+  Neos\Flow\Security\Authorization\Privilege\Method\MethodPrivilege:
+    'Psmb.FlatNav:Backend':
+      matcher: 'method(Psmb\FlatNav\Controller\StandardController->(.*)Action())'
+
+roles:
+  'Neos.Neos:Editor':
+    privileges:
+      -
+        privilegeTarget: 'Psmb.FlatNav:Backend'
+        permission: GRANT

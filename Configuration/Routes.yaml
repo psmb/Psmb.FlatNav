@@ -1,0 +1,9 @@
+-
+  name: 'Psmb.FlatNav'
+  uriPattern: 'flatnav/{@action}'
+  defaults:
+    '@package':    'Psmb.FlatNav'
+    '@controller': 'Standard'
+    '@format':     'html'
+    '@action':     'query'
+  appendExceedingArguments: TRUE

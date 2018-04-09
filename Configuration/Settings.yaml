@@ -1,0 +1,39 @@
+Neos:
+  Neos:
+    Ui:
+      resources:
+        javascript:
+          'Psmb.FlatNav:FlatNav':
+            resource: resource://Psmb.FlatNav/Public/JavaScript/FlatNav/Plugin.js
+      frontendConfiguration:
+        Psmb_FlatNav:
+          presets:
+            # # Example using ElasticSearch
+            # news:
+            #   label: News
+            #   icon: newspaper
+            #   query: 'Search.query(node).nodeType("Your.Namespace:News").sortDesc("date").from((page - 1) * 20).limit(20).execute().toArray()'
+            #   newReferenceNodePath: '/sites/site'
+            #   newNodeType: 'Your.Namespace:News'
+            # # Example using FlowQuery
+            # tags:
+            #   label: Tags
+            #   icon: tag
+            #   query: 'q(node).find("[instanceof Your.Namespace:Tag]").sort("title", "ASC").slice((page - 1) * 20, page * 20).get()'
+            #   newReferenceNodePath: '/sites/site'
+            #   newNodeType: 'Your.Namespace:Tag'
+
+  Flow:
+    security:
+      authentication:
+        providers:
+          'Neos.Neos:Backend':
+            requestPatterns:
+              'Psmb.FlatNav:Backend':
+                pattern: ControllerObjectName
+                patternOptions:
+                  controllerObjectNamePattern: 'Psmb\FlatNav\Controller\.*'
+    mvc:
+      routes:
+        'Psmb.FlatNav':
+          position: 'before Neos.Neos'

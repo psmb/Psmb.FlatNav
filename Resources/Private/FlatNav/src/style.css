@@ -1,0 +1,20 @@
+.loadMoreButton {
+    width: 100% !important;
+    opacity: 1 !important;
+}
+
+.toolbar {
+    border-bottom: 1px solid var(--colors-ContrastDark);
+}
+
+.node {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+    padding: 3px 6px;
+    cursor: pointer;
+}
+.node--focused {
+    background-color: var(--colors-ContrastNeutral);
+}
