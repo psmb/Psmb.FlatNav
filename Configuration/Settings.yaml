@@ -8,6 +8,10 @@ Neos:
       frontendConfiguration:
         Psmb_FlatNav:
           presets:
+            tree:
+              type: tree
+              label: Tree
+              icon: tree
             # # Example using ElasticSearch
             # news:
             #   label: News

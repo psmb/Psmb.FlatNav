@@ -1,9 +1,22 @@
+import React from 'react';
 import manifest from '@neos-project/neos-ui-extensibility';
-import FlatNavContainer from './FlatNav';
+import makeFlatNavContainer from './FlatNav';
 
 manifest('Psmb.FlatNav:FlatNav', {}, globalRegistry => {
     const containerRegistry = globalRegistry.get('containers');
+    const PageTreeToolbar = containerRegistry.get('LeftSideBar/Top/PageTreeToolbar');
+    const PageTreeSearchbar = containerRegistry.get('LeftSideBar/Top/PageTreeSearchbar');
+    const PageTree = containerRegistry.get('LeftSideBar/Top/PageTree');
+
+    const OriginalTree = () => (
+        <div>
+            <PageTreeToolbar/>
+            <PageTreeSearchbar/>
+            <PageTree/>
+        </div>
+    );
     containerRegistry.set('LeftSideBar/Top/PageTreeToolbar', () => null);
     containerRegistry.set('LeftSideBar/Top/PageTreeSearchbar', () => null);
-    containerRegistry.set('LeftSideBar/Top/PageTree', FlatNavContainer);
+
+    containerRegistry.set('LeftSideBar/Top/PageTree', makeFlatNavContainer(OriginalTree));
 });

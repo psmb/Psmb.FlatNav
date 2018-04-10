@@ -102,6 +102,10 @@ __webpack_require__(2);
 "use strict";
 
 
+var _react = __webpack_require__(8);
+
+var _react2 = _interopRequireDefault(_react);
+
 var _neosUiExtensibility = __webpack_require__(3);
 
 var _neosUiExtensibility2 = _interopRequireDefault(_neosUiExtensibility);
@@ -114,13 +118,27 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 (0, _neosUiExtensibility2.default)('Psmb.FlatNav:FlatNav', {}, function (globalRegistry) {
     var containerRegistry = globalRegistry.get('containers');
+    var PageTreeToolbar = containerRegistry.get('LeftSideBar/Top/PageTreeToolbar');
+    var PageTreeSearchbar = containerRegistry.get('LeftSideBar/Top/PageTreeSearchbar');
+    var PageTree = containerRegistry.get('LeftSideBar/Top/PageTree');
+
+    var OriginalTree = function OriginalTree() {
+        return _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(PageTreeToolbar, null),
+            _react2.default.createElement(PageTreeSearchbar, null),
+            _react2.default.createElement(PageTree, null)
+        );
+    };
     containerRegistry.set('LeftSideBar/Top/PageTreeToolbar', function () {
         return null;
     });
     containerRegistry.set('LeftSideBar/Top/PageTreeSearchbar', function () {
         return null;
     });
-    containerRegistry.set('LeftSideBar/Top/PageTree', _FlatNav2.default);
+
+    containerRegistry.set('LeftSideBar/Top/PageTree', (0, _FlatNav2.default)(OriginalTree));
 });
 
 /***/ }),
@@ -228,13 +246,12 @@ exports.default = function (manifests) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.default = undefined;
+
+var _dec, _dec2, _class2, _class3, _temp2;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _dec, _dec2, _class, _dec3, _dec4, _class3, _class4, _temp2;
 
 var _react = __webpack_require__(8);
 
@@ -276,94 +293,100 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var FlatNavContainer = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
-    return {
-        options: globalRegistry.get('frontendConfiguration').get('Psmb_FlatNav')
-    };
-}), _dec2 = (0, _reactRedux.connect)((0, _plowJs.$transform)({}), {
-    add: _neosUiReduxStore.actions.CR.Nodes.add
-}), _dec(_class = _dec2(_class = function (_Component) {
-    _inherits(FlatNavContainer, _Component);
+var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
+    var FlatNavContainer = function (_Component) {
+        _inherits(FlatNavContainer, _Component);
 
-    function FlatNavContainer(props) {
-        _classCallCheck(this, FlatNavContainer);
+        function FlatNavContainer(props) {
+            _classCallCheck(this, FlatNavContainer);
 
-        var _this = _possibleConstructorReturn(this, (FlatNavContainer.__proto__ || Object.getPrototypeOf(FlatNavContainer)).call(this, props));
+            var _this = _possibleConstructorReturn(this, (FlatNavContainer.__proto__ || Object.getPrototypeOf(FlatNavContainer)).call(this, props));
 
-        _this.state = {};
+            _this.state = {};
 
-        _this.makeFetchNodes = function (preset) {
-            return function () {
-                _this.setState(_defineProperty({}, preset, {
-                    isLoading: true,
-                    page: _this.state[preset].page,
-                    nodes: _this.state[preset].nodes
-                }));
-                _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
-                    return {
-                        url: '/flatnav/query?preset=' + preset + '&page=' + _this.state[preset].page,
-                        method: 'GET',
-                        credentials: 'include',
-                        headers: {
-                            'X-Flow-Csrftoken': csrfToken,
-                            'Content-Type': 'application/json'
-                        }
-                    };
-                }).then(function (response) {
-                    return response && response.json();
-                }).then(function (nodes) {
-                    var nodesMap = nodes.reduce(function (result, node) {
-                        result[node.contextPath] = node;
-                        return result;
-                    }, {});
-                    _this.props.add(nodesMap);
+            _this.makeFetchNodes = function (preset) {
+                return function () {
                     _this.setState(_defineProperty({}, preset, {
-                        isLoading: false,
-                        page: _this.state[preset].page + 1,
-                        nodes: [].concat(_toConsumableArray(_this.state[preset].nodes), _toConsumableArray(Object.keys(nodesMap)))
+                        isLoading: true,
+                        page: _this.state[preset].page,
+                        nodes: _this.state[preset].nodes
                     }));
-                });
+                    _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
+                        return {
+                            url: '/flatnav/query?preset=' + preset + '&page=' + _this.state[preset].page,
+                            method: 'GET',
+                            credentials: 'include',
+                            headers: {
+                                'X-Flow-Csrftoken': csrfToken,
+                                'Content-Type': 'application/json'
+                            }
+                        };
+                    }).then(function (response) {
+                        return response && response.json();
+                    }).then(function (nodes) {
+                        var nodesMap = nodes.reduce(function (result, node) {
+                            result[node.contextPath] = node;
+                            return result;
+                        }, {});
+                        _this.props.add(nodesMap);
+                        _this.setState(_defineProperty({}, preset, {
+                            isLoading: false,
+                            page: _this.state[preset].page + 1,
+                            nodes: [].concat(_toConsumableArray(_this.state[preset].nodes), _toConsumableArray(Object.keys(nodesMap)))
+                        }));
+                    });
+                };
             };
-        };
 
-        Object.keys(_this.props.options.presets).forEach(function (preset) {
-            _this.state[preset] = {
-                page: 1,
-                isLoading: false,
-                nodes: []
-            };
-        });
-        return _this;
-    }
-
-    _createClass(FlatNavContainer, [{
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            return _react2.default.createElement(
-                _reactUiComponents.Tabs,
-                null,
-                Object.keys(this.props.options.presets).map(function (presetName) {
-                    var preset = _this2.props.options.presets[presetName];
-                    return _react2.default.createElement(
-                        _reactUiComponents.Tabs.Panel,
-                        { key: presetName, title: preset.label, icon: preset.icon },
-                        _react2.default.createElement(FlatNav, _extends({ preset: preset, fetchNodes: _this2.makeFetchNodes(presetName) }, _this2.state[presetName]))
-                    );
-                })
-            );
+            Object.keys(_this.props.options.presets).forEach(function (preset) {
+                _this.state[preset] = {
+                    page: 1,
+                    isLoading: false,
+                    nodes: []
+                };
+            });
+            return _this;
         }
-    }]);
 
-    return FlatNavContainer;
-}(_react.Component)) || _class) || _class);
-exports.default = FlatNavContainer;
-var FlatNav = (_dec3 = (0, _neosUiDecorators.neos)(function (globalRegistry) {
+        _createClass(FlatNavContainer, [{
+            key: 'render',
+            value: function render() {
+                var _this2 = this;
+
+                return _react2.default.createElement(
+                    _reactUiComponents.Tabs,
+                    null,
+                    Object.keys(this.props.options.presets).map(function (presetName) {
+                        var preset = _this2.props.options.presets[presetName];
+                        return _react2.default.createElement(
+                            _reactUiComponents.Tabs.Panel,
+                            { key: presetName, icon: preset.icon, tooltip: preset.label },
+                            preset.type === 'flat' && _react2.default.createElement(FlatNav, _extends({ preset: preset, fetchNodes: _this2.makeFetchNodes(presetName) }, _this2.state[presetName])),
+                            preset.type === 'tree' && _react2.default.createElement(OriginalPageTree, null)
+                        );
+                    })
+                );
+            }
+        }]);
+
+        return FlatNavContainer;
+    }(_react.Component);
+
+    return (0, _neosUiDecorators.neos)(function (globalRegistry) {
+        return {
+            options: globalRegistry.get('frontendConfiguration').get('Psmb_FlatNav')
+        };
+    })((0, _reactRedux.connect)((0, _plowJs.$transform)({}), {
+        add: _neosUiReduxStore.actions.CR.Nodes.add
+    })(FlatNavContainer));
+};
+
+exports.default = makeFlatNavContainer;
+var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     return {
         nodeTypesRegistry: globalRegistry.get('@neos-project/neos-ui-contentrepository')
     };
-}), _dec4 = (0, _reactRedux.connect)((0, _plowJs.$transform)({
+}), _dec2 = (0, _reactRedux.connect)((0, _plowJs.$transform)({
     nodeData: (0, _plowJs.$get)('cr.nodes.byContextPath'),
     focused: (0, _plowJs.$get)('ui.pageTree.isFocused'),
     siteNodeContextPath: (0, _plowJs.$get)('cr.nodes.siteNode')
@@ -373,7 +396,7 @@ var FlatNav = (_dec3 = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     openNodeCreationDialog: _neosUiReduxStore.actions.UI.NodeCreationDialog.open,
     commenceNodeCreation: _neosUiReduxStore.actions.CR.Nodes.commenceCreation,
     selectNodeType: _neosUiReduxStore.actions.UI.SelectNodeTypeModal.apply
-}), _dec3(_class3 = _dec4(_class3 = (_temp2 = _class4 = function (_Component2) {
+}), _dec(_class2 = _dec2(_class2 = (_temp2 = _class3 = function (_Component2) {
     _inherits(FlatNav, _Component2);
 
     function FlatNav() {
@@ -465,12 +488,12 @@ var FlatNav = (_dec3 = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     }]);
 
     return FlatNav;
-}(_react.Component), _class4.propTypes = {
+}(_react.Component), _class3.propTypes = {
     nodes: _propTypes2.default.array.isRequired,
     preset: _propTypes2.default.object.isRequired,
     isLoading: _propTypes2.default.bool.isRequired,
     page: _propTypes2.default.number.isRequired
-}, _temp2)) || _class3) || _class3);
+}, _temp2)) || _class2) || _class2);
 
 /***/ }),
 /* 8 */

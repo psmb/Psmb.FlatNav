@@ -9,75 +9,79 @@ import {fetchWithErrorHandling} from '@neos-project/neos-ui-backend-connector';
 import mergeClassNames from 'classnames';
 import style from './style.css';
 
-@neos(globalRegistry => ({
-    options: globalRegistry.get('frontendConfiguration').get('Psmb_FlatNav')
-}))
-@connect($transform({}), {
-    add: actions.CR.Nodes.add
-})
-export default class FlatNavContainer extends Component {
-    state = {};
+const makeFlatNavContainer = OriginalPageTree => {
+    class FlatNavContainer extends Component {
+        state = {};
 
-    constructor(props) {
-        super(props);
-        Object.keys(this.props.options.presets).forEach(preset => {
-            this.state[preset] = {
-                page: 1,
-                isLoading: false,
-                nodes: []
-            };
-        });
-    }
-
-    makeFetchNodes = preset => () => {
-        this.setState({
-            [preset]: {
-                isLoading: true,
-                page: this.state[preset].page,
-                nodes: this.state[preset].nodes
-            }
-        });
-        fetchWithErrorHandling.withCsrfToken(csrfToken => ({
-            url: `/flatnav/query?preset=${preset}&page=${this.state[preset].page}`,
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'X-Flow-Csrftoken': csrfToken,
-                'Content-Type': 'application/json'
-            }
-        }))
-            .then(response => response && response.json())
-            .then(nodes => {
-                const nodesMap = nodes.reduce((result, node) => {
-                    result[node.contextPath] = node;
-                    return result;
-                }, {});
-                this.props.add(nodesMap);
-                this.setState({
-                    [preset]: {
-                        isLoading: false,
-                        page: this.state[preset].page + 1,
-                        nodes: [...this.state[preset].nodes, ...Object.keys(nodesMap)]
-                    }
-                });
+        constructor(props) {
+            super(props);
+            Object.keys(this.props.options.presets).forEach(preset => {
+                this.state[preset] = {
+                    page: 1,
+                    isLoading: false,
+                    nodes: []
+                };
             });
-    };
+        }
 
-    render() {
-        return (
-            <Tabs>
-                {Object.keys(this.props.options.presets).map(presetName => {
-                    const preset = this.props.options.presets[presetName];
-                    return (
-                        <Tabs.Panel key={presetName} title={preset.label} icon={preset.icon}>
-                            <FlatNav preset={preset} fetchNodes={this.makeFetchNodes(presetName)} {...this.state[presetName]} />
-                        </Tabs.Panel>
-                    );
-                })}
-            </Tabs>
-        );
+        makeFetchNodes = preset => () => {
+            this.setState({
+                [preset]: {
+                    isLoading: true,
+                    page: this.state[preset].page,
+                    nodes: this.state[preset].nodes
+                }
+            });
+            fetchWithErrorHandling.withCsrfToken(csrfToken => ({
+                url: `/flatnav/query?preset=${preset}&page=${this.state[preset].page}`,
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'X-Flow-Csrftoken': csrfToken,
+                    'Content-Type': 'application/json'
+                }
+            }))
+                .then(response => response && response.json())
+                .then(nodes => {
+                    const nodesMap = nodes.reduce((result, node) => {
+                        result[node.contextPath] = node;
+                        return result;
+                    }, {});
+                    this.props.add(nodesMap);
+                    this.setState({
+                        [preset]: {
+                            isLoading: false,
+                            page: this.state[preset].page + 1,
+                            nodes: [...this.state[preset].nodes, ...Object.keys(nodesMap)]
+                        }
+                    });
+                });
+        };
+
+        render() {
+            return (
+                <Tabs>
+                    {Object.keys(this.props.options.presets).map(presetName => {
+                        const preset = this.props.options.presets[presetName];
+                        return (
+                            <Tabs.Panel key={presetName} icon={preset.icon} tooltip={preset.label}>
+                                {preset.type === 'flat' && (<FlatNav preset={preset} fetchNodes={this.makeFetchNodes(presetName)} {...this.state[presetName]} />)}
+                                {preset.type === 'tree' && (<OriginalPageTree />)}
+                            </Tabs.Panel>
+                        );
+                    })}
+                </Tabs>
+            );
+        }
     }
-}
+    return neos(globalRegistry => ({
+        options: globalRegistry.get('frontendConfiguration').get('Psmb_FlatNav')
+    }))(connect($transform({}), {
+        add: actions.CR.Nodes.add
+    })(FlatNavContainer));
+};
+
+export default makeFlatNavContainer;
 
 @neos(globalRegistry => ({
     nodeTypesRegistry: globalRegistry.get('@neos-project/neos-ui-contentrepository')
