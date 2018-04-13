@@ -2,7 +2,7 @@
 
 Sometimes your content is better represented as just a flat lists of entities (e.g. News or Tags), and not as a tree. This package helps you to do just that:
 
-![Demo](https://raw.githubusercontent.com/psmb/Psmb.CreateNodeButton/master/demo.gif)
+![Demo](https://raw.githubusercontent.com/psmb/Psmb.FlatNav/master/flatnav.gif)
 
 Getting started:
 
