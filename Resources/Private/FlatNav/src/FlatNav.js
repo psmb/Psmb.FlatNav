@@ -77,7 +77,7 @@ const makeFlatNavContainer = OriginalPageTree => {
         }
     }
     return neos(globalRegistry => ({
-        options: globalRegistry.get('frontendConfiguration').get('Psmb_FlatNav'),
+        options: globalRegistry.get('frontendConfiguration').get('Psmb_FlatNav')
     }))(connect($transform({
         siteNodeContextPath: $get('cr.nodes.siteNode')
     }), {
