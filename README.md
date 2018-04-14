@@ -9,4 +9,4 @@ Getting started:
 1. `composer require 'psmb/flatnav@dev'`
 2. Use these Settings to configure the views of entities to show: https://github.com/psmb/Psmb.FlatNav/blob/master/Configuration/Settings.yaml#L15
 
-**Not production ready yet, wait a few days or help**
+**Contributions are welcome!**
