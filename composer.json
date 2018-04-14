@@ -10,6 +10,7 @@
             "Psmb\\FlatNav\\": "Classes/"
         }
     },
+    "license": "GPL-3.0-or-later",
     "extra": {
         "neos": {
             "package-key": "Psmb.FlatNav"
