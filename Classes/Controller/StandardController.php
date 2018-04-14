@@ -43,18 +43,19 @@ class StandardController extends ActionController
     protected $eelEvaluator;
 
     /**
-     * @param string $preset
-     * @param integer $page
+     * @param string $preset The preset, configured in Settings.yaml
+     * @param string $nodeContextPath The context path of the node that will be available as `node` context var in Eel
+     * @param integer $page Page parameter used for pagination
      * @return void
      * @Flow\SkipCsrfProtection
      */
-    public function queryAction($preset, $page = 1)
+    public function queryAction($preset, $nodeContextPath, $page = 1)
     {
         if (!isset($this->presets[$preset])) {
             throw new \Exception('Invalid preset name');
         }
         $expression = '${' . $this->presets[$preset]['query'] . '}';
-        $baseNode = $this->nodeService->getNodeFromContextPath('/sites/site@user-dimaip;language=ru', null, null, true);
+        $baseNode = $this->nodeService->getNodeFromContextPath($nodeContextPath, null, null, true);
         $contextVariables = [
             'node' => $baseNode,
             'page' => $page

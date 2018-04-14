@@ -6,6 +6,8 @@ import {connect} from 'react-redux';
 import {actions} from '@neos-project/neos-ui-redux-store';
 import {neos} from '@neos-project/neos-ui-decorators';
 import {fetchWithErrorHandling} from '@neos-project/neos-ui-backend-connector';
+import HideSelectedNode from './HideSelectedNode';
+import DeleteSelectedNode from './DeleteSelectedNode';
 import mergeClassNames from 'classnames';
 import style from './style.css';
 
@@ -33,7 +35,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                 }
             });
             fetchWithErrorHandling.withCsrfToken(csrfToken => ({
-                url: `/flatnav/query?preset=${preset}&page=${this.state[preset].page}`,
+                url: `/flatnav/query?nodeContextPath=${this.props.siteNodeContextPath}&preset=${preset}&page=${this.state[preset].page}`,
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -75,8 +77,10 @@ const makeFlatNavContainer = OriginalPageTree => {
         }
     }
     return neos(globalRegistry => ({
-        options: globalRegistry.get('frontendConfiguration').get('Psmb_FlatNav')
-    }))(connect($transform({}), {
+        options: globalRegistry.get('frontendConfiguration').get('Psmb_FlatNav'),
+    }))(connect($transform({
+        siteNodeContextPath: $get('cr.nodes.siteNode')
+    }), {
         add: actions.CR.Nodes.add
     })(FlatNavContainer));
 };
@@ -122,52 +126,56 @@ class FlatNav extends Component {
         return this.props.nodes
             .map(contextPath => {
                 const item = $get([contextPath], this.props.nodeData);
-                const nodeTypeName = $get('nodeType', item);
-                const nodeType = this.props.nodeTypesRegistry.getNodeType(nodeTypeName);
-                return (
-                    <div
-                        className={mergeClassNames({
-                            [style.node]: true,
-                            [style['node--focused']]: this.props.focused === contextPath
-                        })}
-                        key={contextPath}
-                        onClick={() => {
-                            this.props.setSrc($get('uri', item));
-                            this.props.focus(contextPath);
-                        }}
-                        role="button"
-                        >
-                        <Icon icon={$get('ui.icon', nodeType)} /> {$get('label', item)}
-                    </div>
-                );
-            });
+                if (item) {
+                    const nodeTypeName = $get('nodeType', item);
+                    const nodeType = this.props.nodeTypesRegistry.getNodeType(nodeTypeName);
+                    return (
+                        <div
+                            className={mergeClassNames({
+                                [style.node]: true,
+                                [style['node--focused']]: this.props.focused === contextPath
+                            })}
+                            key={contextPath}
+                            onClick={() => {
+                                this.props.setSrc($get('uri', item));
+                                this.props.focus(contextPath);
+                            }}
+                            role="button"
+                            >
+                            <Icon icon={$get('ui.icon', nodeType)} /> {$get('label', item)}
+                        </div>
+                    );
+                }
+                return null;
+            }).filter(i => i);
     };
 
     render() {
         return (
             <div style={{overflow: 'hidden'}}>
-                <div style={{overflowY: 'auto'}}>
-                    <div className={style.toolbar}>
-                        <IconButton icon="plus" onClick={this.createNode}/>
-                    </div>
-
-                    {this.renderNodes()}
-
-                    <Button
-                        onClick={this.props.fetchNodes}
-                        style="clean"
-                        className={style.loadMoreButton}
-                        isDisabled={this.props.isLoading}
-                    >
-                        <div style={{textAlign: 'center'}}>
-                            <Icon
-                                spin={this.props.isLoading}
-                                icon={this.props.isLoading ? 'spinner' : 'angle-double-down'}
-                            />
-                            &nbsp;{this.props.isLoading ? 'Loading...' : 'Load more'}
-                        </div>
-                    </Button>
+                <div className={style.toolbar}>
+                    <IconButton icon="plus" onClick={this.createNode}/>
+                    <HideSelectedNode/>
+                    <DeleteSelectedNode/>
                 </div>
+
+                <div style={{overflowY: 'auto'}}>
+                    {this.renderNodes()}
+                </div>
+                <Button
+                    onClick={this.props.fetchNodes}
+                    style="clean"
+                    className={style.loadMoreButton}
+                    isDisabled={this.props.isLoading}
+                >
+                    <div style={{textAlign: 'center'}}>
+                        <Icon
+                            spin={this.props.isLoading}
+                            icon={this.props.isLoading ? 'spinner' : 'angle-double-down'}
+                        />
+                        &nbsp;{this.props.isLoading ? 'Loading...' : 'Load more'}
+                    </div>
+                </Button>
             </div>
         );
     }
