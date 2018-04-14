@@ -441,7 +441,7 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                             result[node.contextPath] = node;
                             return result;
                         }, {});
-                        _this.props.add(nodesMap);
+                        _this.props.merge(nodesMap);
                         _this.setState(_defineProperty({}, preset, {
                             isLoading: false,
                             page: _this.state[preset].page + 1,
@@ -492,7 +492,7 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
     })((0, _reactRedux.connect)((0, _plowJs.$transform)({
         siteNodeContextPath: (0, _plowJs.$get)('cr.nodes.siteNode')
     }), {
-        add: _neosUiReduxStore.actions.CR.Nodes.add
+        merge: _neosUiReduxStore.actions.CR.Nodes.merge
     })(FlatNavContainer));
 };
 

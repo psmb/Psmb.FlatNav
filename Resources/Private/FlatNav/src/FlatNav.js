@@ -49,7 +49,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                         result[node.contextPath] = node;
                         return result;
                     }, {});
-                    this.props.add(nodesMap);
+                    this.props.merge(nodesMap);
                     this.setState({
                         [preset]: {
                             isLoading: false,
@@ -81,7 +81,7 @@ const makeFlatNavContainer = OriginalPageTree => {
     }))(connect($transform({
         siteNodeContextPath: $get('cr.nodes.siteNode')
     }), {
-        add: actions.CR.Nodes.add
+        merge: actions.CR.Nodes.merge
     })(FlatNavContainer));
 };
 
