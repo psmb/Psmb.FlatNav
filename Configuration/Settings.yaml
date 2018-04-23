@@ -16,6 +16,7 @@ Neos:
             # news:
             #   label: News
             #   icon: newspaper
+            #   type: flat
             #   query: 'Search.query(node).nodeType("Your.Namespace:News").sortDesc("date").from((page - 1) * 20).limit(20).execute().toArray()'
             #   newReferenceNodePath: '/sites/site'
             #   newNodeType: 'Your.Namespace:News'
@@ -23,6 +24,7 @@ Neos:
             # tags:
             #   label: Tags
             #   icon: tag
+            #   type: flat
             #   query: 'q(node).find("[instanceof Your.Namespace:Tag]").sort("title", "ASC").slice((page - 1) * 20, page * 20).get()'
             #   newReferenceNodePath: '/sites/site'
             #   newNodeType: 'Your.Namespace:Tag'
