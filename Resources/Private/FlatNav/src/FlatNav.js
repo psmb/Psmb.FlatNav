@@ -21,7 +21,8 @@ const makeFlatNavContainer = OriginalPageTree => {
                 this.state[preset] = {
                     page: 1,
                     isLoading: false,
-                    nodes: []
+                    nodes: [],
+                    moreNodesAvailable: true
                 };
             });
         }
@@ -31,7 +32,8 @@ const makeFlatNavContainer = OriginalPageTree => {
                 [preset]: {
                     isLoading: true,
                     page: this.state[preset].page,
-                    nodes: this.state[preset].nodes
+                    nodes: this.state[preset].nodes,
+                    moreNodesAvailable: true
                 }
             });
             fetchWithErrorHandling.withCsrfToken(csrfToken => ({
@@ -45,18 +47,30 @@ const makeFlatNavContainer = OriginalPageTree => {
             }))
                 .then(response => response && response.json())
                 .then(nodes => {
-                    const nodesMap = nodes.reduce((result, node) => {
-                        result[node.contextPath] = node;
-                        return result;
-                    }, {});
-                    this.props.merge(nodesMap);
-                    this.setState({
-                        [preset]: {
-                            isLoading: false,
-                            page: this.state[preset].page + 1,
-                            nodes: [...this.state[preset].nodes, ...Object.keys(nodesMap)]
-                        }
-                    });
+                    if (nodes.length > 0) {
+                        const nodesMap = nodes.reduce((result, node) => {
+                            result[node.contextPath] = node;
+                            return result;
+                        }, {});
+                        this.props.merge(nodesMap);
+                        this.setState({
+                            [preset]: {
+                                isLoading: false,
+                                page: this.state[preset].page + 1,
+                                nodes: [...this.state[preset].nodes, ...Object.keys(nodesMap)],
+                                moreNodesAvailable: true
+                            }
+                        });
+                    } else {
+                        this.setState({
+                            [preset]: {
+                                isLoading: false,
+                                page: this.state[preset].page,
+                                nodes: this.state[preset].nodes,
+                                moreNodesAvailable: false
+                            }
+                        });
+                    }
                 });
         };
 
@@ -106,7 +120,8 @@ class FlatNav extends Component {
         nodes: PropTypes.array.isRequired,
         preset: PropTypes.object.isRequired,
         isLoading: PropTypes.bool.isRequired,
-        page: PropTypes.number.isRequired
+        page: PropTypes.number.isRequired,
+        moreNodesAvailable: PropTypes.bool.isRequired
     };
 
     componentDidMount() {
@@ -162,7 +177,7 @@ class FlatNav extends Component {
                 <div style={{overflowY: 'auto'}}>
                     {this.renderNodes()}
                 </div>
-                <Button
+                {this.props.moreNodesAvailable && (<Button
                     onClick={this.props.fetchNodes}
                     style="clean"
                     className={style.loadMoreButton}
@@ -175,7 +190,7 @@ class FlatNav extends Component {
                         />
                         &nbsp;{this.props.isLoading ? 'Loading...' : 'Load more'}
                     </div>
-                </Button>
+                </Button>)}
             </div>
         );
     }

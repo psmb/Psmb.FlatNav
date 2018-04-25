@@ -422,7 +422,8 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                     _this.setState(_defineProperty({}, preset, {
                         isLoading: true,
                         page: _this.state[preset].page,
-                        nodes: _this.state[preset].nodes
+                        nodes: _this.state[preset].nodes,
+                        moreNodesAvailable: true
                     }));
                     _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
                         return {
@@ -437,16 +438,26 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                     }).then(function (response) {
                         return response && response.json();
                     }).then(function (nodes) {
-                        var nodesMap = nodes.reduce(function (result, node) {
-                            result[node.contextPath] = node;
-                            return result;
-                        }, {});
-                        _this.props.merge(nodesMap);
-                        _this.setState(_defineProperty({}, preset, {
-                            isLoading: false,
-                            page: _this.state[preset].page + 1,
-                            nodes: [].concat(_toConsumableArray(_this.state[preset].nodes), _toConsumableArray(Object.keys(nodesMap)))
-                        }));
+                        if (nodes.length > 0) {
+                            var nodesMap = nodes.reduce(function (result, node) {
+                                result[node.contextPath] = node;
+                                return result;
+                            }, {});
+                            _this.props.merge(nodesMap);
+                            _this.setState(_defineProperty({}, preset, {
+                                isLoading: false,
+                                page: _this.state[preset].page + 1,
+                                nodes: [].concat(_toConsumableArray(_this.state[preset].nodes), _toConsumableArray(Object.keys(nodesMap))),
+                                moreNodesAvailable: true
+                            }));
+                        } else {
+                            _this.setState(_defineProperty({}, preset, {
+                                isLoading: false,
+                                page: _this.state[preset].page,
+                                nodes: _this.state[preset].nodes,
+                                moreNodesAvailable: false
+                            }));
+                        }
                     });
                 };
             };
@@ -455,7 +466,8 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                 _this.state[preset] = {
                     page: 1,
                     isLoading: false,
-                    nodes: []
+                    nodes: [],
+                    moreNodesAvailable: true
                 };
             });
             return _this;
@@ -586,7 +598,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                     { style: { overflowY: 'auto' } },
                     this.renderNodes()
                 ),
-                _react2.default.createElement(
+                this.props.moreNodesAvailable && _react2.default.createElement(
                     _reactUiComponents.Button,
                     {
                         onClick: this.props.fetchNodes,
@@ -614,7 +626,8 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     nodes: _propTypes2.default.array.isRequired,
     preset: _propTypes2.default.object.isRequired,
     isLoading: _propTypes2.default.bool.isRequired,
-    page: _propTypes2.default.number.isRequired
+    page: _propTypes2.default.number.isRequired,
+    moreNodesAvailable: _propTypes2.default.bool.isRequired
 }, _temp2)) || _class2) || _class2);
 
 /***/ }),
