@@ -156,13 +156,15 @@ class FlatNav extends Component {
     componentDidMount() {
         if (this.props.nodes.length === 0) {
             this.props.fetchNodes();
-            this.props.fetchNewReferenceNodePath();
+            if (this.props.preset.newReferenceNodePath.indexOf('/') !== 0) {
+                this.props.fetchNewReferenceNodePath();
+            }
         }
     }
 
     createNode = () => {
         const context = this.props.siteNodeContextPath.split('@')[1];
-        const contextPath = this.props.preset.newReferenceNodePath + '@' + context;
+        const contextPath = (this.props.newReferenceNodePath || this.props.preset.newReferenceNodePath) + '@' + context;
         this.props.commenceNodeCreation(contextPath);
         this.props.selectNodeType('into', this.props.preset.newNodeType);
     }

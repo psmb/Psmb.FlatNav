@@ -423,8 +423,7 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                         isLoading: true,
                         page: _this.state[preset].page,
                         nodes: _this.state[preset].nodes,
-                        newReferenceNodePath: _this.state[preset].newReferenceNodePath,
-                        moreNodesAvailable: true
+                        newReferenceNodePath: _this.state[preset].newReferenceNodePath
                     }));
                     _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
                         return {
@@ -439,28 +438,17 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                     }).then(function (response) {
                         return response && response.json();
                     }).then(function (nodes) {
-                        if (nodes.length > 0) {
-                            var nodesMap = nodes.reduce(function (result, node) {
-                                result[node.contextPath] = node;
-                                return result;
-                            }, {});
-                            _this.props.merge(nodesMap);
-                            _this.setState(_defineProperty({}, preset, {
-                                isLoading: false,
-                                page: _this.state[preset].page + 1,
-                                nodes: [].concat(_toConsumableArray(_this.state[preset].nodes), _toConsumableArray(Object.keys(nodesMap))),
-                                newReferenceNodePath: _this.state[preset].newReferenceNodePath,
-                                moreNodesAvailable: true
-                            }));
-                        } else {
-                            _this.setState(_defineProperty({}, preset, {
-                                isLoading: false,
-                                page: _this.state[preset].page,
-                                nodes: _this.state[preset].nodes,
-                                newReferenceNodePath: _this.state[preset].newReferenceNodePath,
-                                moreNodesAvailable: false
-                            }));
-                        }
+                        var nodesMap = nodes.reduce(function (result, node) {
+                            result[node.contextPath] = node;
+                            return result;
+                        }, {});
+                        _this.props.merge(nodesMap);
+                        _this.setState(_defineProperty({}, preset, {
+                            isLoading: false,
+                            page: _this.state[preset].page + 1,
+                            nodes: [].concat(_toConsumableArray(_this.state[preset].nodes), _toConsumableArray(Object.keys(nodesMap))),
+                            newReferenceNodePath: _this.state[preset].newReferenceNodePath
+                        }));
                     });
                 };
             };
@@ -484,8 +472,7 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                             isLoading: false,
                             page: _this.state[preset].page,
                             nodes: _this.state[preset].nodes,
-                            newReferenceNodePath: newReferenceNodePath,
-                            moreNodesAvailable: _this.state[preset].moreNodesAvailable
+                            newReferenceNodePath: newReferenceNodePath
                         }));
                     });
                 };
@@ -496,7 +483,6 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                     page: 1,
                     isLoading: false,
                     nodes: [],
-                    moreNodesAvailable: true,
                     newReferenceNodePath: ''
                 };
             });
@@ -569,7 +555,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
 
         return _ret = (_temp = (_this3 = _possibleConstructorReturn(this, (_ref = FlatNav.__proto__ || Object.getPrototypeOf(FlatNav)).call.apply(_ref, [this].concat(args))), _this3), _this3.createNode = function () {
             var context = _this3.props.siteNodeContextPath.split('@')[1];
-            var contextPath = _this3.props.preset.newReferenceNodePath + '@' + context;
+            var contextPath = (_this3.props.newReferenceNodePath || _this3.props.preset.newReferenceNodePath) + '@' + context;
             _this3.props.commenceNodeCreation(contextPath);
             _this3.props.selectNodeType('into', _this3.props.preset.newNodeType);
         }, _this3.renderNodes = function () {
@@ -608,7 +594,9 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
         value: function componentDidMount() {
             if (this.props.nodes.length === 0) {
                 this.props.fetchNodes();
-                this.props.fetchNewReferenceNodePath();
+                if (this.props.preset.newReferenceNodePath.indexOf('/') !== 0) {
+                    this.props.fetchNewReferenceNodePath();
+                }
             }
         }
     }, {
@@ -629,7 +617,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                     { style: { overflowY: 'auto' } },
                     this.renderNodes()
                 ),
-                this.props.moreNodesAvailable && _react2.default.createElement(
+                _react2.default.createElement(
                     _reactUiComponents.Button,
                     {
                         onClick: this.props.fetchNodes,
@@ -658,8 +646,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     preset: _propTypes2.default.object.isRequired,
     isLoading: _propTypes2.default.bool.isRequired,
     page: _propTypes2.default.number.isRequired,
-    newReferenceNodePath: _propTypes2.default.string.isRequired,
-    moreNodesAvailable: _propTypes2.default.bool.isRequired
+    newReferenceNodePath: _propTypes2.default.string.isRequired
 }, _temp2)) || _class2) || _class2);
 
 /***/ }),
