@@ -21,6 +21,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                 this.state[preset] = {
                     page: 1,
                     isLoading: false,
+                    isLoadingReferenceNodePath: false,
                     nodes: [],
                     moreNodesAvailable: true,
                     newReferenceNodePath: ''
@@ -31,11 +32,12 @@ const makeFlatNavContainer = OriginalPageTree => {
         makeFetchNodes = preset => () => {
             this.setState({
                 [preset]: {
-                    isLoading: true,
                     page: this.state[preset].page,
+                    isLoading: true,
+                    isLoadingReferenceNodePath: this.state[preset].isLoadingReferenceNodePath,
                     nodes: this.state[preset].nodes,
-                    newReferenceNodePath: this.state[preset].newReferenceNodePath,
-                    moreNodesAvailable: true
+                    moreNodesAvailable: true,
+                    newReferenceNodePath: this.state[preset].newReferenceNodePath
                 }
             });
             fetchWithErrorHandling.withCsrfToken(csrfToken => ({
@@ -57,21 +59,23 @@ const makeFlatNavContainer = OriginalPageTree => {
                         this.props.merge(nodesMap);
                         this.setState({
                             [preset]: {
-                                isLoading: false,
                                 page: this.state[preset].page + 1,
+                                isLoading: false,
+                                isLoadingReferenceNodePath: this.state[preset].isLoadingReferenceNodePath,
                                 nodes: [...this.state[preset].nodes, ...Object.keys(nodesMap)],
-                                newReferenceNodePath: this.state[preset].newReferenceNodePath,
-                                moreNodesAvailable: true
+                                moreNodesAvailable: true,
+                                newReferenceNodePath: this.state[preset].newReferenceNodePath
                             }
                         });
                     } else {
                         this.setState({
                             [preset]: {
-                                isLoading: false,
                                 page: this.state[preset].page,
+                                isLoading: false,
+                                isLoadingReferenceNodePath: this.state[preset].isLoadingReferenceNodePath,
                                 nodes: this.state[preset].nodes,
-                                newReferenceNodePath: this.state[preset].newReferenceNodePath,
-                                moreNodesAvailable: false
+                                moreNodesAvailable: false,
+                                newReferenceNodePath: this.state[preset].newReferenceNodePath
                             }
                         });
                     }
@@ -79,6 +83,16 @@ const makeFlatNavContainer = OriginalPageTree => {
         };
 
         makeGetNewReferenceNodePath = preset => () => {
+            this.setState({
+                [preset]: {
+                    page: this.state[preset].page,
+                    isLoading: this.state[preset].isLoading,
+                    isLoadingReferenceNodePath: true,
+                    nodes: this.state[preset].nodes,
+                    moreNodesAvailable: this.state[preset].moreNodesAvailable,
+                    newReferenceNodePath: this.state[preset].newReferenceNodePath
+                }
+            });
             fetchWithErrorHandling.withCsrfToken(csrfToken => ({
                 url: `/flatnav/getNewReferenceNodePath?nodeContextPath=${this.props.siteNodeContextPath}&preset=${preset}`,
                 method: 'GET',
@@ -92,11 +106,12 @@ const makeFlatNavContainer = OriginalPageTree => {
                 .then(newReferenceNodePath => {
                     this.setState({
                         [preset]: {
-                            isLoading: false,
                             page: this.state[preset].page,
+                            isLoading: false,
+                            isLoadingReferenceNodePath: false,
                             nodes: this.state[preset].nodes,
-                            newReferenceNodePath: newReferenceNodePath,
-                            moreNodesAvailable: this.state[preset].moreNodesAvailable
+                            moreNodesAvailable: this.state[preset].moreNodesAvailable,
+                            newReferenceNodePath: newReferenceNodePath
                         }
                     });
                 });
@@ -148,6 +163,7 @@ class FlatNav extends Component {
         nodes: PropTypes.array.isRequired,
         preset: PropTypes.object.isRequired,
         isLoading: PropTypes.bool.isRequired,
+        isLoadingReferenceNodePath: PropTypes.bool.isRequired,
         page: PropTypes.number.isRequired,
         newReferenceNodePath: PropTypes.string.isRequired,
         moreNodesAvailable: PropTypes.bool.isRequired
@@ -201,7 +217,7 @@ class FlatNav extends Component {
         return (
             <div style={{overflow: 'hidden'}}>
                 <div className={style.toolbar}>
-                    <IconButton icon="plus" onClick={this.createNode}/>
+                    {!this.props.isLoadingReferenceNodePath && (<IconButton icon="plus" onClick={this.createNode}/>)}
                     <HideSelectedNode/>
                     <DeleteSelectedNode/>
                 </div>

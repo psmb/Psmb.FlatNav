@@ -420,9 +420,11 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
             _this.makeFetchNodes = function (preset) {
                 return function () {
                     _this.setState(_defineProperty({}, preset, {
-                        isLoading: true,
                         page: _this.state[preset].page,
+                        isLoading: true,
+                        isLoadingReferenceNodePath: _this.state[preset].isLoadingReferenceNodePath,
                         nodes: _this.state[preset].nodes,
+                        moreNodesAvailable: true,
                         newReferenceNodePath: _this.state[preset].newReferenceNodePath
                     }));
                     _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
@@ -438,23 +440,44 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                     }).then(function (response) {
                         return response && response.json();
                     }).then(function (nodes) {
-                        var nodesMap = nodes.reduce(function (result, node) {
-                            result[node.contextPath] = node;
-                            return result;
-                        }, {});
-                        _this.props.merge(nodesMap);
-                        _this.setState(_defineProperty({}, preset, {
-                            isLoading: false,
-                            page: _this.state[preset].page + 1,
-                            nodes: [].concat(_toConsumableArray(_this.state[preset].nodes), _toConsumableArray(Object.keys(nodesMap))),
-                            newReferenceNodePath: _this.state[preset].newReferenceNodePath
-                        }));
+                        if (nodes.length > 0) {
+                            var nodesMap = nodes.reduce(function (result, node) {
+                                result[node.contextPath] = node;
+                                return result;
+                            }, {});
+                            _this.props.merge(nodesMap);
+                            _this.setState(_defineProperty({}, preset, {
+                                page: _this.state[preset].page + 1,
+                                isLoading: false,
+                                isLoadingReferenceNodePath: _this.state[preset].isLoadingReferenceNodePath,
+                                nodes: [].concat(_toConsumableArray(_this.state[preset].nodes), _toConsumableArray(Object.keys(nodesMap))),
+                                moreNodesAvailable: true,
+                                newReferenceNodePath: _this.state[preset].newReferenceNodePath
+                            }));
+                        } else {
+                            _this.setState(_defineProperty({}, preset, {
+                                page: _this.state[preset].page,
+                                isLoading: false,
+                                isLoadingReferenceNodePath: _this.state[preset].isLoadingReferenceNodePath,
+                                nodes: _this.state[preset].nodes,
+                                moreNodesAvailable: false,
+                                newReferenceNodePath: _this.state[preset].newReferenceNodePath
+                            }));
+                        }
                     });
                 };
             };
 
             _this.makeGetNewReferenceNodePath = function (preset) {
                 return function () {
+                    _this.setState(_defineProperty({}, preset, {
+                        page: _this.state[preset].page,
+                        isLoading: _this.state[preset].isLoading,
+                        isLoadingReferenceNodePath: true,
+                        nodes: _this.state[preset].nodes,
+                        moreNodesAvailable: _this.state[preset].moreNodesAvailable,
+                        newReferenceNodePath: _this.state[preset].newReferenceNodePath
+                    }));
                     _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
                         return {
                             url: '/flatnav/getNewReferenceNodePath?nodeContextPath=' + _this.props.siteNodeContextPath + '&preset=' + preset,
@@ -469,9 +492,11 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                         return response && response.json();
                     }).then(function (newReferenceNodePath) {
                         _this.setState(_defineProperty({}, preset, {
-                            isLoading: false,
                             page: _this.state[preset].page,
+                            isLoading: false,
+                            isLoadingReferenceNodePath: false,
                             nodes: _this.state[preset].nodes,
+                            moreNodesAvailable: _this.state[preset].moreNodesAvailable,
                             newReferenceNodePath: newReferenceNodePath
                         }));
                     });
@@ -482,7 +507,9 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                 _this.state[preset] = {
                     page: 1,
                     isLoading: false,
+                    isLoadingReferenceNodePath: false,
                     nodes: [],
+                    moreNodesAvailable: true,
                     newReferenceNodePath: ''
                 };
             });
@@ -608,7 +635,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                 _react2.default.createElement(
                     'div',
                     { className: _style2.default.toolbar },
-                    _react2.default.createElement(_reactUiComponents.IconButton, { icon: 'plus', onClick: this.createNode }),
+                    !this.props.isLoadingReferenceNodePath && _react2.default.createElement(_reactUiComponents.IconButton, { icon: 'plus', onClick: this.createNode }),
                     _react2.default.createElement(_HideSelectedNode2.default, null),
                     _react2.default.createElement(_DeleteSelectedNode2.default, null)
                 ),
@@ -617,7 +644,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                     { style: { overflowY: 'auto' } },
                     this.renderNodes()
                 ),
-                _react2.default.createElement(
+                this.props.moreNodesAvailable && _react2.default.createElement(
                     _reactUiComponents.Button,
                     {
                         onClick: this.props.fetchNodes,
@@ -645,8 +672,10 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     nodes: _propTypes2.default.array.isRequired,
     preset: _propTypes2.default.object.isRequired,
     isLoading: _propTypes2.default.bool.isRequired,
+    isLoadingReferenceNodePath: _propTypes2.default.bool.isRequired,
     page: _propTypes2.default.number.isRequired,
-    newReferenceNodePath: _propTypes2.default.string.isRequired
+    newReferenceNodePath: _propTypes2.default.string.isRequired,
+    moreNodesAvailable: _propTypes2.default.bool.isRequired
 }, _temp2)) || _class2) || _class2);
 
 /***/ }),
