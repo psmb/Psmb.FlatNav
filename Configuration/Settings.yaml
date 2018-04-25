@@ -26,7 +26,7 @@ Neos:
             #   icon: tag
             #   type: flat
             #   query: 'q(node).find("[instanceof Your.Namespace:Tag]").sort("title", "ASC").slice((page - 1) * 20, page * 20).get()'
-            #   newReferenceNodePath: '/sites/site'
+            #   newReferenceNodePath: 'q(node).find("[instanceof Your.Namespace:NewsList]").first().get(0).path'
             #   newNodeType: 'Your.Namespace:Tag'
 
   Flow:

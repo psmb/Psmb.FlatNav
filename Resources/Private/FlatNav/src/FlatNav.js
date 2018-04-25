@@ -22,7 +22,8 @@ const makeFlatNavContainer = OriginalPageTree => {
                     page: 1,
                     isLoading: false,
                     nodes: [],
-                    moreNodesAvailable: true
+                    moreNodesAvailable: true,
+                    newReferenceNodePath: ''
                 };
             });
         }
@@ -33,6 +34,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                     isLoading: true,
                     page: this.state[preset].page,
                     nodes: this.state[preset].nodes,
+                    newReferenceNodePath: this.state[preset].newReferenceNodePath,
                     moreNodesAvailable: true
                 }
             });
@@ -58,6 +60,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                                 isLoading: false,
                                 page: this.state[preset].page + 1,
                                 nodes: [...this.state[preset].nodes, ...Object.keys(nodesMap)],
+                                newReferenceNodePath: this.state[preset].newReferenceNodePath,
                                 moreNodesAvailable: true
                             }
                         });
@@ -67,10 +70,35 @@ const makeFlatNavContainer = OriginalPageTree => {
                                 isLoading: false,
                                 page: this.state[preset].page,
                                 nodes: this.state[preset].nodes,
+                                newReferenceNodePath: this.state[preset].newReferenceNodePath,
                                 moreNodesAvailable: false
                             }
                         });
                     }
+                });
+        };
+
+        makeGetNewReferenceNodePath = preset => () => {
+            fetchWithErrorHandling.withCsrfToken(csrfToken => ({
+                url: `/flatnav/getNewReferenceNodePath?nodeContextPath=${this.props.siteNodeContextPath}&preset=${preset}`,
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'X-Flow-Csrftoken': csrfToken,
+                    'Content-Type': 'application/json'
+                }
+            }))
+                .then(response => response && response.json())
+                .then(newReferenceNodePath => {
+                    this.setState({
+                        [preset]: {
+                            isLoading: false,
+                            page: this.state[preset].page,
+                            nodes: this.state[preset].nodes,
+                            newReferenceNodePath: newReferenceNodePath,
+                            moreNodesAvailable: this.state[preset].moreNodesAvailable
+                        }
+                    });
                 });
         };
 
@@ -81,7 +109,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                         const preset = this.props.options.presets[presetName];
                         return (
                             <Tabs.Panel key={presetName} icon={preset.icon} tooltip={preset.label}>
-                                {preset.type === 'flat' && (<FlatNav preset={preset} fetchNodes={this.makeFetchNodes(presetName)} {...this.state[presetName]} />)}
+                                {preset.type === 'flat' && (<FlatNav preset={preset} fetchNodes={this.makeFetchNodes(presetName)} fetchNewReferenceNodePath={this.makeGetNewReferenceNodePath(presetName)} {...this.state[presetName]} />)}
                                 {preset.type === 'tree' && (<OriginalPageTree />)}
                             </Tabs.Panel>
                         );
@@ -121,12 +149,14 @@ class FlatNav extends Component {
         preset: PropTypes.object.isRequired,
         isLoading: PropTypes.bool.isRequired,
         page: PropTypes.number.isRequired,
+        newReferenceNodePath: PropTypes.string.isRequired,
         moreNodesAvailable: PropTypes.bool.isRequired
     };
 
     componentDidMount() {
         if (this.props.nodes.length === 0) {
             this.props.fetchNodes();
+            this.props.fetchNewReferenceNodePath();
         }
     }
 
