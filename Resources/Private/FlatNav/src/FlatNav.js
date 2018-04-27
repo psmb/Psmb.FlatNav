@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {$get, $transform} from 'plow-js';
 import {Button, Icon, IconButton, Tabs} from '@neos-project/react-ui-components';
 import {connect} from 'react-redux';
-import {actions} from '@neos-project/neos-ui-redux-store';
+import {actions, selectors} from '@neos-project/neos-ui-redux-store';
 import {neos} from '@neos-project/neos-ui-decorators';
 import {fetchWithErrorHandling} from '@neos-project/neos-ui-backend-connector';
 import HideSelectedNode from './HideSelectedNode';
@@ -150,7 +150,8 @@ const makeFlatNavContainer = OriginalPageTree => {
 export default makeFlatNavContainer;
 
 @neos(globalRegistry => ({
-    nodeTypesRegistry: globalRegistry.get('@neos-project/neos-ui-contentrepository')
+    nodeTypesRegistry: globalRegistry.get('@neos-project/neos-ui-contentrepository'),
+    serverFeedbackHandlers: globalRegistry.get('serverFeedbackHandlers')
 }))
 @connect($transform({
     nodeData: $get('cr.nodes.byContextPath'),
@@ -180,6 +181,19 @@ class FlatNav extends Component {
             if (this.props.preset.newReferenceNodePath.indexOf('/') !== 0) {
                 this.props.fetchNewReferenceNodePath();
             }
+        }
+        this.props.serverFeedbackHandlers.set('Neos.Neos.Ui:NodeCreated/DocumentAdded', this.handleNodeWasCreated, 'after Neos.Neos.Ui:NodeCreated/Main');
+    }
+
+    handleNodeWasCreated = (feedbackPayload, {store}) => {
+        const state = store.getState();
+
+        const getNodeByContextPathSelector = selectors.CR.Nodes.makeGetNodeByContextPathSelector(feedbackPayload.contextPath);
+        const node = getNodeByContextPathSelector(state);
+        const nodeTypeName = $get('nodeType', node);
+
+        if (nodeTypeName === this.props.preset.newNodeType) {
+            this.refreshFlatNav();
         }
     }
 
