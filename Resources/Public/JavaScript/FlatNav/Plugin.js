@@ -575,7 +575,8 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                                 preset: preset,
                                 fetchNodes: _this2.makeFetchNodes(presetName),
                                 resetNodes: _this2.makeResetNodes(presetName),
-                                fetchNewReferenceNodePath: _this2.makeGetNewReferenceNodePath(presetName) }, _this2.state[presetName])),
+                                fetchNewReferenceNodePath: _this2.makeGetNewReferenceNodePath(presetName)
+                            }, _this2.state[presetName])),
                             preset.type === 'tree' && _react2.default.createElement(OriginalPageTree, null)
                         );
                     })
@@ -600,7 +601,8 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
 exports.default = makeFlatNavContainer;
 var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     return {
-        nodeTypesRegistry: globalRegistry.get('@neos-project/neos-ui-contentrepository')
+        nodeTypesRegistry: globalRegistry.get('@neos-project/neos-ui-contentrepository'),
+        serverFeedbackHandlers: globalRegistry.get('serverFeedbackHandlers')
     };
 }), _dec2 = (0, _reactRedux.connect)((0, _plowJs.$transform)({
     nodeData: (0, _plowJs.$get)('cr.nodes.byContextPath'),
@@ -626,7 +628,19 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
             args[_key] = arguments[_key];
         }
 
-        return _ret = (_temp = (_this3 = _possibleConstructorReturn(this, (_ref = FlatNav.__proto__ || Object.getPrototypeOf(FlatNav)).call.apply(_ref, [this].concat(args))), _this3), _this3.createNode = function () {
+        return _ret = (_temp = (_this3 = _possibleConstructorReturn(this, (_ref = FlatNav.__proto__ || Object.getPrototypeOf(FlatNav)).call.apply(_ref, [this].concat(args))), _this3), _this3.handleNodeWasCreated = function (feedbackPayload, _ref2) {
+            var store = _ref2.store;
+
+            var state = store.getState();
+
+            var getNodeByContextPathSelector = _neosUiReduxStore.selectors.CR.Nodes.makeGetNodeByContextPathSelector(feedbackPayload.contextPath);
+            var node = getNodeByContextPathSelector(state);
+            var nodeTypeName = (0, _plowJs.$get)('nodeType', node);
+
+            if (nodeTypeName === _this3.props.preset.newNodeType) {
+                _this3.refreshFlatNav();
+            }
+        }, _this3.createNode = function () {
             var context = _this3.props.siteNodeContextPath.split('@')[1];
             var contextPath = (_this3.props.newReferenceNodePath || _this3.props.preset.newReferenceNodePath) + '@' + context;
             _this3.props.commenceNodeCreation(contextPath);
@@ -673,6 +687,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                     this.props.fetchNewReferenceNodePath();
                 }
             }
+            this.props.serverFeedbackHandlers.set('Neos.Neos.Ui:NodeCreated/DocumentAdded', this.handleNodeWasCreated, 'after Neos.Neos.Ui:NodeCreated/Main');
         }
     }, {
         key: 'render',
