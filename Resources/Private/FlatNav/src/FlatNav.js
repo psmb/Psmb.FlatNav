@@ -127,7 +127,8 @@ const makeFlatNavContainer = OriginalPageTree => {
                                     preset={preset}
                                     fetchNodes={this.makeFetchNodes(presetName)}
                                     resetNodes={this.makeResetNodes(presetName)}
-                                    fetchNewReferenceNodePath={this.makeGetNewReferenceNodePath(presetName)} {...this.state[presetName]}
+                                    fetchNewReferenceNodePath={this.makeGetNewReferenceNodePath(presetName)}
+                                    {...this.state[presetName]}
                                     />)}
                                 {preset.type === 'tree' && (<OriginalPageTree />)}
                             </Tabs.Panel>
