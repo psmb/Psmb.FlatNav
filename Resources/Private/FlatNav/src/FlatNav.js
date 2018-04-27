@@ -32,12 +32,9 @@ const makeFlatNavContainer = OriginalPageTree => {
         makeFetchNodes = preset => () => {
             this.setState({
                 [preset]: {
-                    page: this.state[preset].page,
+                    ...this.state[preset],
                     isLoading: true,
-                    isLoadingReferenceNodePath: this.state[preset].isLoadingReferenceNodePath,
-                    nodes: this.state[preset].nodes,
-                    moreNodesAvailable: true,
-                    newReferenceNodePath: this.state[preset].newReferenceNodePath
+                    moreNodesAvailable: true
                 }
             });
             fetchWithErrorHandling.withCsrfToken(csrfToken => ({
@@ -59,23 +56,19 @@ const makeFlatNavContainer = OriginalPageTree => {
                         this.props.merge(nodesMap);
                         this.setState({
                             [preset]: {
+                                ...this.state[preset],
                                 page: this.state[preset].page + 1,
                                 isLoading: false,
-                                isLoadingReferenceNodePath: this.state[preset].isLoadingReferenceNodePath,
                                 nodes: [...this.state[preset].nodes, ...Object.keys(nodesMap)],
-                                moreNodesAvailable: true,
-                                newReferenceNodePath: this.state[preset].newReferenceNodePath
+                                moreNodesAvailable: true
                             }
                         });
                     } else {
                         this.setState({
                             [preset]: {
-                                page: this.state[preset].page,
+                                ...this.state[preset],
                                 isLoading: false,
-                                isLoadingReferenceNodePath: this.state[preset].isLoadingReferenceNodePath,
-                                nodes: this.state[preset].nodes,
-                                moreNodesAvailable: false,
-                                newReferenceNodePath: this.state[preset].newReferenceNodePath
+                                moreNodesAvailable: false
                             }
                         });
                     }
@@ -85,12 +78,8 @@ const makeFlatNavContainer = OriginalPageTree => {
         makeGetNewReferenceNodePath = preset => () => {
             this.setState({
                 [preset]: {
-                    page: this.state[preset].page,
-                    isLoading: this.state[preset].isLoading,
-                    isLoadingReferenceNodePath: true,
-                    nodes: this.state[preset].nodes,
-                    moreNodesAvailable: this.state[preset].moreNodesAvailable,
-                    newReferenceNodePath: this.state[preset].newReferenceNodePath
+                    ...this.state[preset],
+                    isLoadingReferenceNodePath: true
                 }
             });
             fetchWithErrorHandling.withCsrfToken(csrfToken => ({
@@ -106,11 +95,9 @@ const makeFlatNavContainer = OriginalPageTree => {
                 .then(newReferenceNodePath => {
                     this.setState({
                         [preset]: {
-                            page: this.state[preset].page,
+                            ...this.state[preset],
                             isLoading: false,
                             isLoadingReferenceNodePath: false,
-                            nodes: this.state[preset].nodes,
-                            moreNodesAvailable: this.state[preset].moreNodesAvailable,
                             newReferenceNodePath: newReferenceNodePath
                         }
                     });

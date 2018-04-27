@@ -419,14 +419,10 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
 
             _this.makeFetchNodes = function (preset) {
                 return function () {
-                    _this.setState(_defineProperty({}, preset, {
-                        page: _this.state[preset].page,
+                    _this.setState(_defineProperty({}, preset, _extends({}, _this.state[preset], {
                         isLoading: true,
-                        isLoadingReferenceNodePath: _this.state[preset].isLoadingReferenceNodePath,
-                        nodes: _this.state[preset].nodes,
-                        moreNodesAvailable: true,
-                        newReferenceNodePath: _this.state[preset].newReferenceNodePath
-                    }));
+                        moreNodesAvailable: true
+                    })));
                     _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
                         return {
                             url: '/flatnav/query?nodeContextPath=' + _this.props.siteNodeContextPath + '&preset=' + preset + '&page=' + _this.state[preset].page,
@@ -446,23 +442,17 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                                 return result;
                             }, {});
                             _this.props.merge(nodesMap);
-                            _this.setState(_defineProperty({}, preset, {
+                            _this.setState(_defineProperty({}, preset, _extends({}, _this.state[preset], {
                                 page: _this.state[preset].page + 1,
                                 isLoading: false,
-                                isLoadingReferenceNodePath: _this.state[preset].isLoadingReferenceNodePath,
                                 nodes: [].concat(_toConsumableArray(_this.state[preset].nodes), _toConsumableArray(Object.keys(nodesMap))),
-                                moreNodesAvailable: true,
-                                newReferenceNodePath: _this.state[preset].newReferenceNodePath
-                            }));
+                                moreNodesAvailable: true
+                            })));
                         } else {
-                            _this.setState(_defineProperty({}, preset, {
-                                page: _this.state[preset].page,
+                            _this.setState(_defineProperty({}, preset, _extends({}, _this.state[preset], {
                                 isLoading: false,
-                                isLoadingReferenceNodePath: _this.state[preset].isLoadingReferenceNodePath,
-                                nodes: _this.state[preset].nodes,
-                                moreNodesAvailable: false,
-                                newReferenceNodePath: _this.state[preset].newReferenceNodePath
-                            }));
+                                moreNodesAvailable: false
+                            })));
                         }
                     });
                 };
@@ -470,14 +460,9 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
 
             _this.makeGetNewReferenceNodePath = function (preset) {
                 return function () {
-                    _this.setState(_defineProperty({}, preset, {
-                        page: _this.state[preset].page,
-                        isLoading: _this.state[preset].isLoading,
-                        isLoadingReferenceNodePath: true,
-                        nodes: _this.state[preset].nodes,
-                        moreNodesAvailable: _this.state[preset].moreNodesAvailable,
-                        newReferenceNodePath: _this.state[preset].newReferenceNodePath
-                    }));
+                    _this.setState(_defineProperty({}, preset, _extends({}, _this.state[preset], {
+                        isLoadingReferenceNodePath: true
+                    })));
                     _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
                         return {
                             url: '/flatnav/getNewReferenceNodePath?nodeContextPath=' + _this.props.siteNodeContextPath + '&preset=' + preset,
@@ -491,14 +476,11 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                     }).then(function (response) {
                         return response && response.json();
                     }).then(function (newReferenceNodePath) {
-                        _this.setState(_defineProperty({}, preset, {
-                            page: _this.state[preset].page,
+                        _this.setState(_defineProperty({}, preset, _extends({}, _this.state[preset], {
                             isLoading: false,
                             isLoadingReferenceNodePath: false,
-                            nodes: _this.state[preset].nodes,
-                            moreNodesAvailable: _this.state[preset].moreNodesAvailable,
                             newReferenceNodePath: newReferenceNodePath
-                        }));
+                        })));
                     });
                 };
             };
