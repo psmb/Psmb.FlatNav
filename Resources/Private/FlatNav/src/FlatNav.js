@@ -10,6 +10,7 @@ import HideSelectedNode from './HideSelectedNode';
 import DeleteSelectedNode from './DeleteSelectedNode';
 import mergeClassNames from 'classnames';
 import style from './style.css';
+import RefreshNodes from "./RefreshNodes";
 
 const makeFlatNavContainer = OriginalPageTree => {
     class FlatNavContainer extends Component {
@@ -27,6 +28,17 @@ const makeFlatNavContainer = OriginalPageTree => {
                     newReferenceNodePath: ''
                 };
             });
+        }
+
+        makeResetNodes = preset => callback => {
+            this.setState({
+                [preset]: {
+                    ...this.state[preset],
+                    page: 1,
+                    nodes: [],
+                    moreNodesAvailable: true
+                }
+            }, callback);
         }
 
         makeFetchNodes = preset => () => {
@@ -111,7 +123,13 @@ const makeFlatNavContainer = OriginalPageTree => {
                         const preset = this.props.options.presets[presetName];
                         return (
                             <Tabs.Panel key={presetName} icon={preset.icon} tooltip={preset.label}>
-                                {preset.type === 'flat' && (<FlatNav preset={preset} fetchNodes={this.makeFetchNodes(presetName)} fetchNewReferenceNodePath={this.makeGetNewReferenceNodePath(presetName)} {...this.state[presetName]} />)}
+                                {preset.type === 'flat' && (<FlatNav
+                                    preset={preset}
+                                    fetchNodes={this.makeFetchNodes(presetName)}
+                                    resetNodes={this.makeResetNodes(presetName)}
+                                    fetchNewReferenceNodePath={this.makeGetNewReferenceNodePath(presetName)}
+                                    {...this.state[presetName]}
+                                    />)}
                                 {preset.type === 'tree' && (<OriginalPageTree />)}
                             </Tabs.Panel>
                         );
@@ -172,6 +190,10 @@ class FlatNav extends Component {
         this.props.selectNodeType('into', this.props.preset.newNodeType);
     }
 
+    refreshFlatNav = () => {
+        this.props.resetNodes(this.props.fetchNodes);
+    }
+
     renderNodes = () => {
         return this.props.nodes
             .map(contextPath => {
@@ -207,6 +229,7 @@ class FlatNav extends Component {
                     {!this.props.isLoadingReferenceNodePath && (<IconButton icon="plus" onClick={this.createNode}/>)}
                     <HideSelectedNode/>
                     <DeleteSelectedNode/>
+                    <RefreshNodes onClick={this.refreshFlatNav} isLoading={this.props.isLoading}/>
                 </div>
 
                 <div style={{overflowY: 'auto'}}>
