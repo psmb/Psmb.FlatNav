@@ -65,4 +65,25 @@ class StandardController extends ActionController
         $result = $nodeInfoHelper->renderNodes($nodes, $this->getControllerContext(), true);
         $this->view->assign('value', $result);
     }
+
+    /**
+     * @param string $preset The preset, configured in Settings.yaml
+     * @param string $nodeContextPath The context path of the node that will be available as `node` context var in Eel
+     * @param integer $page Page parameter used for pagination
+     * @return void
+     * @Flow\SkipCsrfProtection
+     */
+    public function getNewReferenceNodePathAction($preset, $nodeContextPath)
+    {
+        if (!isset($this->presets[$preset])) {
+            throw new \Exception('Invalid preset name');
+        }
+        $expression = '${' . $this->presets[$preset]['newReferenceNodePath'] . '}';
+        $baseNode = $this->nodeService->getNodeFromContextPath($nodeContextPath, null, null, true);
+        $contextVariables = [
+            'node' => $baseNode
+        ];
+        $newReferenceNodePath = \Neos\Eel\Utility::evaluateEelExpression($expression, $this->eelEvaluator, $contextVariables, $this->defaultContextConfiguration);
+        $this->view->assign('value', $newReferenceNodePath);
+    }
 }

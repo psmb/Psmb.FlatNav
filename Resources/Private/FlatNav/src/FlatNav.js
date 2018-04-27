@@ -21,8 +21,10 @@ const makeFlatNavContainer = OriginalPageTree => {
                 this.state[preset] = {
                     page: 1,
                     isLoading: false,
+                    isLoadingReferenceNodePath: false,
                     nodes: [],
-                    moreNodesAvailable: true
+                    moreNodesAvailable: true,
+                    newReferenceNodePath: ''
                 };
             });
         }
@@ -30,9 +32,8 @@ const makeFlatNavContainer = OriginalPageTree => {
         makeFetchNodes = preset => () => {
             this.setState({
                 [preset]: {
+                    ...this.state[preset],
                     isLoading: true,
-                    page: this.state[preset].page,
-                    nodes: this.state[preset].nodes,
                     moreNodesAvailable: true
                 }
             });
@@ -55,8 +56,9 @@ const makeFlatNavContainer = OriginalPageTree => {
                         this.props.merge(nodesMap);
                         this.setState({
                             [preset]: {
-                                isLoading: false,
+                                ...this.state[preset],
                                 page: this.state[preset].page + 1,
+                                isLoading: false,
                                 nodes: [...this.state[preset].nodes, ...Object.keys(nodesMap)],
                                 moreNodesAvailable: true
                             }
@@ -64,13 +66,41 @@ const makeFlatNavContainer = OriginalPageTree => {
                     } else {
                         this.setState({
                             [preset]: {
+                                ...this.state[preset],
                                 isLoading: false,
-                                page: this.state[preset].page,
-                                nodes: this.state[preset].nodes,
                                 moreNodesAvailable: false
                             }
                         });
                     }
+                });
+        };
+
+        makeGetNewReferenceNodePath = preset => () => {
+            this.setState({
+                [preset]: {
+                    ...this.state[preset],
+                    isLoadingReferenceNodePath: true
+                }
+            });
+            fetchWithErrorHandling.withCsrfToken(csrfToken => ({
+                url: `/flatnav/getNewReferenceNodePath?nodeContextPath=${this.props.siteNodeContextPath}&preset=${preset}`,
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'X-Flow-Csrftoken': csrfToken,
+                    'Content-Type': 'application/json'
+                }
+            }))
+                .then(response => response && response.json())
+                .then(newReferenceNodePath => {
+                    this.setState({
+                        [preset]: {
+                            ...this.state[preset],
+                            isLoading: false,
+                            isLoadingReferenceNodePath: false,
+                            newReferenceNodePath: newReferenceNodePath
+                        }
+                    });
                 });
         };
 
@@ -81,7 +111,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                         const preset = this.props.options.presets[presetName];
                         return (
                             <Tabs.Panel key={presetName} icon={preset.icon} tooltip={preset.label}>
-                                {preset.type === 'flat' && (<FlatNav preset={preset} fetchNodes={this.makeFetchNodes(presetName)} {...this.state[presetName]} />)}
+                                {preset.type === 'flat' && (<FlatNav preset={preset} fetchNodes={this.makeFetchNodes(presetName)} fetchNewReferenceNodePath={this.makeGetNewReferenceNodePath(presetName)} {...this.state[presetName]} />)}
                                 {preset.type === 'tree' && (<OriginalPageTree />)}
                             </Tabs.Panel>
                         );
@@ -120,19 +150,24 @@ class FlatNav extends Component {
         nodes: PropTypes.array.isRequired,
         preset: PropTypes.object.isRequired,
         isLoading: PropTypes.bool.isRequired,
+        isLoadingReferenceNodePath: PropTypes.bool.isRequired,
         page: PropTypes.number.isRequired,
+        newReferenceNodePath: PropTypes.string.isRequired,
         moreNodesAvailable: PropTypes.bool.isRequired
     };
 
     componentDidMount() {
         if (this.props.nodes.length === 0) {
             this.props.fetchNodes();
+            if (this.props.preset.newReferenceNodePath.indexOf('/') !== 0) {
+                this.props.fetchNewReferenceNodePath();
+            }
         }
     }
 
     createNode = () => {
         const context = this.props.siteNodeContextPath.split('@')[1];
-        const contextPath = this.props.preset.newReferenceNodePath + '@' + context;
+        const contextPath = (this.props.newReferenceNodePath || this.props.preset.newReferenceNodePath) + '@' + context;
         this.props.commenceNodeCreation(contextPath);
         this.props.selectNodeType('into', this.props.preset.newNodeType);
     }
@@ -169,7 +204,7 @@ class FlatNav extends Component {
         return (
             <div style={{overflow: 'hidden'}}>
                 <div className={style.toolbar}>
-                    <IconButton icon="plus" onClick={this.createNode}/>
+                    {!this.props.isLoadingReferenceNodePath && (<IconButton icon="plus" onClick={this.createNode}/>)}
                     <HideSelectedNode/>
                     <DeleteSelectedNode/>
                 </div>
