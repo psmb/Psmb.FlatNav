@@ -24,7 +24,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                     isLoading: false,
                     isLoadingReferenceNodePath: false,
                     nodes: [],
-                    moreNodesAvailable: true,
+                    moreNodesAvailable: false,
                     newReferenceNodePath: ''
                 };
             });
@@ -60,6 +60,7 @@ const makeFlatNavContainer = OriginalPageTree => {
             }))
                 .then(response => response && response.json())
                 .then(nodes => {
+                    console.log(nodes);
                     if (nodes.length > 0) {
                         const nodesMap = nodes.reduce((result, node) => {
                             result[node.contextPath] = node;
@@ -72,7 +73,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                                 page: this.state[preset].page + 1,
                                 isLoading: false,
                                 nodes: [...this.state[preset].nodes, ...Object.keys(nodesMap)],
-                                moreNodesAvailable: true
+                                moreNodesAvailable: false
                             }
                         });
                     } else {
