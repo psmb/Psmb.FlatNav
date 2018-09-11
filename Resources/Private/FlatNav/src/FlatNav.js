@@ -24,7 +24,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                     isLoading: false,
                     isLoadingReferenceNodePath: false,
                     nodes: [],
-                    moreNodesAvailable: false,
+                    moreNodesAvailable: true,
                     newReferenceNodePath: ''
                 };
             });
@@ -60,7 +60,6 @@ const makeFlatNavContainer = OriginalPageTree => {
             }))
                 .then(response => response && response.json())
                 .then(nodes => {
-                    console.log(nodes);
                     if (nodes.length > 0) {
                         const nodesMap = nodes.reduce((result, node) => {
                             result[node.contextPath] = node;
@@ -73,7 +72,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                                 page: this.state[preset].page + 1,
                                 isLoading: false,
                                 nodes: [...this.state[preset].nodes, ...Object.keys(nodesMap)],
-                                moreNodesAvailable: false
+                                moreNodesAvailable: true
                             }
                         });
                     } else {
@@ -229,7 +228,14 @@ class FlatNav extends Component {
                             }}
                             role="button"
                             >
-                            <Icon icon={$get('ui.icon', nodeType)} /> {$get('label', item)}
+                            <div
+                                className={style.node__iconWrapper}>
+                                <Icon icon={$get('ui.icon', nodeType)} />
+                            </div>
+                            <span
+                                className={style.node__label}>
+                                {$get('label', item)}
+                            </span>
                         </div>
                     );
                 }
@@ -247,10 +253,10 @@ class FlatNav extends Component {
                     <RefreshNodes onClick={this.refreshFlatNav} isLoading={this.props.isLoading}/>
                 </div>
 
-                <div style={{overflowY: 'auto'}}>
+                <div className={style.treeWrapper} style={{overflowY: 'auto'}}>
                     {this.renderNodes()}
                 </div>
-                {this.props.moreNodesAvailable && (<Button
+                {this.props.preset.isPaginated && this.props.moreNodesAvailable && (<Button
                     onClick={this.props.fetchNodes}
                     style="clean"
                     className={style.loadMoreButton}

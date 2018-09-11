@@ -7,6 +7,10 @@
     border-bottom: 1px solid var(--colors-ContrastDark);
 }
 
+.treeWrapper {
+    padding: 5px 0;
+}
+
 .node {
     overflow: hidden;
     white-space: nowrap;
@@ -17,4 +21,18 @@
 }
 .node--focused {
     background-color: var(--colors-ContrastNeutral);
+}
+.node--focused .node__label {
+    color: var(--colors-PrimaryBlue);
+}
+
+.node__iconWrapper {
+    width: 2em;
+    display: inline-block;
+    position: absolute;
+    text-align: center;
+}
+
+.node__label {
+    margin-left: 2em;
 }

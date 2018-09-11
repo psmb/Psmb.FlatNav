@@ -515,7 +515,6 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                     }).then(function (response) {
                         return response && response.json();
                     }).then(function (nodes) {
-                        console.log(nodes);
                         if (nodes.length > 0) {
                             var nodesMap = nodes.reduce(function (result, node) {
                                 result[node.contextPath] = node;
@@ -526,7 +525,7 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                                 page: _this.state[preset].page + 1,
                                 isLoading: false,
                                 nodes: [].concat(_toConsumableArray(_this.state[preset].nodes), _toConsumableArray(Object.keys(nodesMap))),
-                                moreNodesAvailable: false
+                                moreNodesAvailable: true
                             })));
                         } else {
                             _this.setState(_defineProperty({}, preset, _extends({}, _this.state[preset], {
@@ -571,7 +570,7 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                     isLoading: false,
                     isLoadingReferenceNodePath: false,
                     nodes: [],
-                    moreNodesAvailable: false,
+                    moreNodesAvailable: true,
                     newReferenceNodePath: ''
                 };
             });
@@ -686,9 +685,18 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                             },
                             role: 'button'
                         },
-                        _react2.default.createElement(_reactUiComponents.Icon, { icon: (0, _plowJs.$get)('ui.icon', nodeType) }),
-                        ' ',
-                        (0, _plowJs.$get)('label', item)
+                        _react2.default.createElement(
+                            'div',
+                            {
+                                className: _style2.default.node__iconWrapper },
+                            _react2.default.createElement(_reactUiComponents.Icon, { icon: (0, _plowJs.$get)('ui.icon', nodeType) })
+                        ),
+                        _react2.default.createElement(
+                            'span',
+                            {
+                                className: _style2.default.node__label },
+                            (0, _plowJs.$get)('label', item)
+                        )
                     );
                 }
                 return null;
@@ -725,10 +733,10 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                 ),
                 _react2.default.createElement(
                     'div',
-                    { style: { overflowY: 'auto' } },
+                    { className: _style2.default.treeWrapper, style: { overflowY: 'auto' } },
                     this.renderNodes()
                 ),
-                this.props.moreNodesAvailable && _react2.default.createElement(
+                this.props.preset.isPaginated && this.props.moreNodesAvailable && _react2.default.createElement(
                     _reactUiComponents.Button,
                     {
                         onClick: this.props.fetchNodes,
@@ -997,14 +1005,17 @@ exports = module.exports = __webpack_require__(21)(false);
 
 
 // module
-exports.push([module.i, ".style__loadMoreButton___9u14e {\n    width: 100% !important;\n    opacity: 1 !important;\n}\n\n.style__toolbar___Y2z2P {\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__node___37dXu {\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    width: 100%;\n    padding: 3px 6px;\n    cursor: pointer;\n}\n\n.style__node--focused___2Ad0k {\n    background-color: #323232;\n}\n", ""]);
+exports.push([module.i, ".style__loadMoreButton___9u14e {\n    width: 100% !important;\n    opacity: 1 !important;\n}\n\n.style__toolbar___Y2z2P {\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__treeWrapper___1Ki9q {\n    padding: 5px 0;\n}\n\n.style__node___37dXu {\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    width: 100%;\n    padding: 3px 6px;\n    cursor: pointer;\n}\n\n.style__node--focused___2Ad0k {\n    background-color: #323232;\n}\n\n.style__node--focused___2Ad0k .style__node__label___2ktrO {\n    color: #00ADEE;\n}\n\n.style__node__iconWrapper___32kOo {\n    width: 2em;\n    display: inline-block;\n    position: absolute;\n    text-align: center;\n}\n\n.style__node__label___2ktrO {\n    margin-left: 2em;\n}\n", ""]);
 
 // exports
 exports.locals = {
 	"loadMoreButton": "style__loadMoreButton___9u14e",
 	"toolbar": "style__toolbar___Y2z2P",
+	"treeWrapper": "style__treeWrapper___1Ki9q",
 	"node": "style__node___37dXu",
-	"node--focused": "style__node--focused___2Ad0k"
+	"node--focused": "style__node--focused___2Ad0k",
+	"node__label": "style__node__label___2ktrO",
+	"node__iconWrapper": "style__node__iconWrapper___32kOo"
 };
 
 /***/ }),
