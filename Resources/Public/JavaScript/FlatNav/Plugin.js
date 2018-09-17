@@ -736,7 +736,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                     { className: _style2.default.treeWrapper, style: { overflowY: 'auto' } },
                     this.renderNodes()
                 ),
-                this.props.preset.isPaginated && this.props.moreNodesAvailable && _react2.default.createElement(
+                !this.props.preset.disablePagination && this.props.moreNodesAvailable && _react2.default.createElement(
                     _reactUiComponents.Button,
                     {
                         onClick: this.props.fetchNodes,

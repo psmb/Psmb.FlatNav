@@ -256,7 +256,7 @@ class FlatNav extends Component {
                 <div className={style.treeWrapper} style={{overflowY: 'auto'}}>
                     {this.renderNodes()}
                 </div>
-                {this.props.preset.isPaginated && this.props.moreNodesAvailable && (<Button
+                {!this.props.preset.disablePagination && this.props.moreNodesAvailable && (<Button
                     onClick={this.props.fetchNodes}
                     style="clean"
                     className={style.loadMoreButton}
