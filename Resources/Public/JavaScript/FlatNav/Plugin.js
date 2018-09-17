@@ -210,30 +210,49 @@ module.exports = (0, _readFromConsumerApi2.default)('vendor')().classnames;
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// style-loader: Adds some css to the DOM by adding a <style> tag
 
-// load the styles
 var content = __webpack_require__(20);
+
 if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
+
 var transform;
+var insertInto;
+
+
 
 var options = {"hmr":true}
+
 options.transform = transform
-// add the styles to the DOM
+options.insertInto = undefined;
+
 var update = __webpack_require__(22)(content, options);
+
 if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
+
 if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../node_modules/css-loader/index.js??ref--3-2!../node_modules/postcss-loader/lib/index.js??ref--3-3!./style.css", function() {
-			var newContent = require("!!../node_modules/css-loader/index.js??ref--3-2!../node_modules/postcss-loader/lib/index.js??ref--3-3!./style.css");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
+	module.hot.accept("!!../node_modules/css-loader/index.js??ref--6-2!../node_modules/postcss-loader/lib/index.js??ref--6-3!./style.css", function() {
+		var newContent = require("!!../node_modules/css-loader/index.js??ref--6-2!../node_modules/postcss-loader/lib/index.js??ref--6-3!./style.css");
+
+		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+
+		var locals = (function(a, b) {
+			var key, idx = 0;
+
+			for(key in a) {
+				if(!b || a[key] !== b[key]) return false;
+				idx++;
+			}
+
+			for(key in b) idx--;
+
+			return idx === 0;
+		}(content.locals, newContent.locals));
+
+		if(!locals) throw new Error('Aborting CSS HMR due to changed css-modules locals.');
+
+		update(newContent);
+	});
+
 	module.hot.dispose(function() { update(); });
 }
 
@@ -363,7 +382,7 @@ function createConsumerApi(manifests, exposureMap) {
 /* 14 */
 /***/ (function(module, exports) {
 
-module.exports = {"name":"@neos-project/neos-ui-extensibility","version":"1.0.9","description":"Extensibility mechanisms for the Neos CMS UI","main":"./src/index.js","scripts":{"prebuild":"check-dependencies && yarn clean","test":"yarn jest -- -w 2 --coverage","test:watch":"yarn jest -- --watch","build":"exit 0","build:watch":"exit 0","clean":"rimraf ./lib ./dist","lint":"eslint src","jest":"NODE_ENV=test jest"},"devDependencies":{"@neos-project/babel-preset-neos-ui":"1.0.9","@neos-project/jest-preset-neos-ui":"1.0.9"},"dependencies":{"@neos-project/build-essentials":"1.0.9","@neos-project/positional-array-sorter":"1.0.9","babel-core":"^6.13.2","babel-eslint":"^7.1.1","babel-loader":"^7.1.2","babel-plugin-transform-decorators-legacy":"^1.3.4","babel-plugin-transform-object-rest-spread":"^6.20.1","babel-plugin-webpack-alias":"^2.1.1","babel-preset-es2015":"^6.13.2","babel-preset-react":"^6.3.13","babel-preset-stage-0":"^6.3.13","chalk":"^1.1.3","css-loader":"^0.28.4","file-loader":"^1.1.5","json-loader":"^0.5.4","postcss-loader":"^2.0.10","react-dev-utils":"^0.5.0","style-loader":"^0.19.0"},"bin":{"neos-react-scripts":"./bin/neos-react-scripts.js"},"jest":{"preset":"@neos-project/jest-preset-neos-ui"}}
+module.exports = {"name":"@neos-project/neos-ui-extensibility","version":"1.3.3","description":"Extensibility mechanisms for the Neos CMS UI","main":"./src/index.js","scripts":{"prebuild":"check-dependencies && yarn clean","test":"yarn jest -- -w 2 --coverage","test:watch":"yarn jest -- --watch","build":"exit 0","build:watch":"exit 0","clean":"rimraf ./lib ./dist","lint":"eslint src","jest":"NODE_ENV=test jest"},"devDependencies":{"@neos-project/babel-preset-neos-ui":"1.3.3","@neos-project/jest-preset-neos-ui":"1.3.3"},"dependencies":{"@neos-project/build-essentials":"1.3.3","@neos-project/positional-array-sorter":"1.3.3","babel-core":"^6.13.2","babel-eslint":"^7.1.1","babel-loader":"^7.1.2","babel-plugin-transform-decorators-legacy":"^1.3.4","babel-plugin-transform-object-rest-spread":"^6.20.1","babel-plugin-webpack-alias":"^2.1.1","babel-preset-es2015":"^6.13.2","babel-preset-react":"^6.3.13","babel-preset-stage-0":"^6.3.13","chalk":"^1.1.3","css-loader":"^0.28.4","file-loader":"^1.1.5","json-loader":"^0.5.4","postcss-loader":"^2.0.10","react-dev-utils":"^0.5.0","style-loader":"^0.21.0"},"bin":{"neos-react-scripts":"./bin/neos-react-scripts.js"},"jest":{"preset":"@neos-project/jest-preset-neos-ui"}}
 
 /***/ }),
 /* 15 */
@@ -379,7 +398,7 @@ Object.defineProperty(exports, "__esModule", {
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 exports.default = function (manifests) {
-    return function manifest(identifier, options, bootstrap) {
+    return function (identifier, options, bootstrap) {
         manifests.push(_defineProperty({}, identifier, {
             options: options,
             bootstrap: bootstrap
@@ -440,7 +459,7 @@ var _style = __webpack_require__(9);
 
 var _style2 = _interopRequireDefault(_style);
 
-var _RefreshNodes = __webpack_require__(25);
+var _RefreshNodes = __webpack_require__(24);
 
 var _RefreshNodes2 = _interopRequireDefault(_RefreshNodes);
 
@@ -666,9 +685,18 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                             },
                             role: 'button'
                         },
-                        _react2.default.createElement(_reactUiComponents.Icon, { icon: (0, _plowJs.$get)('ui.icon', nodeType) }),
-                        ' ',
-                        (0, _plowJs.$get)('label', item)
+                        _react2.default.createElement(
+                            'div',
+                            {
+                                className: _style2.default.node__iconWrapper },
+                            _react2.default.createElement(_reactUiComponents.Icon, { icon: (0, _plowJs.$get)('ui.icon', nodeType) })
+                        ),
+                        _react2.default.createElement(
+                            'span',
+                            {
+                                className: _style2.default.node__label },
+                            (0, _plowJs.$get)('label', item)
+                        )
                     );
                 }
                 return null;
@@ -705,10 +733,10 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                 ),
                 _react2.default.createElement(
                     'div',
-                    { style: { overflowY: 'auto' } },
+                    { className: _style2.default.treeWrapper, style: { overflowY: 'auto' } },
                     this.renderNodes()
                 ),
-                this.props.moreNodesAvailable && _react2.default.createElement(
+                !this.props.preset.disablePagination && this.props.moreNodesAvailable && _react2.default.createElement(
                     _reactUiComponents.Button,
                     {
                         onClick: this.props.fetchNodes,
@@ -761,8 +789,6 @@ var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().NeosUiBackendConnectorDefault;
-
-
 var fetchWithErrorHandling = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().NeosUiBackendConnector.fetchWithErrorHandling;
 exports.fetchWithErrorHandling = fetchWithErrorHandling;
 
@@ -979,14 +1005,17 @@ exports = module.exports = __webpack_require__(21)(false);
 
 
 // module
-exports.push([module.i, ".style__loadMoreButton___9u14e {\n    width: 100% !important;\n    opacity: 1 !important;\n}\n\n.style__toolbar___Y2z2P {\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__node___37dXu {\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    width: 100%;\n    padding: 3px 6px;\n    cursor: pointer;\n}\n\n.style__node--focused___2Ad0k {\n    background-color: #323232;\n}\n", ""]);
+exports.push([module.i, ".style__loadMoreButton___9u14e {\n    width: 100% !important;\n    opacity: 1 !important;\n}\n\n.style__toolbar___Y2z2P {\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__treeWrapper___1Ki9q {\n    padding: 5px 0;\n}\n\n.style__node___37dXu {\n    position: relative;\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    width: 100%;\n    padding: 3px 6px;\n    cursor: pointer;\n}\n\n.style__node--focused___2Ad0k {\n    background-color: #323232;\n}\n\n.style__node--focused___2Ad0k .style__node__label___2ktrO {\n    color: #00ADEE;\n}\n\n.style__node__iconWrapper___32kOo {\n    width: 2em;\n    display: inline-block;\n    position: absolute;\n    text-align: center;\n}\n\n.style__node__label___2ktrO {\n    margin-left: 2em;\n}\n", ""]);
 
 // exports
 exports.locals = {
 	"loadMoreButton": "style__loadMoreButton___9u14e",
 	"toolbar": "style__toolbar___Y2z2P",
+	"treeWrapper": "style__treeWrapper___1Ki9q",
 	"node": "style__node___37dXu",
-	"node--focused": "style__node--focused___2Ad0k"
+	"node--focused": "style__node--focused___2Ad0k",
+	"node__label": "style__node__label___2ktrO",
+	"node__iconWrapper": "style__node__iconWrapper___32kOo"
 };
 
 /***/ }),
@@ -1100,14 +1129,26 @@ var isOldIE = memoize(function () {
 	return window && document && document.all && !window.atob;
 });
 
+var getTarget = function (target) {
+  return document.querySelector(target);
+};
+
 var getElement = (function (fn) {
 	var memo = {};
 
-	return function(selector) {
-		if (typeof memo[selector] === "undefined") {
-			var styleTarget = fn.call(this, selector);
+	return function(target) {
+                // If passing function in options, then use it for resolve "head" element.
+                // Useful for Shadow Root style i.e
+                // {
+                //   insertInto: function () { return document.querySelector("#foo").shadowRoot }
+                // }
+                if (typeof target === 'function') {
+                        return target();
+                }
+                if (typeof memo[target] === "undefined") {
+			var styleTarget = getTarget.call(this, target);
 			// Special case to return head of iframe instead of iframe itself
-			if (styleTarget instanceof window.HTMLIFrameElement) {
+			if (window.HTMLIFrameElement && styleTarget instanceof window.HTMLIFrameElement) {
 				try {
 					// This will throw an exception if access to iframe is blocked
 					// due to cross-origin restrictions
@@ -1116,13 +1157,11 @@ var getElement = (function (fn) {
 					styleTarget = null;
 				}
 			}
-			memo[selector] = styleTarget;
+			memo[target] = styleTarget;
 		}
-		return memo[selector]
+		return memo[target]
 	};
-})(function (target) {
-	return document.querySelector(target)
-});
+})();
 
 var singleton = null;
 var	singletonCounter = 0;
@@ -1144,7 +1183,7 @@ module.exports = function(list, options) {
 	if (!options.singleton && typeof options.singleton !== "boolean") options.singleton = isOldIE();
 
 	// By default, add <style> tags to the <head> element
-	if (!options.insertInto) options.insertInto = "head";
+        if (!options.insertInto) options.insertInto = "head";
 
 	// By default, add <style> tags to the bottom of the target
 	if (!options.insertAt) options.insertAt = "bottom";
@@ -1268,7 +1307,9 @@ function removeStyleElement (style) {
 function createStyleElement (options) {
 	var style = document.createElement("style");
 
-	options.attrs.type = "text/css";
+	if(options.attrs.type === undefined) {
+		options.attrs.type = "text/css";
+	}
 
 	addAttrs(style, options.attrs);
 	insertStyleElement(options, style);
@@ -1279,7 +1320,9 @@ function createStyleElement (options) {
 function createLinkElement (options) {
 	var link = document.createElement("link");
 
-	options.attrs.type = "text/css";
+	if(options.attrs.type === undefined) {
+		options.attrs.type = "text/css";
+	}
 	options.attrs.rel = "stylesheet";
 
 	addAttrs(link, options.attrs);
@@ -1511,7 +1554,7 @@ module.exports = function (css) {
 			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
 
 		// already a full url? no change
-		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/)/i.test(unquotedOrigUrl)) {
+		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/|\s*$)/i.test(unquotedOrigUrl)) {
 		  return fullMatch;
 		}
 
@@ -1539,8 +1582,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 24 */,
-/* 25 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
