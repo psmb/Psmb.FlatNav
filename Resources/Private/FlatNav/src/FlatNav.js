@@ -156,7 +156,8 @@ export default makeFlatNavContainer;
 @connect($transform({
     nodeData: $get('cr.nodes.byContextPath'),
     focused: $get('ui.pageTree.isFocused'),
-    siteNodeContextPath: $get('cr.nodes.siteNode')
+    siteNodeContextPath: $get('cr.nodes.siteNode'),
+    publishableNodes: $get('cr.workspaces.personalWorkspace.publishableNodes')
 }), {
     setSrc: actions.UI.ContentCanvas.setSrc,
     focus: actions.UI.PageTree.focus,
@@ -212,19 +213,29 @@ class FlatNav extends Component {
         return this.props.nodes
             .map(contextPath => {
                 const item = $get([contextPath], this.props.nodeData);
+
                 if (item) {
                     const nodeTypeName = $get('nodeType', item);
                     const nodeType = this.props.nodeTypesRegistry.getNodeType(nodeTypeName);
+                    const isDirty = this.props.publishableNodes.filter(i => (
+                        $get('contextPath', i) === contextPath ||
+                        $get('documentContextPath', i) === contextPath
+                    )).count() > 0;
+
                     return (
                         <div
                             className={mergeClassNames({
                                 [style.node]: true,
-                                [style['node--focused']]: this.props.focused === contextPath
+                                [style['node--focused']]: this.props.focused === contextPath,
+                                [style['node--dirty']]: isDirty,
+                                [style['node--removed']]: $get('properties._removed', item)
                             })}
                             key={contextPath}
                             onClick={() => {
-                                this.props.setSrc($get('uri', item));
-                                this.props.focus(contextPath);
+                                if ( ! $get('properties._removed', item)) {
+                                    this.props.setSrc($get('uri', item));
+                                    this.props.focus(contextPath);
+                                }
                             }}
                             role="button"
                             >

@@ -626,7 +626,8 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
 }), _dec2 = (0, _reactRedux.connect)((0, _plowJs.$transform)({
     nodeData: (0, _plowJs.$get)('cr.nodes.byContextPath'),
     focused: (0, _plowJs.$get)('ui.pageTree.isFocused'),
-    siteNodeContextPath: (0, _plowJs.$get)('cr.nodes.siteNode')
+    siteNodeContextPath: (0, _plowJs.$get)('cr.nodes.siteNode'),
+    publishableNodes: (0, _plowJs.$get)('cr.workspaces.personalWorkspace.publishableNodes')
 }), {
     setSrc: _neosUiReduxStore.actions.UI.ContentCanvas.setSrc,
     focus: _neosUiReduxStore.actions.UI.PageTree.focus,
@@ -669,19 +670,26 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
         }, _this3.renderNodes = function () {
             return _this3.props.nodes.map(function (contextPath) {
                 var item = (0, _plowJs.$get)([contextPath], _this3.props.nodeData);
+
                 if (item) {
                     var _mergeClassNames;
 
                     var nodeTypeName = (0, _plowJs.$get)('nodeType', item);
                     var nodeType = _this3.props.nodeTypesRegistry.getNodeType(nodeTypeName);
+                    var isDirty = _this3.props.publishableNodes.filter(function (i) {
+                        return (0, _plowJs.$get)('contextPath', i) === contextPath || (0, _plowJs.$get)('documentContextPath', i) === contextPath;
+                    }).count() > 0;
+
                     return _react2.default.createElement(
                         'div',
                         {
-                            className: (0, _classnames2.default)((_mergeClassNames = {}, _defineProperty(_mergeClassNames, _style2.default.node, true), _defineProperty(_mergeClassNames, _style2.default['node--focused'], _this3.props.focused === contextPath), _mergeClassNames)),
+                            className: (0, _classnames2.default)((_mergeClassNames = {}, _defineProperty(_mergeClassNames, _style2.default.node, true), _defineProperty(_mergeClassNames, _style2.default['node--focused'], _this3.props.focused === contextPath), _defineProperty(_mergeClassNames, _style2.default['node--dirty'], isDirty), _defineProperty(_mergeClassNames, _style2.default['node--removed'], (0, _plowJs.$get)('properties._removed', item)), _mergeClassNames)),
                             key: contextPath,
                             onClick: function onClick() {
-                                _this3.props.setSrc((0, _plowJs.$get)('uri', item));
-                                _this3.props.focus(contextPath);
+                                if (!(0, _plowJs.$get)('properties._removed', item)) {
+                                    _this3.props.setSrc((0, _plowJs.$get)('uri', item));
+                                    _this3.props.focus(contextPath);
+                                }
                             },
                             role: 'button'
                         },
@@ -1005,7 +1013,7 @@ exports = module.exports = __webpack_require__(21)(false);
 
 
 // module
-exports.push([module.i, ".style__loadMoreButton___9u14e {\n    width: 100% !important;\n    opacity: 1 !important;\n}\n\n.style__toolbar___Y2z2P {\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__treeWrapper___1Ki9q {\n    padding: 5px 0;\n}\n\n.style__node___37dXu {\n    position: relative;\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    width: 100%;\n    padding: 3px 6px;\n    cursor: pointer;\n}\n\n.style__node--focused___2Ad0k {\n    background-color: #323232;\n}\n\n.style__node--focused___2Ad0k .style__node__label___2ktrO {\n    color: #00ADEE;\n}\n\n.style__node__iconWrapper___32kOo {\n    width: 2em;\n    display: inline-block;\n    position: absolute;\n    text-align: center;\n}\n\n.style__node__label___2ktrO {\n    margin-left: 2em;\n}\n", ""]);
+exports.push([module.i, ".style__loadMoreButton___9u14e {\n    width: 100% !important;\n    opacity: 1 !important;\n}\n\n.style__toolbar___Y2z2P {\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__treeWrapper___1Ki9q {\n    padding: 5px 0;\n}\n\n.style__node___37dXu {\n    position: relative;\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    width: 100%;\n    padding: 3px 6px;\n    cursor: pointer;\n}\n\n.style__node--focused___2Ad0k {\n    background-color: #323232;\n}\n\n.style__node--focused___2Ad0k .style__node__label___2ktrO {\n    color: #00ADEE;\n}\n\n.style__node--dirty___K2yEx {\n    border-left: 2px solid #ff8700;\n    padding-left: 4px;\n}\n\n.style__node--removed___3ycgN {\n    cursor: not-allowed;\n    border-color: #ff460d;\n}\n\n.style__node--removed___3ycgN .style__node__label___2ktrO,\n.style__node--removed___3ycgN .style__node__iconWrapper___32kOo {\n    opacity: 0.5;\n}\n\n.style__node__iconWrapper___32kOo {\n    width: 2em;\n    display: inline-block;\n    position: absolute;\n    text-align: center;\n}\n\n.style__node__label___2ktrO {\n    margin-left: 2em;\n}\n", ""]);
 
 // exports
 exports.locals = {
@@ -1015,6 +1023,8 @@ exports.locals = {
 	"node": "style__node___37dXu",
 	"node--focused": "style__node--focused___2Ad0k",
 	"node__label": "style__node__label___2ktrO",
+	"node--dirty": "style__node--dirty___K2yEx",
+	"node--removed": "style__node--removed___3ycgN",
 	"node__iconWrapper": "style__node__iconWrapper___32kOo"
 };
 

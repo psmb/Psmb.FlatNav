@@ -26,6 +26,18 @@
 .node--focused .node__label {
     color: var(--colors-PrimaryBlue);
 }
+.node--dirty {
+    border-left: 2px solid var(--colors-Warn);
+    padding-left: 4px;
+}
+.node--removed {
+    cursor: not-allowed;
+    border-color: var(--colors-Error);
+}
+.node--removed .node__label,
+.node--removed .node__iconWrapper {
+    opacity: 0.5;
+}
 
 .node__iconWrapper {
     width: 2em;
