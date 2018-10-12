@@ -697,7 +697,13 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                             'div',
                             {
                                 className: _style2.default.node__iconWrapper },
-                            _react2.default.createElement(_reactUiComponents.Icon, { icon: (0, _plowJs.$get)('ui.icon', nodeType) })
+                            (0, _plowJs.$get)('properties._hidden', item) ? _react2.default.createElement(
+                                'span',
+                                { className: 'fa-layers fa-fw' },
+                                _react2.default.createElement(_reactUiComponents.Icon, { icon: (0, _plowJs.$get)('ui.icon', nodeType) }),
+                                _react2.default.createElement(_reactUiComponents.Icon, { icon: 'circle', color: 'error', transform: 'shrink-3 down-6 right-4' }),
+                                _react2.default.createElement(_reactUiComponents.Icon, { icon: 'times', transform: 'shrink-7 down-6 right-4' })
+                            ) : _react2.default.createElement(_reactUiComponents.Icon, { icon: (0, _plowJs.$get)('ui.icon', nodeType) })
                         ),
                         _react2.default.createElement(
                             'span',

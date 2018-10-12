@@ -241,7 +241,15 @@ class FlatNav extends Component {
                             >
                             <div
                                 className={style.node__iconWrapper}>
-                                <Icon icon={$get('ui.icon', nodeType)} />
+                                {$get('properties._hidden', item) ? (
+                                    <span className="fa-layers fa-fw">
+                                        <Icon icon={$get('ui.icon', nodeType)} />
+                                        <Icon icon="circle" color="error" transform="shrink-3 down-6 right-4" />
+                                        <Icon icon="times" transform="shrink-7 down-6 right-4" />
+                                    </span>
+                                ) : (
+                                    <Icon icon={$get('ui.icon', nodeType)} />
+                                )}
                             </div>
                             <span
                                 className={style.node__label}>
