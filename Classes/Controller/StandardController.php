@@ -67,6 +67,7 @@ class StandardController extends ActionController
         foreach ($nodes as $node) {
             $nodeInfo = $nodeInfoHelper->renderNodeWithMinimalPropertiesAndChildrenInformation($node, $this->getControllerContext());
             $nodeInfo['properties']['_removed'] = $node->isRemoved();
+            $nodeInfo['properties']['_hidden'] = $node->isHidden();
             $result[] = $nodeInfo;
         }
         $this->view->assign('value', $result);

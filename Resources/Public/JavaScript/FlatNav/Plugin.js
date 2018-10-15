@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -93,13 +93,7 @@ function readFromConsumerApi(key) {
 "use strict";
 
 
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = (0, _readFromConsumerApi2.default)('vendor')().React;
+__webpack_require__(2);
 
 /***/ }),
 /* 2 */
@@ -108,179 +102,15 @@ module.exports = (0, _readFromConsumerApi2.default)('vendor')().React;
 "use strict";
 
 
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().ReactUiComponents;
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().NeosUiDecorators;
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = (0, _readFromConsumerApi2.default)('vendor')().PropTypes;
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = (0, _readFromConsumerApi2.default)('vendor')().plow;
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = (0, _readFromConsumerApi2.default)('vendor')().reactRedux;
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().NeosUiReduxStore;
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = (0, _readFromConsumerApi2.default)('vendor')().classnames;
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(20);
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(22)(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {
-	module.hot.accept("!!../node_modules/css-loader/index.js??ref--6-2!../node_modules/postcss-loader/lib/index.js??ref--6-3!./style.css", function() {
-		var newContent = require("!!../node_modules/css-loader/index.js??ref--6-2!../node_modules/postcss-loader/lib/index.js??ref--6-3!./style.css");
-
-		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-
-		var locals = (function(a, b) {
-			var key, idx = 0;
-
-			for(key in a) {
-				if(!b || a[key] !== b[key]) return false;
-				idx++;
-			}
-
-			for(key in b) idx--;
-
-			return idx === 0;
-		}(content.locals, newContent.locals));
-
-		if(!locals) throw new Error('Aborting CSS HMR due to changed css-modules locals.');
-
-		update(newContent);
-	});
-
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(11);
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _react = __webpack_require__(1);
+var _react = __webpack_require__(3);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _neosUiExtensibility = __webpack_require__(12);
+var _neosUiExtensibility = __webpack_require__(4);
 
 var _neosUiExtensibility2 = _interopRequireDefault(_neosUiExtensibility);
 
-var _FlatNav = __webpack_require__(16);
+var _FlatNav = __webpack_require__(8);
 
 var _FlatNav2 = _interopRequireDefault(_FlatNav);
 
@@ -312,7 +142,22 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 });
 
 /***/ }),
-/* 12 */
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = (0, _readFromConsumerApi2.default)('vendor')().React;
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -323,7 +168,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.createConsumerApi = undefined;
 
-var _createConsumerApi = __webpack_require__(13);
+var _createConsumerApi = __webpack_require__(5);
 
 var _createConsumerApi2 = _interopRequireDefault(_createConsumerApi);
 
@@ -337,7 +182,7 @@ exports.default = (0, _readFromConsumerApi2.default)('manifest');
 exports.createConsumerApi = _createConsumerApi2.default;
 
 /***/ }),
-/* 13 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -348,9 +193,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = createConsumerApi;
 
-var _package = __webpack_require__(14);
+var _package = __webpack_require__(6);
 
-var _manifest = __webpack_require__(15);
+var _manifest = __webpack_require__(7);
 
 var _manifest2 = _interopRequireDefault(_manifest);
 
@@ -379,13 +224,13 @@ function createConsumerApi(manifests, exposureMap) {
 }
 
 /***/ }),
-/* 14 */
+/* 6 */
 /***/ (function(module, exports) {
 
 module.exports = {"name":"@neos-project/neos-ui-extensibility","version":"1.3.3","description":"Extensibility mechanisms for the Neos CMS UI","main":"./src/index.js","scripts":{"prebuild":"check-dependencies && yarn clean","test":"yarn jest -- -w 2 --coverage","test:watch":"yarn jest -- --watch","build":"exit 0","build:watch":"exit 0","clean":"rimraf ./lib ./dist","lint":"eslint src","jest":"NODE_ENV=test jest"},"devDependencies":{"@neos-project/babel-preset-neos-ui":"1.3.3","@neos-project/jest-preset-neos-ui":"1.3.3"},"dependencies":{"@neos-project/build-essentials":"1.3.3","@neos-project/positional-array-sorter":"1.3.3","babel-core":"^6.13.2","babel-eslint":"^7.1.1","babel-loader":"^7.1.2","babel-plugin-transform-decorators-legacy":"^1.3.4","babel-plugin-transform-object-rest-spread":"^6.20.1","babel-plugin-webpack-alias":"^2.1.1","babel-preset-es2015":"^6.13.2","babel-preset-react":"^6.3.13","babel-preset-stage-0":"^6.3.13","chalk":"^1.1.3","css-loader":"^0.28.4","file-loader":"^1.1.5","json-loader":"^0.5.4","postcss-loader":"^2.0.10","react-dev-utils":"^0.5.0","style-loader":"^0.21.0"},"bin":{"neos-react-scripts":"./bin/neos-react-scripts.js"},"jest":{"preset":"@neos-project/jest-preset-neos-ui"}}
 
 /***/ }),
-/* 15 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -407,7 +252,7 @@ exports.default = function (manifests) {
 };
 
 /***/ }),
-/* 16 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -423,23 +268,23 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(1);
+var _react = __webpack_require__(3);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(4);
+var _propTypes = __webpack_require__(11);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _plowJs = __webpack_require__(5);
+var _plowJs = __webpack_require__(12);
 
-var _reactUiComponents = __webpack_require__(2);
+var _reactUiComponents = __webpack_require__(9);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(13);
 
-var _neosUiReduxStore = __webpack_require__(7);
+var _neosUiReduxStore = __webpack_require__(14);
 
-var _neosUiDecorators = __webpack_require__(3);
+var _neosUiDecorators = __webpack_require__(10);
 
 var _neosUiBackendConnector = __webpack_require__(17);
 
@@ -451,11 +296,11 @@ var _DeleteSelectedNode = __webpack_require__(19);
 
 var _DeleteSelectedNode2 = _interopRequireDefault(_DeleteSelectedNode);
 
-var _classnames = __webpack_require__(8);
+var _classnames = __webpack_require__(15);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _style = __webpack_require__(9);
+var _style = __webpack_require__(16);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -674,19 +519,20 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                 if (item) {
                     var _mergeClassNames;
 
-                    var nodeTypeName = (0, _plowJs.$get)('nodeType', item);
-                    var nodeType = _this3.props.nodeTypesRegistry.getNodeType(nodeTypeName);
+                    var isFocused = _this3.props.focused === contextPath;
                     var isDirty = _this3.props.publishableNodes.filter(function (i) {
                         return (0, _plowJs.$get)('contextPath', i) === contextPath || (0, _plowJs.$get)('documentContextPath', i) === contextPath;
                     }).count() > 0;
+                    var isRemoved = (0, _plowJs.$get)('properties._removed', item);
+                    var nodeIconComponent = _this3.getNodeIconComponent(item);
 
                     return _react2.default.createElement(
                         'div',
                         {
-                            className: (0, _classnames2.default)((_mergeClassNames = {}, _defineProperty(_mergeClassNames, _style2.default.node, true), _defineProperty(_mergeClassNames, _style2.default['node--focused'], _this3.props.focused === contextPath), _defineProperty(_mergeClassNames, _style2.default['node--dirty'], isDirty), _defineProperty(_mergeClassNames, _style2.default['node--removed'], (0, _plowJs.$get)('properties._removed', item)), _mergeClassNames)),
+                            className: (0, _classnames2.default)((_mergeClassNames = {}, _defineProperty(_mergeClassNames, _style2.default.node, true), _defineProperty(_mergeClassNames, _style2.default['node--focused'], isFocused), _defineProperty(_mergeClassNames, _style2.default['node--dirty'], isDirty), _defineProperty(_mergeClassNames, _style2.default['node--removed'], isRemoved), _mergeClassNames)),
                             key: contextPath,
                             onClick: function onClick() {
-                                if (!(0, _plowJs.$get)('properties._removed', item)) {
+                                if (!isRemoved) {
                                     _this3.props.setSrc((0, _plowJs.$get)('uri', item));
                                     _this3.props.focus(contextPath);
                                 }
@@ -697,13 +543,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                             'div',
                             {
                                 className: _style2.default.node__iconWrapper },
-                            (0, _plowJs.$get)('properties._hidden', item) ? _react2.default.createElement(
-                                'span',
-                                { className: 'fa-layers fa-fw' },
-                                _react2.default.createElement(_reactUiComponents.Icon, { icon: (0, _plowJs.$get)('ui.icon', nodeType) }),
-                                _react2.default.createElement(_reactUiComponents.Icon, { icon: 'circle', color: 'error', transform: 'shrink-3 down-6 right-4' }),
-                                _react2.default.createElement(_reactUiComponents.Icon, { icon: 'times', transform: 'shrink-7 down-6 right-4' })
-                            ) : _react2.default.createElement(_reactUiComponents.Icon, { icon: (0, _plowJs.$get)('ui.icon', nodeType) })
+                            nodeIconComponent
                         ),
                         _react2.default.createElement(
                             'span',
@@ -730,6 +570,37 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                 }
             }
             this.props.serverFeedbackHandlers.set('Neos.Neos.Ui:NodeCreated/DocumentAdded', this.handleNodeWasCreated, 'after Neos.Neos.Ui:NodeCreated/Main');
+        }
+    }, {
+        key: 'getNodeIconComponent',
+        value: function getNodeIconComponent(node) {
+            var nodeTypeName = (0, _plowJs.$get)('nodeType', node);
+            var nodeType = this.props.nodeTypesRegistry.getNodeType(nodeTypeName);
+            var isHidden = (0, _plowJs.$get)('properties._hidden', node);
+            var isHiddenBefore = (0, _plowJs.$get)('properties._hiddenBeforeDateTime', node);
+            var isHiddenAfter = (0, _plowJs.$get)('properties._hiddenAfterDateTime', node);
+
+            if (isHidden) {
+                return _react2.default.createElement(
+                    'span',
+                    { className: 'fa-layers fa-fw' },
+                    _react2.default.createElement(_reactUiComponents.Icon, { icon: (0, _plowJs.$get)('ui.icon', nodeType) }),
+                    _react2.default.createElement(_reactUiComponents.Icon, { icon: 'circle', color: 'error', transform: 'shrink-3 down-6 right-4' }),
+                    _react2.default.createElement(_reactUiComponents.Icon, { icon: 'times', transform: 'shrink-7 down-6 right-4' })
+                );
+            }
+
+            if (isHiddenBefore || isHiddenAfter) {
+                return _react2.default.createElement(
+                    'span',
+                    { className: 'fa-layers fa-fw' },
+                    _react2.default.createElement(_reactUiComponents.Icon, { icon: (0, _plowJs.$get)('ui.icon', nodeType) }),
+                    _react2.default.createElement(_reactUiComponents.Icon, { icon: 'circle', color: 'primaryBlue', transform: 'shrink-5 down-6 right-4' }),
+                    _react2.default.createElement(_reactUiComponents.Icon, { icon: 'clock', transform: 'shrink-9 down-6 right-4' })
+                );
+            }
+
+            return _react2.default.createElement(_reactUiComponents.Icon, { icon: (0, _plowJs.$get)('ui.icon', nodeType) });
         }
     }, {
         key: 'render',
@@ -785,6 +656,161 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
 }, _temp2)) || _class2) || _class2);
 
 /***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().ReactUiComponents;
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().NeosUiDecorators;
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = (0, _readFromConsumerApi2.default)('vendor')().PropTypes;
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = (0, _readFromConsumerApi2.default)('vendor')().plow;
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = (0, _readFromConsumerApi2.default)('vendor')().reactRedux;
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().NeosUiReduxStore;
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = (0, _readFromConsumerApi2.default)('vendor')().classnames;
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(20);
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(22)(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {
+	module.hot.accept("!!../node_modules/css-loader/index.js??ref--6-2!../node_modules/postcss-loader/lib/index.js??ref--6-3!./style.css", function() {
+		var newContent = require("!!../node_modules/css-loader/index.js??ref--6-2!../node_modules/postcss-loader/lib/index.js??ref--6-3!./style.css");
+
+		if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+
+		var locals = (function(a, b) {
+			var key, idx = 0;
+
+			for(key in a) {
+				if(!b || a[key] !== b[key]) return false;
+				idx++;
+			}
+
+			for(key in b) idx--;
+
+			return idx === 0;
+		}(content.locals, newContent.locals));
+
+		if(!locals) throw new Error('Aborting CSS HMR due to changed css-modules locals.');
+
+		update(newContent);
+	});
+
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
 /* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -822,23 +848,23 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _dec, _dec2, _class, _class2, _temp2;
 
-var _react = __webpack_require__(1);
+var _react = __webpack_require__(3);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(4);
+var _propTypes = __webpack_require__(11);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(13);
 
-var _neosUiDecorators = __webpack_require__(3);
+var _neosUiDecorators = __webpack_require__(10);
 
-var _plowJs = __webpack_require__(5);
+var _plowJs = __webpack_require__(12);
 
-var _reactUiComponents = __webpack_require__(2);
+var _reactUiComponents = __webpack_require__(9);
 
-var _neosUiReduxStore = __webpack_require__(7);
+var _neosUiReduxStore = __webpack_require__(14);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -935,19 +961,19 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _dec, _dec2, _class;
 
-var _react = __webpack_require__(1);
+var _react = __webpack_require__(3);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(13);
 
-var _plowJs = __webpack_require__(5);
+var _plowJs = __webpack_require__(12);
 
-var _neosUiDecorators = __webpack_require__(3);
+var _neosUiDecorators = __webpack_require__(10);
 
-var _reactUiComponents = __webpack_require__(2);
+var _reactUiComponents = __webpack_require__(9);
 
-var _neosUiReduxStore = __webpack_require__(7);
+var _neosUiReduxStore = __webpack_require__(14);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1613,23 +1639,23 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _dec, _class, _class2, _temp2;
 
-var _react = __webpack_require__(1);
+var _react = __webpack_require__(3);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(4);
+var _propTypes = __webpack_require__(11);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _classnames = __webpack_require__(8);
+var _classnames = __webpack_require__(15);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _neosUiDecorators = __webpack_require__(3);
+var _neosUiDecorators = __webpack_require__(10);
 
-var _reactUiComponents = __webpack_require__(2);
+var _reactUiComponents = __webpack_require__(9);
 
-var _style = __webpack_require__(9);
+var _style = __webpack_require__(16);
 
 var _style2 = _interopRequireDefault(_style);
 

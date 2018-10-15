@@ -209,30 +209,63 @@ class FlatNav extends Component {
         this.props.resetNodes(this.props.fetchNodes);
     }
 
+    getNodeIconComponent(node) {
+        const nodeTypeName = $get('nodeType', node);
+        const nodeType = this.props.nodeTypesRegistry.getNodeType(nodeTypeName);
+        const isHidden = $get('properties._hidden', node);
+        const isHiddenBefore = $get('properties._hiddenBeforeDateTime', node);
+        const isHiddenAfter = $get('properties._hiddenAfterDateTime', node);
+
+        if (isHidden) {
+            return (
+                <span className="fa-layers fa-fw">
+                    <Icon icon={$get('ui.icon', nodeType)} />
+                    <Icon icon="circle" color="error" transform="shrink-3 down-6 right-4" />
+                    <Icon icon="times" transform="shrink-7 down-6 right-4" />
+                </span>
+            );
+        }
+
+        if (isHiddenBefore || isHiddenAfter) {
+            return (
+                <span className="fa-layers fa-fw">
+                    <Icon icon={$get('ui.icon', nodeType)} />
+                    <Icon icon="circle" color="primaryBlue" transform="shrink-5 down-6 right-4" />
+                    <Icon icon="clock" transform="shrink-9 down-6 right-4" />
+                </span>
+            );
+        }
+
+        return (
+            <Icon icon={$get('ui.icon', nodeType)} />
+        );
+    }
+
     renderNodes = () => {
         return this.props.nodes
             .map(contextPath => {
                 const item = $get([contextPath], this.props.nodeData);
 
                 if (item) {
-                    const nodeTypeName = $get('nodeType', item);
-                    const nodeType = this.props.nodeTypesRegistry.getNodeType(nodeTypeName);
+                    const isFocused = this.props.focused === contextPath;
                     const isDirty = this.props.publishableNodes.filter(i => (
                         $get('contextPath', i) === contextPath ||
                         $get('documentContextPath', i) === contextPath
                     )).count() > 0;
+                    const isRemoved = $get('properties._removed', item);
+                    const nodeIconComponent = this.getNodeIconComponent(item);
 
                     return (
                         <div
                             className={mergeClassNames({
                                 [style.node]: true,
-                                [style['node--focused']]: this.props.focused === contextPath,
+                                [style['node--focused']]: isFocused,
                                 [style['node--dirty']]: isDirty,
-                                [style['node--removed']]: $get('properties._removed', item)
+                                [style['node--removed']]: isRemoved
                             })}
                             key={contextPath}
                             onClick={() => {
-                                if ( ! $get('properties._removed', item)) {
+                                if ( ! isRemoved) {
                                     this.props.setSrc($get('uri', item));
                                     this.props.focus(contextPath);
                                 }
@@ -241,15 +274,7 @@ class FlatNav extends Component {
                             >
                             <div
                                 className={style.node__iconWrapper}>
-                                {$get('properties._hidden', item) ? (
-                                    <span className="fa-layers fa-fw">
-                                        <Icon icon={$get('ui.icon', nodeType)} />
-                                        <Icon icon="circle" color="error" transform="shrink-3 down-6 right-4" />
-                                        <Icon icon="times" transform="shrink-7 down-6 right-4" />
-                                    </span>
-                                ) : (
-                                    <Icon icon={$get('ui.icon', nodeType)} />
-                                )}
+                                {nodeIconComponent}
                             </div>
                             <span
                                 className={style.node__label}>
