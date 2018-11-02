@@ -589,7 +589,7 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                         var preset = _this2.props.options.presets[presetName];
                         return _react2.default.createElement(
                             _reactUiComponents.Tabs.Panel,
-                            { key: presetName, icon: preset.icon, tooltip: preset.label },
+                            { key: presetName, icon: preset.icon, tooltip: _this2.props.i18nRegistry.translate(preset.label) },
                             preset.type === 'flat' && _react2.default.createElement(FlatNav, _extends({
                                 preset: preset,
                                 fetchNodes: _this2.makeFetchNodes(presetName),
@@ -608,7 +608,8 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
 
     return (0, _neosUiDecorators.neos)(function (globalRegistry) {
         return {
-            options: globalRegistry.get('frontendConfiguration').get('Psmb_FlatNav')
+            options: globalRegistry.get('frontendConfiguration').get('Psmb_FlatNav'),
+            i18nRegistry: globalRegistry.get('i18n')
         };
     })((0, _reactRedux.connect)((0, _plowJs.$transform)({
         siteNodeContextPath: (0, _plowJs.$get)('cr.nodes.siteNode')
@@ -621,7 +622,8 @@ exports.default = makeFlatNavContainer;
 var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     return {
         nodeTypesRegistry: globalRegistry.get('@neos-project/neos-ui-contentrepository'),
-        serverFeedbackHandlers: globalRegistry.get('serverFeedbackHandlers')
+        serverFeedbackHandlers: globalRegistry.get('serverFeedbackHandlers'),
+        i18nRegistry: globalRegistry.get('i18n')
     };
 }), _dec2 = (0, _reactRedux.connect)((0, _plowJs.$transform)({
     nodeData: (0, _plowJs.$get)('cr.nodes.byContextPath'),
@@ -752,7 +754,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                             icon: this.props.isLoading ? 'spinner' : 'angle-double-down'
                         }),
                         '\xA0',
-                        this.props.isLoading ? 'Loading...' : 'Load more'
+                        this.props.isLoading ? this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loading') : this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loadMore')
                     )
                 )
             );

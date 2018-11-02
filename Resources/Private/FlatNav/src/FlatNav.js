@@ -122,7 +122,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                     {Object.keys(this.props.options.presets).map(presetName => {
                         const preset = this.props.options.presets[presetName];
                         return (
-                            <Tabs.Panel key={presetName} icon={preset.icon} tooltip={preset.label}>
+                            <Tabs.Panel key={presetName} icon={preset.icon} tooltip={this.props.i18nRegistry.translate(preset.label)}>
                                 {preset.type === 'flat' && (<FlatNav
                                     preset={preset}
                                     fetchNodes={this.makeFetchNodes(presetName)}
@@ -139,7 +139,8 @@ const makeFlatNavContainer = OriginalPageTree => {
         }
     }
     return neos(globalRegistry => ({
-        options: globalRegistry.get('frontendConfiguration').get('Psmb_FlatNav')
+        options: globalRegistry.get('frontendConfiguration').get('Psmb_FlatNav'),
+        i18nRegistry: globalRegistry.get('i18n')
     }))(connect($transform({
         siteNodeContextPath: $get('cr.nodes.siteNode')
     }), {
@@ -151,7 +152,8 @@ export default makeFlatNavContainer;
 
 @neos(globalRegistry => ({
     nodeTypesRegistry: globalRegistry.get('@neos-project/neos-ui-contentrepository'),
-    serverFeedbackHandlers: globalRegistry.get('serverFeedbackHandlers')
+    serverFeedbackHandlers: globalRegistry.get('serverFeedbackHandlers'),
+    i18nRegistry: globalRegistry.get('i18n')
 }))
 @connect($transform({
     nodeData: $get('cr.nodes.byContextPath'),
@@ -267,7 +269,7 @@ class FlatNav extends Component {
                             spin={this.props.isLoading}
                             icon={this.props.isLoading ? 'spinner' : 'angle-double-down'}
                         />
-                        &nbsp;{this.props.isLoading ? 'Loading...' : 'Load more'}
+                        &nbsp;{this.props.isLoading ? this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loading') : this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loadMore')}
                     </div>
                 </Button>)}
             </div>

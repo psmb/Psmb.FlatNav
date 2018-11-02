@@ -1,5 +1,10 @@
 Neos:
   Neos:
+    userInterface:
+      translation:
+        autoInclude:
+          Psmb.FlatNav:
+            - Main
     Ui:
       resources:
         javascript:
