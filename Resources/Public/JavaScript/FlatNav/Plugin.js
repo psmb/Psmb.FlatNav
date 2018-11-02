@@ -663,7 +663,9 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
             var context = _this3.props.siteNodeContextPath.split('@')[1];
             var contextPath = (_this3.props.newReferenceNodePath || _this3.props.preset.newReferenceNodePath) + '@' + context;
             _this3.props.commenceNodeCreation(contextPath);
-            _this3.props.selectNodeType('into', _this3.props.preset.newNodeType);
+            if (_this3.props.preset.newNodeType) {
+                _this3.props.selectNodeType('into', _this3.props.preset.newNodeType);
+            }
         }, _this3.refreshFlatNav = function () {
             _this3.props.resetNodes(_this3.props.fetchNodes);
         }, _this3.renderNodes = function () {
