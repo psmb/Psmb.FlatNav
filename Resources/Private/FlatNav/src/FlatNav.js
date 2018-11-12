@@ -202,10 +202,7 @@ class FlatNav extends Component {
     createNode = () => {
         const context = this.props.siteNodeContextPath.split('@')[1];
         const contextPath = (this.props.newReferenceNodePath || this.props.preset.newReferenceNodePath) + '@' + context;
-        this.props.commenceNodeCreation(contextPath);
-        if (this.props.preset.newNodeType) {
-            this.props.selectNodeType('into', this.props.preset.newNodeType);
-        }
+        this.props.commenceNodeCreation(contextPath, undefined, 'into', this.props.preset.newNodeType || undefined);
     }
 
     refreshFlatNav = () => {
