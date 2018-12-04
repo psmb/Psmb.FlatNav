@@ -628,7 +628,8 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
 }), _dec2 = (0, _reactRedux.connect)((0, _plowJs.$transform)({
     nodeData: (0, _plowJs.$get)('cr.nodes.byContextPath'),
     focused: (0, _plowJs.$get)('ui.pageTree.isFocused'),
-    siteNodeContextPath: (0, _plowJs.$get)('cr.nodes.siteNode')
+    siteNodeContextPath: (0, _plowJs.$get)('cr.nodes.siteNode'),
+    baseWorkspaceName: (0, _plowJs.$get)('cr.workspaces.personalWorkspace.baseWorkspace')
 }), {
     setSrc: _neosUiReduxStore.actions.UI.ContentCanvas.setSrc,
     focus: _neosUiReduxStore.actions.UI.PageTree.focus,
@@ -717,6 +718,14 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                 }
             }
             this.props.serverFeedbackHandlers.set('Neos.Neos.Ui:NodeCreated/DocumentAdded', this.handleNodeWasCreated, 'after Neos.Neos.Ui:NodeCreated/Main');
+        }
+    }, {
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate(prevProps) {
+            // If the siteNodeContextPath or baseWorkspaceName have changed, reload the nodes
+            if (this.props.siteNodeContextPath !== prevProps.siteNodeContextPath || this.props.baseWorkspaceName !== prevProps.baseWorkspaceName) {
+                this.refreshFlatNav();
+            }
         }
     }, {
         key: 'render',
