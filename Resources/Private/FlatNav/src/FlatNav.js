@@ -1,154 +1,33 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {$get, $transform} from 'plow-js';
-import {Button, Icon, IconButton, Tabs} from '@neos-project/react-ui-components';
+import {Button, Icon, IconButton} from '@neos-project/react-ui-components';
 import {connect} from 'react-redux';
 import {actions, selectors} from '@neos-project/neos-ui-redux-store';
 import {neos} from '@neos-project/neos-ui-decorators';
-import {fetchWithErrorHandling} from '@neos-project/neos-ui-backend-connector';
 import HideSelectedNode from './HideSelectedNode';
 import DeleteSelectedNode from './DeleteSelectedNode';
 import mergeClassNames from 'classnames';
 import style from './style.css';
 import RefreshNodes from "./RefreshNodes";
+import backend from '@neos-project/neos-ui-backend-connector';
 
-const makeFlatNavContainer = OriginalPageTree => {
-    class FlatNavContainer extends Component {
-        state = {};
-
-        constructor(props) {
-            super(props);
-            Object.keys(this.props.options.presets).forEach(preset => {
-                this.state[preset] = {
-                    page: 1,
-                    isLoading: false,
-                    isLoadingReferenceNodePath: false,
-                    nodes: [],
-                    moreNodesAvailable: true,
-                    newReferenceNodePath: ''
-                };
-            });
-        }
-
-        makeResetNodes = preset => callback => {
-            this.setState({
-                [preset]: {
-                    ...this.state[preset],
-                    page: 1,
-                    nodes: [],
-                    moreNodesAvailable: true
-                }
-            }, callback);
-        }
-
-        makeFetchNodes = preset => () => {
-            this.setState({
-                [preset]: {
-                    ...this.state[preset],
-                    isLoading: true,
-                    moreNodesAvailable: true
-                }
-            });
-            fetchWithErrorHandling.withCsrfToken(csrfToken => ({
-                url: `/flatnav/query?nodeContextPath=${this.props.siteNodeContextPath}&preset=${preset}&page=${this.state[preset].page}`,
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'X-Flow-Csrftoken': csrfToken,
-                    'Content-Type': 'application/json'
-                }
-            }))
-                .then(response => response && response.json())
-                .then(nodes => {
-                    if (nodes.length > 0) {
-                        const nodesMap = nodes.reduce((result, node) => {
-                            result[node.contextPath] = node;
-                            return result;
-                        }, {});
-                        this.props.merge(nodesMap);
-                        this.setState({
-                            [preset]: {
-                                ...this.state[preset],
-                                page: this.state[preset].page + 1,
-                                isLoading: false,
-                                nodes: [...this.state[preset].nodes, ...Object.keys(nodesMap)],
-                                moreNodesAvailable: true
-                            }
-                        });
-                    } else {
-                        this.setState({
-                            [preset]: {
-                                ...this.state[preset],
-                                isLoading: false,
-                                moreNodesAvailable: false
-                            }
-                        });
-                    }
-                });
-        };
-
-        makeGetNewReferenceNodePath = preset => () => {
-            this.setState({
-                [preset]: {
-                    ...this.state[preset],
-                    isLoadingReferenceNodePath: true
-                }
-            });
-            fetchWithErrorHandling.withCsrfToken(csrfToken => ({
-                url: `/flatnav/getNewReferenceNodePath?nodeContextPath=${this.props.siteNodeContextPath}&preset=${preset}`,
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'X-Flow-Csrftoken': csrfToken,
-                    'Content-Type': 'application/json'
-                }
-            }))
-                .then(response => response && response.json())
-                .then(newReferenceNodePath => {
-                    this.setState({
-                        [preset]: {
-                            ...this.state[preset],
-                            isLoading: false,
-                            isLoadingReferenceNodePath: false,
-                            newReferenceNodePath: newReferenceNodePath
-                        }
-                    });
-                });
-        };
-
-        render() {
-            return (
-                <Tabs>
-                    {Object.keys(this.props.options.presets).map(presetName => {
-                        const preset = this.props.options.presets[presetName];
-                        return (
-                            <Tabs.Panel key={presetName} icon={preset.icon} tooltip={this.props.i18nRegistry.translate(preset.label)}>
-                                {preset.type === 'flat' && (<FlatNav
-                                    preset={preset}
-                                    fetchNodes={this.makeFetchNodes(presetName)}
-                                    resetNodes={this.makeResetNodes(presetName)}
-                                    fetchNewReferenceNodePath={this.makeGetNewReferenceNodePath(presetName)}
-                                    {...this.state[presetName]}
-                                    />)}
-                                {preset.type === 'tree' && (<OriginalPageTree />)}
-                            </Tabs.Panel>
-                        );
-                    })}
-                </Tabs>
-            );
-        }
+// Taken from here, as it's not exported in the UI
+// https://github.com/neos/neos-ui/blob/b2a52d66a211b192dfc541799779a8be27bf5a31/packages/neos-ui-sagas/src/CR/NodeOperations/helpers.js#L3
+const parentNodeContextPath = contextPath => {
+    if (typeof contextPath !== 'string') {
+        return null;
     }
-    return neos(globalRegistry => ({
-        options: globalRegistry.get('frontendConfiguration').get('Psmb_FlatNav'),
-        i18nRegistry: globalRegistry.get('i18n')
-    }))(connect($transform({
-        siteNodeContextPath: $get('cr.nodes.siteNode')
-    }), {
-        merge: actions.CR.Nodes.merge
-    })(FlatNavContainer));
-};
 
-export default makeFlatNavContainer;
+    const [path, context] = contextPath.split('@');
+
+    if (path.length === 0) {
+        // We are at top level; so there is no parent anymore!
+        return false;
+    }
+
+    return `${path.substr(0, path.lastIndexOf('/'))}@${context}`;
+};
 
 @neos(globalRegistry => ({
     nodeTypesRegistry: globalRegistry.get('@neos-project/neos-ui-contentrepository'),
@@ -165,9 +44,10 @@ export default makeFlatNavContainer;
     focus: actions.UI.PageTree.focus,
     openNodeCreationDialog: actions.UI.NodeCreationDialog.open,
     commenceNodeCreation: actions.CR.Nodes.commenceCreation,
-    selectNodeType: actions.UI.SelectNodeTypeModal.apply
+    selectNodeType: actions.UI.SelectNodeTypeModal.apply,
+    merge: actions.CR.Nodes.merge
 })
-class FlatNav extends Component {
+export default class FlatNav extends Component {
     static propTypes = {
         nodes: PropTypes.array.isRequired,
         preset: PropTypes.object.isRequired,
@@ -181,6 +61,7 @@ class FlatNav extends Component {
     componentDidMount() {
         if (this.props.nodes.length === 0) {
             this.props.fetchNodes();
+            this.fetchReferenceNode();
             if (this.props.preset.newReferenceNodePath.indexOf('/') !== 0) {
                 this.props.fetchNewReferenceNodePath();
             }
@@ -195,6 +76,7 @@ class FlatNav extends Component {
             || this.props.baseWorkspaceName !== prevProps.baseWorkspaceName
         ) {
             this.refreshFlatNav();
+            this.fetchReferenceNode();
         }
     }
 
@@ -210,14 +92,41 @@ class FlatNav extends Component {
         }
     }
 
-    createNode = () => {
+    buildNewReferenceNodePath = () => {
         const context = this.props.siteNodeContextPath.split('@')[1];
-        const contextPath = (this.props.newReferenceNodePath || this.props.preset.newReferenceNodePath) + '@' + context;
+        return (this.props.newReferenceNodePath || this.props.preset.newReferenceNodePath) + '@' + context;
+    };
+
+    createNode = () => {
+        const contextPath = this.buildNewReferenceNodePath();
         this.props.commenceNodeCreation(contextPath, undefined, 'into', this.props.preset.newNodeType || undefined);
     }
 
     refreshFlatNav = () => {
         this.props.resetNodes(this.props.fetchNodes);
+    }
+
+    // This is rather a hack. We need to make sure the target NewReferenceNode is loaded
+    // in order to be able to create anything inside it.
+    fetchReferenceNode = () => {
+        const {siteNodeContextPath} = this.props;
+        const {q} = backend.get();
+
+        let parentContextPath = this.buildNewReferenceNodePath();
+
+        while (parentContextPath !== siteNodeContextPath) {
+            const node = $get([parentContextPath], this.props.nodeData);
+            // If the given node is not in the state, load it
+            if (!node) {
+                q(parentContextPath).get().then(nodes => {
+                    this.props.merge(nodes.reduce((nodeMap, node) => {
+                        nodeMap[$get('contextPath', node)] = node;
+                        return nodeMap;
+                    }, {}));
+                });
+            }
+            parentContextPath = parentNodeContextPath(parentContextPath);
+        }
     }
 
     renderNodes = () => {
