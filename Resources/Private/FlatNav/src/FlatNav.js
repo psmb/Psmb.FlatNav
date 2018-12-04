@@ -158,7 +158,8 @@ export default makeFlatNavContainer;
 @connect($transform({
     nodeData: $get('cr.nodes.byContextPath'),
     focused: $get('ui.pageTree.isFocused'),
-    siteNodeContextPath: $get('cr.nodes.siteNode')
+    siteNodeContextPath: $get('cr.nodes.siteNode'),
+    baseWorkspaceName: $get('cr.workspaces.personalWorkspace.baseWorkspace')
 }), {
     setSrc: actions.UI.ContentCanvas.setSrc,
     focus: actions.UI.PageTree.focus,
@@ -185,6 +186,16 @@ class FlatNav extends Component {
             }
         }
         this.props.serverFeedbackHandlers.set('Neos.Neos.Ui:NodeCreated/DocumentAdded', this.handleNodeWasCreated, 'after Neos.Neos.Ui:NodeCreated/Main');
+    }
+
+    componentDidUpdate(prevProps) {
+        // If the siteNodeContextPath or baseWorkspaceName have changed, reload the nodes
+        if (
+            this.props.siteNodeContextPath !== prevProps.siteNodeContextPath
+            || this.props.baseWorkspaceName !== prevProps.baseWorkspaceName
+        ) {
+            this.refreshFlatNav();
+        }
     }
 
     handleNodeWasCreated = (feedbackPayload, {store}) => {
