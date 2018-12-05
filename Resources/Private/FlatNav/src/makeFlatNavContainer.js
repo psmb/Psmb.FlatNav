@@ -32,6 +32,10 @@ const makeFlatNavContainer = OriginalPageTree => {
         constructor(props) {
             super(props);
             this.state = this.buildDefaultState(props);
+
+            // It's not safe to rely on React's state to do the locking
+            this.loadingLock = {};
+            this.loadingReferenceNodePathLock = {};
         }
 
         componentDidUpdate(prevProps) {
@@ -86,6 +90,10 @@ const makeFlatNavContainer = OriginalPageTree => {
         }
 
         makeFetchNodes = preset => () => {
+            if (this.loadingLock[preset]) {
+                return;
+            }
+            this.loadingLock[preset] = true;
             this.setState({
                 [preset]: {
                     ...this.state[preset],
@@ -128,11 +136,16 @@ const makeFlatNavContainer = OriginalPageTree => {
                             }
                         });
                     }
+                    this.loadingLock[preset] = false;
                 });
         };
 
         // Gets the `newReferenceNodePath` setting and loads that node into state
         makeGetNewReference = preset => () => {
+            if (this.loadingReferenceNodePathLock[preset]) {
+                return;
+            }
+            this.loadingReferenceNodePathLock[preset] = true;
             const context = this.props.siteNodeContextPath.split('@')[1];
             if (this.state[preset].newReferenceNodePath.indexOf('/') === 0) {
                 this.fetchNodeWithParents(this.state[preset].newReferenceNodePath + '@' + context);
@@ -157,10 +170,12 @@ const makeFlatNavContainer = OriginalPageTree => {
                         this.setState({
                             [preset]: {
                                 ...this.state[preset],
+                                isLoadingReferenceNodePath: false,
                                 newReferenceNodePath
                             }
                         });
                         this.fetchNodeWithParents(newReferenceNodePath + '@' + context);
+                        this.loadingReferenceNodePathLock[preset] = false;
                     });
             }
         };

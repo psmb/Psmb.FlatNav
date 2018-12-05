@@ -18,7 +18,8 @@ import RefreshNodes from "./RefreshNodes";
 @connect($transform({
     nodeData: $get('cr.nodes.byContextPath'),
     focused: $get('ui.pageTree.isFocused'),
-    siteNodeContextPath: $get('cr.nodes.siteNode')
+    siteNodeContextPath: $get('cr.nodes.siteNode'),
+    baseWorkspaceName: $get('cr.workspaces.personalWorkspace.baseWorkspace')
 }), {
     setSrc: actions.UI.ContentCanvas.setSrc,
     focus: actions.UI.PageTree.focus,
@@ -43,18 +44,14 @@ export default class FlatNav extends Component {
         this.props.serverFeedbackHandlers.set('Neos.Neos.Ui:NodeCreated/DocumentAdded', this.handleNodeWasCreated, 'after Neos.Neos.Ui:NodeCreated/Main');
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         this.populateTheState();
     }
 
     populateTheState = () => {
         if (this.props.nodes.length === 0) {
-            if (!this.props.isLoading) {
-                this.props.fetchNodes();
-            }
-            if (!this.props.isLoadingReferenceNodePath) {
-                this.props.fetchNewReference();
-            }
+            this.props.fetchNodes();
+            this.props.fetchNewReference();
         }
     };
 

@@ -513,6 +513,10 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
             _initialiseProps.call(_this);
 
             _this.state = _this.buildDefaultState(props);
+
+            // It's not safe to rely on React's state to do the locking
+            _this.loadingLock = {};
+            _this.loadingReferenceNodePathLock = {};
             return _this;
         }
 
@@ -600,6 +604,10 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
 
         this.makeFetchNodes = function (preset) {
             return function () {
+                if (_this3.loadingLock[preset]) {
+                    return;
+                }
+                _this3.loadingLock[preset] = true;
                 _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
                     isLoading: true,
                     moreNodesAvailable: true
@@ -635,12 +643,17 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                             moreNodesAvailable: false
                         })));
                     }
+                    _this3.loadingLock[preset] = false;
                 });
             };
         };
 
         this.makeGetNewReference = function (preset) {
             return function () {
+                if (_this3.loadingReferenceNodePathLock[preset]) {
+                    return;
+                }
+                _this3.loadingReferenceNodePathLock[preset] = true;
                 var context = _this3.props.siteNodeContextPath.split('@')[1];
                 if (_this3.state[preset].newReferenceNodePath.indexOf('/') === 0) {
                     _this3.fetchNodeWithParents(_this3.state[preset].newReferenceNodePath + '@' + context);
@@ -662,9 +675,11 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                         return response && response.json();
                     }).then(function (newReferenceNodePath) {
                         _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
+                            isLoadingReferenceNodePath: false,
                             newReferenceNodePath: newReferenceNodePath
                         })));
                         _this3.fetchNodeWithParents(newReferenceNodePath + '@' + context);
+                        _this3.loadingReferenceNodePathLock[preset] = false;
                     });
                 }
             };
@@ -784,7 +799,8 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
 }), _dec2 = (0, _reactRedux.connect)((0, _plowJs.$transform)({
     nodeData: (0, _plowJs.$get)('cr.nodes.byContextPath'),
     focused: (0, _plowJs.$get)('ui.pageTree.isFocused'),
-    siteNodeContextPath: (0, _plowJs.$get)('cr.nodes.siteNode')
+    siteNodeContextPath: (0, _plowJs.$get)('cr.nodes.siteNode'),
+    baseWorkspaceName: (0, _plowJs.$get)('cr.workspaces.personalWorkspace.baseWorkspace')
 }), {
     setSrc: _neosUiReduxStore.actions.UI.ContentCanvas.setSrc,
     focus: _neosUiReduxStore.actions.UI.PageTree.focus,
@@ -808,12 +824,8 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
 
         return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = FlatNav.__proto__ || Object.getPrototypeOf(FlatNav)).call.apply(_ref, [this].concat(args))), _this), _this.populateTheState = function () {
             if (_this.props.nodes.length === 0) {
-                if (!_this.props.isLoading) {
-                    _this.props.fetchNodes();
-                }
-                if (!_this.props.isLoadingReferenceNodePath) {
-                    _this.props.fetchNewReference();
-                }
+                _this.props.fetchNodes();
+                _this.props.fetchNewReference();
             }
         }, _this.handleNodeWasCreated = function (feedbackPayload, _ref2) {
             var store = _ref2.store;
@@ -883,7 +895,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
         }
     }, {
         key: 'componentDidUpdate',
-        value: function componentDidUpdate() {
+        value: function componentDidUpdate(prevProps) {
             this.populateTheState();
         }
     }, {
