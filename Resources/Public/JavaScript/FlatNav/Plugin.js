@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -144,7 +144,7 @@ var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-module.exports = (0, _readFromConsumerApi2.default)('vendor')().PropTypes;
+module.exports = (0, _readFromConsumerApi2.default)('vendor')().plow;
 
 /***/ }),
 /* 5 */
@@ -159,7 +159,7 @@ var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-module.exports = (0, _readFromConsumerApi2.default)('vendor')().plow;
+module.exports = (0, _readFromConsumerApi2.default)('vendor')().reactRedux;
 
 /***/ }),
 /* 6 */
@@ -174,7 +174,7 @@ var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-module.exports = (0, _readFromConsumerApi2.default)('vendor')().reactRedux;
+module.exports = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().NeosUiReduxStore;
 
 /***/ }),
 /* 7 */
@@ -189,10 +189,32 @@ var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-module.exports = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().NeosUiReduxStore;
+module.exports = (0, _readFromConsumerApi2.default)('vendor')().PropTypes;
 
 /***/ }),
 /* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fetchWithErrorHandling = undefined;
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().NeosUiBackendConnectorDefault;
+var fetchWithErrorHandling = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().NeosUiBackendConnector.fetchWithErrorHandling;
+exports.fetchWithErrorHandling = fetchWithErrorHandling;
+
+/***/ }),
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -207,11 +229,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 module.exports = (0, _readFromConsumerApi2.default)('vendor')().classnames;
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(20);
+var content = __webpack_require__(21);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -225,7 +247,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(22)(content, options);
+var update = __webpack_require__(23)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -257,16 +279,16 @@ if(false) {
 }
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(11);
+__webpack_require__(12);
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -276,13 +298,13 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _neosUiExtensibility = __webpack_require__(12);
+var _neosUiExtensibility = __webpack_require__(13);
 
 var _neosUiExtensibility2 = _interopRequireDefault(_neosUiExtensibility);
 
-var _FlatNav = __webpack_require__(16);
+var _makeFlatNavContainer = __webpack_require__(17);
 
-var _FlatNav2 = _interopRequireDefault(_FlatNav);
+var _makeFlatNavContainer2 = _interopRequireDefault(_makeFlatNavContainer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -308,11 +330,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         return null;
     });
 
-    containerRegistry.set('LeftSideBar/Top/PageTree', (0, _FlatNav2.default)(OriginalTree));
+    containerRegistry.set('LeftSideBar/Top/PageTree', (0, _makeFlatNavContainer2.default)(OriginalTree));
 });
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -323,7 +345,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.createConsumerApi = undefined;
 
-var _createConsumerApi = __webpack_require__(13);
+var _createConsumerApi = __webpack_require__(14);
 
 var _createConsumerApi2 = _interopRequireDefault(_createConsumerApi);
 
@@ -337,7 +359,7 @@ exports.default = (0, _readFromConsumerApi2.default)('manifest');
 exports.createConsumerApi = _createConsumerApi2.default;
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -348,9 +370,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = createConsumerApi;
 
-var _package = __webpack_require__(14);
+var _package = __webpack_require__(15);
 
-var _manifest = __webpack_require__(15);
+var _manifest = __webpack_require__(16);
 
 var _manifest2 = _interopRequireDefault(_manifest);
 
@@ -379,13 +401,13 @@ function createConsumerApi(manifests, exposureMap) {
 }
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = {"name":"@neos-project/neos-ui-extensibility","version":"1.3.3","description":"Extensibility mechanisms for the Neos CMS UI","main":"./src/index.js","scripts":{"prebuild":"check-dependencies && yarn clean","test":"yarn jest -- -w 2 --coverage","test:watch":"yarn jest -- --watch","build":"exit 0","build:watch":"exit 0","clean":"rimraf ./lib ./dist","lint":"eslint src","jest":"NODE_ENV=test jest"},"devDependencies":{"@neos-project/babel-preset-neos-ui":"1.3.3","@neos-project/jest-preset-neos-ui":"1.3.3"},"dependencies":{"@neos-project/build-essentials":"1.3.3","@neos-project/positional-array-sorter":"1.3.3","babel-core":"^6.13.2","babel-eslint":"^7.1.1","babel-loader":"^7.1.2","babel-plugin-transform-decorators-legacy":"^1.3.4","babel-plugin-transform-object-rest-spread":"^6.20.1","babel-plugin-webpack-alias":"^2.1.1","babel-preset-es2015":"^6.13.2","babel-preset-react":"^6.3.13","babel-preset-stage-0":"^6.3.13","chalk":"^1.1.3","css-loader":"^0.28.4","file-loader":"^1.1.5","json-loader":"^0.5.4","postcss-loader":"^2.0.10","react-dev-utils":"^0.5.0","style-loader":"^0.21.0"},"bin":{"neos-react-scripts":"./bin/neos-react-scripts.js"},"jest":{"preset":"@neos-project/jest-preset-neos-ui"}}
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -407,7 +429,7 @@ exports.default = function (manifests) {
 };
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -417,51 +439,33 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _dec, _dec2, _class2, _class3, _temp2;
-
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(4);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _plowJs = __webpack_require__(5);
+var _plowJs = __webpack_require__(4);
 
 var _reactUiComponents = __webpack_require__(2);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(5);
 
-var _neosUiReduxStore = __webpack_require__(7);
+var _neosUiReduxStore = __webpack_require__(6);
 
 var _neosUiDecorators = __webpack_require__(3);
 
-var _neosUiBackendConnector = __webpack_require__(17);
+var _neosUiBackendConnector = __webpack_require__(8);
 
-var _HideSelectedNode = __webpack_require__(18);
+var _neosUiBackendConnector2 = _interopRequireDefault(_neosUiBackendConnector);
 
-var _HideSelectedNode2 = _interopRequireDefault(_HideSelectedNode);
+var _FlatNav = __webpack_require__(18);
 
-var _DeleteSelectedNode = __webpack_require__(19);
-
-var _DeleteSelectedNode2 = _interopRequireDefault(_DeleteSelectedNode);
-
-var _classnames = __webpack_require__(8);
-
-var _classnames2 = _interopRequireDefault(_classnames);
-
-var _style = __webpack_require__(9);
-
-var _style2 = _interopRequireDefault(_style);
-
-var _RefreshNodes = __webpack_require__(24);
-
-var _RefreshNodes2 = _interopRequireDefault(_RefreshNodes);
+var _FlatNav2 = _interopRequireDefault(_FlatNav);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -475,8 +479,30 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+// Taken from here, as it's not exported in the UI
+// https://github.com/neos/neos-ui/blob/b2a52d66a211b192dfc541799779a8be27bf5a31/packages/neos-ui-sagas/src/CR/NodeOperations/helpers.js#L3
+var parentNodeContextPath = function parentNodeContextPath(contextPath) {
+    if (typeof contextPath !== 'string') {
+        return null;
+    }
+
+    var _contextPath$split = contextPath.split('@'),
+        _contextPath$split2 = _slicedToArray(_contextPath$split, 2),
+        path = _contextPath$split2[0],
+        context = _contextPath$split2[1];
+
+    if (path.length === 0) {
+        // We are at top level; so there is no parent anymore!
+        return false;
+    }
+
+    return path.substr(0, path.lastIndexOf('/')) + '@' + context;
+};
+
 var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
-    var FlatNavContainer = function (_Component) {
+    var _class, _temp, _initialiseProps;
+
+    var FlatNavContainer = (_temp = _class = function (_Component) {
         _inherits(FlatNavContainer, _Component);
 
         function FlatNavContainer(props) {
@@ -484,100 +510,28 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
 
             var _this = _possibleConstructorReturn(this, (FlatNavContainer.__proto__ || Object.getPrototypeOf(FlatNavContainer)).call(this, props));
 
-            _this.state = {};
+            _initialiseProps.call(_this);
 
-            _this.makeResetNodes = function (preset) {
-                return function (callback) {
-                    _this.setState(_defineProperty({}, preset, _extends({}, _this.state[preset], {
-                        page: 1,
-                        nodes: [],
-                        moreNodesAvailable: true
-                    })), callback);
-                };
-            };
+            _this.state = _this.buildDefaultState(props);
 
-            _this.makeFetchNodes = function (preset) {
-                return function () {
-                    _this.setState(_defineProperty({}, preset, _extends({}, _this.state[preset], {
-                        isLoading: true,
-                        moreNodesAvailable: true
-                    })));
-                    _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
-                        return {
-                            url: '/flatnav/query?nodeContextPath=' + _this.props.siteNodeContextPath + '&preset=' + preset + '&page=' + _this.state[preset].page,
-                            method: 'GET',
-                            credentials: 'include',
-                            headers: {
-                                'X-Flow-Csrftoken': csrfToken,
-                                'Content-Type': 'application/json'
-                            }
-                        };
-                    }).then(function (response) {
-                        return response && response.json();
-                    }).then(function (nodes) {
-                        if (nodes.length > 0) {
-                            var nodesMap = nodes.reduce(function (result, node) {
-                                result[node.contextPath] = node;
-                                return result;
-                            }, {});
-                            _this.props.merge(nodesMap);
-                            _this.setState(_defineProperty({}, preset, _extends({}, _this.state[preset], {
-                                page: _this.state[preset].page + 1,
-                                isLoading: false,
-                                nodes: [].concat(_toConsumableArray(_this.state[preset].nodes), _toConsumableArray(Object.keys(nodesMap))),
-                                moreNodesAvailable: true
-                            })));
-                        } else {
-                            _this.setState(_defineProperty({}, preset, _extends({}, _this.state[preset], {
-                                isLoading: false,
-                                moreNodesAvailable: false
-                            })));
-                        }
-                    });
-                };
-            };
-
-            _this.makeGetNewReferenceNodePath = function (preset) {
-                return function () {
-                    _this.setState(_defineProperty({}, preset, _extends({}, _this.state[preset], {
-                        isLoadingReferenceNodePath: true
-                    })));
-                    _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
-                        return {
-                            url: '/flatnav/getNewReferenceNodePath?nodeContextPath=' + _this.props.siteNodeContextPath + '&preset=' + preset,
-                            method: 'GET',
-                            credentials: 'include',
-                            headers: {
-                                'X-Flow-Csrftoken': csrfToken,
-                                'Content-Type': 'application/json'
-                            }
-                        };
-                    }).then(function (response) {
-                        return response && response.json();
-                    }).then(function (newReferenceNodePath) {
-                        _this.setState(_defineProperty({}, preset, _extends({}, _this.state[preset], {
-                            isLoading: false,
-                            isLoadingReferenceNodePath: false,
-                            newReferenceNodePath: newReferenceNodePath
-                        })));
-                    });
-                };
-            };
-
-            Object.keys(_this.props.options.presets).forEach(function (preset) {
-                _this.state[preset] = {
-                    page: 1,
-                    isLoading: false,
-                    isLoadingReferenceNodePath: false,
-                    nodes: [],
-                    moreNodesAvailable: true,
-                    newReferenceNodePath: ''
-                };
-            });
+            // It's not safe to rely on React's state to do the locking
+            _this.loadingLock = {};
+            _this.loadingReferenceNodePathLock = {};
             return _this;
         }
 
         _createClass(FlatNavContainer, [{
+            key: 'componentDidUpdate',
+            value: function componentDidUpdate(prevProps) {
+                // If the siteNodeContextPath or baseWorkspaceName have changed, fully reset the state
+                if (this.props.siteNodeContextPath !== prevProps.siteNodeContextPath || this.props.baseWorkspaceName !== prevProps.baseWorkspaceName) {
+                    this.fullReset();
+                }
+            }
+
+            // Gets the `newReferenceNodePath` setting and loads that node into state
+
+        }, {
             key: 'render',
             value: function render() {
                 var _this2 = this;
@@ -590,11 +544,12 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                         return _react2.default.createElement(
                             _reactUiComponents.Tabs.Panel,
                             { key: presetName, icon: preset.icon, tooltip: _this2.props.i18nRegistry.translate(preset.label) },
-                            preset.type === 'flat' && _react2.default.createElement(FlatNav, _extends({
+                            preset.type === 'flat' && _react2.default.createElement(_FlatNav2.default, _extends({
                                 preset: preset,
                                 fetchNodes: _this2.makeFetchNodes(presetName),
                                 resetNodes: _this2.makeResetNodes(presetName),
-                                fetchNewReferenceNodePath: _this2.makeGetNewReferenceNodePath(presetName)
+                                fullReset: _this2.fullReset,
+                                fetchNewReference: _this2.makeGetNewReference(presetName)
                             }, _this2.state[presetName])),
                             preset.type === 'tree' && _react2.default.createElement(OriginalPageTree, null)
                         );
@@ -604,7 +559,157 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
         }]);
 
         return FlatNavContainer;
-    }(_react.Component);
+    }(_react.Component), _initialiseProps = function _initialiseProps() {
+        var _this3 = this;
+
+        this.state = {};
+
+        this.buildDefaultState = function (props) {
+            var state = {};
+            Object.keys(props.options.presets).forEach(function (preset) {
+                var newReferenceNodePath = void 0;
+                // If `newReferenceNodePath` is static, append context to it, otherwise set to empty, as it would be fetched later
+                var newReferenceNodePathSetting = (0, _plowJs.$get)(['options', 'presets', preset, 'newReferenceNodePath'], props);
+                if (typeof newReferenceNodePathSetting === 'string' && newReferenceNodePathSetting.indexOf('/') === 0) {
+                    newReferenceNodePath = props.options.presets[preset].newReferenceNodePath;
+                } else {
+                    newReferenceNodePath = '';
+                }
+                state[preset] = {
+                    page: 1,
+                    isLoading: false,
+                    isLoadingReferenceNodePath: false,
+                    nodes: [],
+                    moreNodesAvailable: true,
+                    newReferenceNodePath: newReferenceNodePath
+                };
+            });
+            return state;
+        };
+
+        this.fullReset = function () {
+            var defaultState = _this3.buildDefaultState(_this3.props);
+            _this3.setState(_extends({}, defaultState));
+        };
+
+        this.makeResetNodes = function (preset) {
+            return function (callback) {
+                _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
+                    page: 1,
+                    nodes: [],
+                    moreNodesAvailable: true
+                })), callback);
+            };
+        };
+
+        this.makeFetchNodes = function (preset) {
+            return function () {
+                if (_this3.loadingLock[preset]) {
+                    return;
+                }
+                _this3.loadingLock[preset] = true;
+                _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
+                    isLoading: true,
+                    moreNodesAvailable: true
+                })));
+                _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
+                    return {
+                        url: '/flatnav/query?nodeContextPath=' + _this3.props.siteNodeContextPath + '&preset=' + preset + '&page=' + _this3.state[preset].page,
+                        method: 'GET',
+                        credentials: 'include',
+                        headers: {
+                            'X-Flow-Csrftoken': csrfToken,
+                            'Content-Type': 'application/json'
+                        }
+                    };
+                }).then(function (response) {
+                    return response && response.json();
+                }).then(function (nodes) {
+                    if (nodes.length > 0) {
+                        var nodesMap = nodes.reduce(function (result, node) {
+                            result[node.contextPath] = node;
+                            return result;
+                        }, {});
+                        _this3.props.merge(nodesMap);
+                        _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
+                            page: _this3.state[preset].page + 1,
+                            isLoading: false,
+                            nodes: [].concat(_toConsumableArray(_this3.state[preset].nodes), _toConsumableArray(Object.keys(nodesMap))),
+                            moreNodesAvailable: true
+                        })));
+                    } else {
+                        _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
+                            isLoading: false,
+                            moreNodesAvailable: false
+                        })));
+                    }
+                    _this3.loadingLock[preset] = false;
+                });
+            };
+        };
+
+        this.makeGetNewReference = function (preset) {
+            return function () {
+                if (_this3.loadingReferenceNodePathLock[preset]) {
+                    return;
+                }
+                _this3.loadingReferenceNodePathLock[preset] = true;
+                var context = _this3.props.siteNodeContextPath.split('@')[1];
+                if (_this3.state[preset].newReferenceNodePath.indexOf('/') === 0) {
+                    _this3.fetchNodeWithParents(_this3.state[preset].newReferenceNodePath + '@' + context);
+                } else {
+                    _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
+                        isLoadingReferenceNodePath: true
+                    })));
+                    _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
+                        return {
+                            url: '/flatnav/getNewReferenceNodePath?nodeContextPath=' + _this3.props.siteNodeContextPath + '&preset=' + preset,
+                            method: 'GET',
+                            credentials: 'include',
+                            headers: {
+                                'X-Flow-Csrftoken': csrfToken,
+                                'Content-Type': 'application/json'
+                            }
+                        };
+                    }).then(function (response) {
+                        return response && response.json();
+                    }).then(function (newReferenceNodePath) {
+                        _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
+                            isLoadingReferenceNodePath: false,
+                            newReferenceNodePath: newReferenceNodePath
+                        })));
+                        _this3.fetchNodeWithParents(newReferenceNodePath + '@' + context);
+                        _this3.loadingReferenceNodePathLock[preset] = false;
+                    });
+                }
+            };
+        };
+
+        this.fetchNodeWithParents = function (contextPath) {
+            // This is rather a hack. We need to make sure the target NewReferenceNode is loaded
+            // in order to be able to create anything inside it.
+            var siteNodeContextPath = _this3.props.siteNodeContextPath;
+
+            var _backend$get = _neosUiBackendConnector2.default.get(),
+                q = _backend$get.q;
+
+            var parentContextPath = contextPath;
+
+            while (parentContextPath !== siteNodeContextPath) {
+                var node = (0, _plowJs.$get)([parentContextPath], _this3.props.nodeData);
+                // If the given node is not in the state, load it
+                if (!node) {
+                    q(parentContextPath).get().then(function (nodes) {
+                        _this3.props.merge(nodes.reduce(function (nodeMap, node) {
+                            nodeMap[(0, _plowJs.$get)('contextPath', node)] = node;
+                            return nodeMap;
+                        }, {}));
+                    });
+                }
+                parentContextPath = parentNodeContextPath(parentContextPath);
+            }
+        };
+    }, _temp);
 
     return (0, _neosUiDecorators.neos)(function (globalRegistry) {
         return {
@@ -612,13 +717,79 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
             i18nRegistry: globalRegistry.get('i18n')
         };
     })((0, _reactRedux.connect)((0, _plowJs.$transform)({
-        siteNodeContextPath: (0, _plowJs.$get)('cr.nodes.siteNode')
+        siteNodeContextPath: (0, _plowJs.$get)('cr.nodes.siteNode'),
+        baseWorkspaceName: (0, _plowJs.$get)('cr.workspaces.personalWorkspace.baseWorkspace')
     }), {
         merge: _neosUiReduxStore.actions.CR.Nodes.merge
     })(FlatNavContainer));
 };
 
 exports.default = makeFlatNavContainer;
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _dec, _dec2, _class, _class2, _temp2;
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(7);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _plowJs = __webpack_require__(4);
+
+var _reactUiComponents = __webpack_require__(2);
+
+var _reactRedux = __webpack_require__(5);
+
+var _neosUiReduxStore = __webpack_require__(6);
+
+var _neosUiDecorators = __webpack_require__(3);
+
+var _HideSelectedNode = __webpack_require__(19);
+
+var _HideSelectedNode2 = _interopRequireDefault(_HideSelectedNode);
+
+var _DeleteSelectedNode = __webpack_require__(20);
+
+var _DeleteSelectedNode2 = _interopRequireDefault(_DeleteSelectedNode);
+
+var _classnames = __webpack_require__(9);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _style = __webpack_require__(10);
+
+var _style2 = _interopRequireDefault(_style);
+
+var _RefreshNodes = __webpack_require__(25);
+
+var _RefreshNodes2 = _interopRequireDefault(_RefreshNodes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     return {
         nodeTypesRegistry: globalRegistry.get('@neos-project/neos-ui-contentrepository'),
@@ -635,14 +806,15 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     focus: _neosUiReduxStore.actions.UI.PageTree.focus,
     openNodeCreationDialog: _neosUiReduxStore.actions.UI.NodeCreationDialog.open,
     commenceNodeCreation: _neosUiReduxStore.actions.CR.Nodes.commenceCreation,
-    selectNodeType: _neosUiReduxStore.actions.UI.SelectNodeTypeModal.apply
-}), _dec(_class2 = _dec2(_class2 = (_temp2 = _class3 = function (_Component2) {
-    _inherits(FlatNav, _Component2);
+    selectNodeType: _neosUiReduxStore.actions.UI.SelectNodeTypeModal.apply,
+    merge: _neosUiReduxStore.actions.CR.Nodes.merge
+}), _dec(_class = _dec2(_class = (_temp2 = _class2 = function (_Component) {
+    _inherits(FlatNav, _Component);
 
     function FlatNav() {
         var _ref;
 
-        var _temp, _this3, _ret;
+        var _temp, _this, _ret;
 
         _classCallCheck(this, FlatNav);
 
@@ -650,7 +822,12 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
             args[_key] = arguments[_key];
         }
 
-        return _ret = (_temp = (_this3 = _possibleConstructorReturn(this, (_ref = FlatNav.__proto__ || Object.getPrototypeOf(FlatNav)).call.apply(_ref, [this].concat(args))), _this3), _this3.handleNodeWasCreated = function (feedbackPayload, _ref2) {
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = FlatNav.__proto__ || Object.getPrototypeOf(FlatNav)).call.apply(_ref, [this].concat(args))), _this), _this.populateTheState = function () {
+            if (_this.props.nodes.length === 0) {
+                _this.props.fetchNodes();
+                _this.props.fetchNewReference();
+            }
+        }, _this.handleNodeWasCreated = function (feedbackPayload, _ref2) {
             var store = _ref2.store;
 
             var state = store.getState();
@@ -659,32 +836,33 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
             var node = getNodeByContextPathSelector(state);
             var nodeTypeName = (0, _plowJs.$get)('nodeType', node);
 
-            if (nodeTypeName === _this3.props.preset.newNodeType) {
-                _this3.refreshFlatNav();
+            if (nodeTypeName === _this.props.preset.newNodeType) {
+                _this.refreshFlatNav();
             }
-        }, _this3.createNode = function () {
-            var context = _this3.props.siteNodeContextPath.split('@')[1];
-            var contextPath = (_this3.props.newReferenceNodePath || _this3.props.preset.newReferenceNodePath) + '@' + context;
-            _this3.props.commenceNodeCreation(contextPath);
-            _this3.props.selectNodeType('into', _this3.props.preset.newNodeType);
-        }, _this3.refreshFlatNav = function () {
-            _this3.props.resetNodes(_this3.props.fetchNodes);
-        }, _this3.renderNodes = function () {
-            return _this3.props.nodes.map(function (contextPath) {
-                var item = (0, _plowJs.$get)([contextPath], _this3.props.nodeData);
+        }, _this.buildNewReferenceNodePath = function () {
+            var context = _this.props.siteNodeContextPath.split('@')[1];
+            return _this.props.newReferenceNodePath + '@' + context;
+        }, _this.createNode = function () {
+            var contextPath = _this.buildNewReferenceNodePath();
+            _this.props.commenceNodeCreation(contextPath, undefined, 'into', _this.props.preset.newNodeType || undefined);
+        }, _this.refreshFlatNav = function () {
+            _this.props.resetNodes(_this.props.fetchNodes);
+        }, _this.renderNodes = function () {
+            return _this.props.nodes.map(function (contextPath) {
+                var item = (0, _plowJs.$get)([contextPath], _this.props.nodeData);
                 if (item) {
                     var _mergeClassNames;
 
                     var nodeTypeName = (0, _plowJs.$get)('nodeType', item);
-                    var nodeType = _this3.props.nodeTypesRegistry.getNodeType(nodeTypeName);
+                    var nodeType = _this.props.nodeTypesRegistry.getNodeType(nodeTypeName);
                     return _react2.default.createElement(
                         'div',
                         {
-                            className: (0, _classnames2.default)((_mergeClassNames = {}, _defineProperty(_mergeClassNames, _style2.default.node, true), _defineProperty(_mergeClassNames, _style2.default['node--focused'], _this3.props.focused === contextPath), _mergeClassNames)),
+                            className: (0, _classnames2.default)((_mergeClassNames = {}, _defineProperty(_mergeClassNames, _style2.default.node, true), _defineProperty(_mergeClassNames, _style2.default['node--focused'], _this.props.focused === contextPath), _mergeClassNames)),
                             key: contextPath,
                             onClick: function onClick() {
-                                _this3.props.setSrc((0, _plowJs.$get)('uri', item));
-                                _this3.props.focus(contextPath);
+                                _this.props.setSrc((0, _plowJs.$get)('uri', item));
+                                _this.props.focus(contextPath);
                             },
                             role: 'button'
                         },
@@ -706,27 +884,19 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
             }).filter(function (i) {
                 return i;
             });
-        }, _temp), _possibleConstructorReturn(_this3, _ret);
+        }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
     _createClass(FlatNav, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            if (this.props.nodes.length === 0) {
-                this.props.fetchNodes();
-                if (this.props.preset.newReferenceNodePath.indexOf('/') !== 0) {
-                    this.props.fetchNewReferenceNodePath();
-                }
-            }
+            this.populateTheState();
             this.props.serverFeedbackHandlers.set('Neos.Neos.Ui:NodeCreated/DocumentAdded', this.handleNodeWasCreated, 'after Neos.Neos.Ui:NodeCreated/Main');
         }
     }, {
         key: 'componentDidUpdate',
         value: function componentDidUpdate(prevProps) {
-            // If the siteNodeContextPath or baseWorkspaceName have changed, reload the nodes
-            if (this.props.siteNodeContextPath !== prevProps.siteNodeContextPath || this.props.baseWorkspaceName !== prevProps.baseWorkspaceName) {
-                this.refreshFlatNav();
-            }
+            this.populateTheState();
         }
     }, {
         key: 'render',
@@ -771,7 +941,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     }]);
 
     return FlatNav;
-}(_react.Component), _class3.propTypes = {
+}(_react.Component), _class2.propTypes = {
     nodes: _propTypes2.default.array.isRequired,
     preset: _propTypes2.default.object.isRequired,
     isLoading: _propTypes2.default.bool.isRequired,
@@ -779,32 +949,11 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     page: _propTypes2.default.number.isRequired,
     newReferenceNodePath: _propTypes2.default.string.isRequired,
     moreNodesAvailable: _propTypes2.default.bool.isRequired
-}, _temp2)) || _class2) || _class2);
+}, _temp2)) || _class) || _class);
+exports.default = FlatNav;
 
 /***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.fetchWithErrorHandling = undefined;
-
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().NeosUiBackendConnectorDefault;
-var fetchWithErrorHandling = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().NeosUiBackendConnector.fetchWithErrorHandling;
-exports.fetchWithErrorHandling = fetchWithErrorHandling;
-
-/***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -823,19 +972,19 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(4);
+var _propTypes = __webpack_require__(7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(5);
 
 var _neosUiDecorators = __webpack_require__(3);
 
-var _plowJs = __webpack_require__(5);
+var _plowJs = __webpack_require__(4);
 
 var _reactUiComponents = __webpack_require__(2);
 
-var _neosUiReduxStore = __webpack_require__(7);
+var _neosUiReduxStore = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -917,7 +1066,7 @@ var HideSelectedNode = (_dec = (0, _neosUiDecorators.neos)(function (globalRegis
 exports.default = HideSelectedNode;
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -936,15 +1085,15 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(5);
 
-var _plowJs = __webpack_require__(5);
+var _plowJs = __webpack_require__(4);
 
 var _neosUiDecorators = __webpack_require__(3);
 
 var _reactUiComponents = __webpack_require__(2);
 
-var _neosUiReduxStore = __webpack_require__(7);
+var _neosUiReduxStore = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1008,10 +1157,10 @@ var DeleteSelectedNode = (_dec = (0, _neosUiDecorators.neos)(function (globalReg
 exports.default = DeleteSelectedNode;
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(21)(false);
+exports = module.exports = __webpack_require__(22)(false);
 // imports
 
 
@@ -1030,7 +1179,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports) {
 
 /*
@@ -1112,7 +1261,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -1178,7 +1327,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(23);
+var	fixUrls = __webpack_require__(24);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -1498,7 +1647,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports) {
 
 
@@ -1593,7 +1742,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1612,11 +1761,11 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(4);
+var _propTypes = __webpack_require__(7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _classnames = __webpack_require__(8);
+var _classnames = __webpack_require__(9);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -1624,7 +1773,7 @@ var _neosUiDecorators = __webpack_require__(3);
 
 var _reactUiComponents = __webpack_require__(2);
 
-var _style = __webpack_require__(9);
+var _style = __webpack_require__(10);
 
 var _style2 = _interopRequireDefault(_style);
 

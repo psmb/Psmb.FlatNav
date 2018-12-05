@@ -1,155 +1,15 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {$get, $transform} from 'plow-js';
-import {Button, Icon, IconButton, Tabs} from '@neos-project/react-ui-components';
+import {Button, Icon, IconButton} from '@neos-project/react-ui-components';
 import {connect} from 'react-redux';
 import {actions, selectors} from '@neos-project/neos-ui-redux-store';
 import {neos} from '@neos-project/neos-ui-decorators';
-import {fetchWithErrorHandling} from '@neos-project/neos-ui-backend-connector';
 import HideSelectedNode from './HideSelectedNode';
 import DeleteSelectedNode from './DeleteSelectedNode';
 import mergeClassNames from 'classnames';
 import style from './style.css';
 import RefreshNodes from "./RefreshNodes";
-
-const makeFlatNavContainer = OriginalPageTree => {
-    class FlatNavContainer extends Component {
-        state = {};
-
-        constructor(props) {
-            super(props);
-            Object.keys(this.props.options.presets).forEach(preset => {
-                this.state[preset] = {
-                    page: 1,
-                    isLoading: false,
-                    isLoadingReferenceNodePath: false,
-                    nodes: [],
-                    moreNodesAvailable: true,
-                    newReferenceNodePath: ''
-                };
-            });
-        }
-
-        makeResetNodes = preset => callback => {
-            this.setState({
-                [preset]: {
-                    ...this.state[preset],
-                    page: 1,
-                    nodes: [],
-                    moreNodesAvailable: true
-                }
-            }, callback);
-        }
-
-        makeFetchNodes = preset => () => {
-            this.setState({
-                [preset]: {
-                    ...this.state[preset],
-                    isLoading: true,
-                    moreNodesAvailable: true
-                }
-            });
-            fetchWithErrorHandling.withCsrfToken(csrfToken => ({
-                url: `/flatnav/query?nodeContextPath=${this.props.siteNodeContextPath}&preset=${preset}&page=${this.state[preset].page}`,
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'X-Flow-Csrftoken': csrfToken,
-                    'Content-Type': 'application/json'
-                }
-            }))
-                .then(response => response && response.json())
-                .then(nodes => {
-                    if (nodes.length > 0) {
-                        const nodesMap = nodes.reduce((result, node) => {
-                            result[node.contextPath] = node;
-                            return result;
-                        }, {});
-                        this.props.merge(nodesMap);
-                        this.setState({
-                            [preset]: {
-                                ...this.state[preset],
-                                page: this.state[preset].page + 1,
-                                isLoading: false,
-                                nodes: [...this.state[preset].nodes, ...Object.keys(nodesMap)],
-                                moreNodesAvailable: true
-                            }
-                        });
-                    } else {
-                        this.setState({
-                            [preset]: {
-                                ...this.state[preset],
-                                isLoading: false,
-                                moreNodesAvailable: false
-                            }
-                        });
-                    }
-                });
-        };
-
-        makeGetNewReferenceNodePath = preset => () => {
-            this.setState({
-                [preset]: {
-                    ...this.state[preset],
-                    isLoadingReferenceNodePath: true
-                }
-            });
-            fetchWithErrorHandling.withCsrfToken(csrfToken => ({
-                url: `/flatnav/getNewReferenceNodePath?nodeContextPath=${this.props.siteNodeContextPath}&preset=${preset}`,
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'X-Flow-Csrftoken': csrfToken,
-                    'Content-Type': 'application/json'
-                }
-            }))
-                .then(response => response && response.json())
-                .then(newReferenceNodePath => {
-                    this.setState({
-                        [preset]: {
-                            ...this.state[preset],
-                            isLoading: false,
-                            isLoadingReferenceNodePath: false,
-                            newReferenceNodePath: newReferenceNodePath
-                        }
-                    });
-                });
-        };
-
-        render() {
-            return (
-                <Tabs>
-                    {Object.keys(this.props.options.presets).map(presetName => {
-                        const preset = this.props.options.presets[presetName];
-                        return (
-                            <Tabs.Panel key={presetName} icon={preset.icon} tooltip={this.props.i18nRegistry.translate(preset.label)}>
-                                {preset.type === 'flat' && (<FlatNav
-                                    preset={preset}
-                                    fetchNodes={this.makeFetchNodes(presetName)}
-                                    resetNodes={this.makeResetNodes(presetName)}
-                                    fetchNewReferenceNodePath={this.makeGetNewReferenceNodePath(presetName)}
-                                    {...this.state[presetName]}
-                                    />)}
-                                {preset.type === 'tree' && (<OriginalPageTree />)}
-                            </Tabs.Panel>
-                        );
-                    })}
-                </Tabs>
-            );
-        }
-    }
-    return neos(globalRegistry => ({
-        options: globalRegistry.get('frontendConfiguration').get('Psmb_FlatNav'),
-        i18nRegistry: globalRegistry.get('i18n')
-    }))(connect($transform({
-        siteNodeContextPath: $get('cr.nodes.siteNode')
-    }), {
-        merge: actions.CR.Nodes.merge
-    })(FlatNavContainer));
-};
-
-export default makeFlatNavContainer;
-
 @neos(globalRegistry => ({
     nodeTypesRegistry: globalRegistry.get('@neos-project/neos-ui-contentrepository'),
     serverFeedbackHandlers: globalRegistry.get('serverFeedbackHandlers'),
@@ -165,9 +25,10 @@ export default makeFlatNavContainer;
     focus: actions.UI.PageTree.focus,
     openNodeCreationDialog: actions.UI.NodeCreationDialog.open,
     commenceNodeCreation: actions.CR.Nodes.commenceCreation,
-    selectNodeType: actions.UI.SelectNodeTypeModal.apply
+    selectNodeType: actions.UI.SelectNodeTypeModal.apply,
+    merge: actions.CR.Nodes.merge
 })
-class FlatNav extends Component {
+export default class FlatNav extends Component {
     static propTypes = {
         nodes: PropTypes.array.isRequired,
         preset: PropTypes.object.isRequired,
@@ -179,24 +40,20 @@ class FlatNav extends Component {
     };
 
     componentDidMount() {
-        if (this.props.nodes.length === 0) {
-            this.props.fetchNodes();
-            if (this.props.preset.newReferenceNodePath.indexOf('/') !== 0) {
-                this.props.fetchNewReferenceNodePath();
-            }
-        }
+        this.populateTheState();
         this.props.serverFeedbackHandlers.set('Neos.Neos.Ui:NodeCreated/DocumentAdded', this.handleNodeWasCreated, 'after Neos.Neos.Ui:NodeCreated/Main');
     }
 
     componentDidUpdate(prevProps) {
-        // If the siteNodeContextPath or baseWorkspaceName have changed, reload the nodes
-        if (
-            this.props.siteNodeContextPath !== prevProps.siteNodeContextPath
-            || this.props.baseWorkspaceName !== prevProps.baseWorkspaceName
-        ) {
-            this.refreshFlatNav();
-        }
+        this.populateTheState();
     }
+
+    populateTheState = () => {
+        if (this.props.nodes.length === 0) {
+            this.props.fetchNodes();
+            this.props.fetchNewReference();
+        }
+    };
 
     handleNodeWasCreated = (feedbackPayload, {store}) => {
         const state = store.getState();
@@ -210,11 +67,14 @@ class FlatNav extends Component {
         }
     }
 
-    createNode = () => {
+    buildNewReferenceNodePath = () => {
         const context = this.props.siteNodeContextPath.split('@')[1];
-        const contextPath = (this.props.newReferenceNodePath || this.props.preset.newReferenceNodePath) + '@' + context;
-        this.props.commenceNodeCreation(contextPath);
-        this.props.selectNodeType('into', this.props.preset.newNodeType);
+        return this.props.newReferenceNodePath + '@' + context;
+    };
+
+    createNode = () => {
+        const contextPath = this.buildNewReferenceNodePath();
+        this.props.commenceNodeCreation(contextPath, undefined, 'into', this.props.preset.newNodeType || undefined);
     }
 
     refreshFlatNav = () => {

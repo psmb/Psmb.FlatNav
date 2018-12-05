@@ -24,6 +24,7 @@ Neos:
             #   type: flat
             #   query: 'Search.query(node).nodeType("Your.Namespace:News").sortDesc("date").from((page - 1) * 20).limit(20).execute().toArray()'
             #   newReferenceNodePath: '/sites/site'
+            #   # If now `newNodeType` is defined, then the nodetype selection dialog would be shown
             #   newNodeType: 'Your.Namespace:News'
             #   disablePagination: false
             ## Example without pagination
