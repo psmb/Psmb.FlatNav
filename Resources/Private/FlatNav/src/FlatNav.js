@@ -10,25 +10,6 @@ import DeleteSelectedNode from './DeleteSelectedNode';
 import mergeClassNames from 'classnames';
 import style from './style.css';
 import RefreshNodes from "./RefreshNodes";
-import backend from '@neos-project/neos-ui-backend-connector';
-
-// Taken from here, as it's not exported in the UI
-// https://github.com/neos/neos-ui/blob/b2a52d66a211b192dfc541799779a8be27bf5a31/packages/neos-ui-sagas/src/CR/NodeOperations/helpers.js#L3
-const parentNodeContextPath = contextPath => {
-    if (typeof contextPath !== 'string') {
-        return null;
-    }
-
-    const [path, context] = contextPath.split('@');
-
-    if (path.length === 0) {
-        // We are at top level; so there is no parent anymore!
-        return false;
-    }
-
-    return `${path.substr(0, path.lastIndexOf('/'))}@${context}`;
-};
-
 @neos(globalRegistry => ({
     nodeTypesRegistry: globalRegistry.get('@neos-project/neos-ui-contentrepository'),
     serverFeedbackHandlers: globalRegistry.get('serverFeedbackHandlers'),
@@ -37,8 +18,7 @@ const parentNodeContextPath = contextPath => {
 @connect($transform({
     nodeData: $get('cr.nodes.byContextPath'),
     focused: $get('ui.pageTree.isFocused'),
-    siteNodeContextPath: $get('cr.nodes.siteNode'),
-    baseWorkspaceName: $get('cr.workspaces.personalWorkspace.baseWorkspace')
+    siteNodeContextPath: $get('cr.nodes.siteNode')
 }), {
     setSrc: actions.UI.ContentCanvas.setSrc,
     focus: actions.UI.PageTree.focus,
@@ -59,26 +39,24 @@ export default class FlatNav extends Component {
     };
 
     componentDidMount() {
-        if (this.props.nodes.length === 0) {
-            this.props.fetchNodes();
-            this.fetchReferenceNode();
-            if (this.props.preset.newReferenceNodePath.indexOf('/') !== 0) {
-                this.props.fetchNewReferenceNodePath();
-            }
-        }
+        this.populateTheState();
         this.props.serverFeedbackHandlers.set('Neos.Neos.Ui:NodeCreated/DocumentAdded', this.handleNodeWasCreated, 'after Neos.Neos.Ui:NodeCreated/Main');
     }
 
-    componentDidUpdate(prevProps) {
-        // If the siteNodeContextPath or baseWorkspaceName have changed, reload the nodes
-        if (
-            this.props.siteNodeContextPath !== prevProps.siteNodeContextPath
-            || this.props.baseWorkspaceName !== prevProps.baseWorkspaceName
-        ) {
-            this.refreshFlatNav();
-            this.fetchReferenceNode();
-        }
+    componentDidUpdate() {
+        this.populateTheState();
     }
+
+    populateTheState = () => {
+        if (this.props.nodes.length === 0) {
+            if (!this.props.isLoading) {
+                this.props.fetchNodes();
+            }
+            if (!this.props.isLoadingReferenceNodePath) {
+                this.props.fetchNewReference();
+            }
+        }
+    };
 
     handleNodeWasCreated = (feedbackPayload, {store}) => {
         const state = store.getState();
@@ -94,7 +72,7 @@ export default class FlatNav extends Component {
 
     buildNewReferenceNodePath = () => {
         const context = this.props.siteNodeContextPath.split('@')[1];
-        return (this.props.newReferenceNodePath || this.props.preset.newReferenceNodePath) + '@' + context;
+        return this.props.newReferenceNodePath + '@' + context;
     };
 
     createNode = () => {
@@ -104,29 +82,6 @@ export default class FlatNav extends Component {
 
     refreshFlatNav = () => {
         this.props.resetNodes(this.props.fetchNodes);
-    }
-
-    // This is rather a hack. We need to make sure the target NewReferenceNode is loaded
-    // in order to be able to create anything inside it.
-    fetchReferenceNode = () => {
-        const {siteNodeContextPath} = this.props;
-        const {q} = backend.get();
-
-        let parentContextPath = this.buildNewReferenceNodePath();
-
-        while (parentContextPath !== siteNodeContextPath) {
-            const node = $get([parentContextPath], this.props.nodeData);
-            // If the given node is not in the state, load it
-            if (!node) {
-                q(parentContextPath).get().then(nodes => {
-                    this.props.merge(nodes.reduce((nodeMap, node) => {
-                        nodeMap[$get('contextPath', node)] = node;
-                        return nodeMap;
-                    }, {}));
-                });
-            }
-            parentContextPath = parentNodeContextPath(parentContextPath);
-        }
     }
 
     renderNodes = () => {

@@ -5,7 +5,25 @@ import {connect} from 'react-redux';
 import {actions} from '@neos-project/neos-ui-redux-store';
 import {neos} from '@neos-project/neos-ui-decorators';
 import {fetchWithErrorHandling} from '@neos-project/neos-ui-backend-connector';
+import backend from '@neos-project/neos-ui-backend-connector';
 import FlatNav from './FlatNav';
+
+// Taken from here, as it's not exported in the UI
+// https://github.com/neos/neos-ui/blob/b2a52d66a211b192dfc541799779a8be27bf5a31/packages/neos-ui-sagas/src/CR/NodeOperations/helpers.js#L3
+const parentNodeContextPath = contextPath => {
+    if (typeof contextPath !== 'string') {
+        return null;
+    }
+
+    const [path, context] = contextPath.split('@');
+
+    if (path.length === 0) {
+        // We are at top level; so there is no parent anymore!
+        return false;
+    }
+
+    return `${path.substr(0, path.lastIndexOf('/'))}@${context}`;
+};
 
 const makeFlatNavContainer = OriginalPageTree => {
     class FlatNavContainer extends Component {
@@ -13,15 +31,46 @@ const makeFlatNavContainer = OriginalPageTree => {
 
         constructor(props) {
             super(props);
-            Object.keys(this.props.options.presets).forEach(preset => {
-                this.state[preset] = {
+            this.state = this.buildDefaultState(props);
+        }
+
+        componentDidUpdate(prevProps) {
+            // If the siteNodeContextPath or baseWorkspaceName have changed, fully reset the state
+            if (
+                this.props.siteNodeContextPath !== prevProps.siteNodeContextPath ||
+                this.props.baseWorkspaceName !== prevProps.baseWorkspaceName
+            ) {
+                this.fullReset();
+            }
+        }
+
+        buildDefaultState = props => {
+            const state = {};
+            Object.keys(props.options.presets).forEach(preset => {
+                let newReferenceNodePath;
+                // If `newReferenceNodePath` is static, append context to it, otherwise set to empty, as it would be fetched later
+                const newReferenceNodePathSetting = $get(['options', 'presets', preset, 'newReferenceNodePath'], props);
+                if (typeof newReferenceNodePathSetting === 'string' && newReferenceNodePathSetting.indexOf('/') === 0) {
+                    newReferenceNodePath = props.options.presets[preset].newReferenceNodePath;
+                } else {
+                    newReferenceNodePath = '';
+                }
+                state[preset] = {
                     page: 1,
                     isLoading: false,
                     isLoadingReferenceNodePath: false,
                     nodes: [],
                     moreNodesAvailable: true,
-                    newReferenceNodePath: ''
+                    newReferenceNodePath
                 };
+            });
+            return state;
+        };
+
+        fullReset = () => {
+            const defaultState = this.buildDefaultState(this.props);
+            this.setState({
+                ...defaultState
             });
         }
 
@@ -82,33 +131,61 @@ const makeFlatNavContainer = OriginalPageTree => {
                 });
         };
 
-        makeGetNewReferenceNodePath = preset => () => {
-            this.setState({
-                [preset]: {
-                    ...this.state[preset],
-                    isLoadingReferenceNodePath: true
-                }
-            });
-            fetchWithErrorHandling.withCsrfToken(csrfToken => ({
-                url: `/flatnav/getNewReferenceNodePath?nodeContextPath=${this.props.siteNodeContextPath}&preset=${preset}`,
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'X-Flow-Csrftoken': csrfToken,
-                    'Content-Type': 'application/json'
-                }
-            }))
-                .then(response => response && response.json())
-                .then(newReferenceNodePath => {
-                    this.setState({
-                        [preset]: {
-                            ...this.state[preset],
-                            isLoading: false,
-                            isLoadingReferenceNodePath: false,
-                            newReferenceNodePath
-                        }
-                    });
+        // Gets the `newReferenceNodePath` setting and loads that node into state
+        makeGetNewReference = preset => () => {
+            if (this.state[preset].newReferenceNodePath.indexOf('/') === 0) {
+                const context = this.props.siteNodeContextPath.split('@')[1];
+                this.fetchNodeWithParents(this.state[preset].newReferenceNodePath + '@' + context);
+            } else {
+                this.setState({
+                    [preset]: {
+                        ...this.state[preset],
+                        isLoadingReferenceNodePath: true
+                    }
                 });
+                fetchWithErrorHandling.withCsrfToken(csrfToken => ({
+                    url: `/flatnav/getNewReferenceNodePath?nodeContextPath=${this.props.siteNodeContextPath}&preset=${preset}`,
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'X-Flow-Csrftoken': csrfToken,
+                        'Content-Type': 'application/json'
+                    }
+                }))
+                    .then(response => response && response.json())
+                    .then(newReferenceNodePath => {
+                        this.setState({
+                            [preset]: {
+                                ...this.state[preset],
+                                newReferenceNodePath
+                            }
+                        });
+                        this.fetchNodeWithParents(newReferenceNodePath);
+                    });
+            }
+        };
+
+        fetchNodeWithParents = contextPath => {
+            // This is rather a hack. We need to make sure the target NewReferenceNode is loaded
+            // in order to be able to create anything inside it.
+            const {siteNodeContextPath} = this.props;
+            const {q} = backend.get();
+
+            let parentContextPath = contextPath;
+
+            while (parentContextPath !== siteNodeContextPath) {
+                const node = $get([parentContextPath], this.props.nodeData);
+                // If the given node is not in the state, load it
+                if (!node) {
+                    q(parentContextPath).get().then(nodes => {
+                        this.props.merge(nodes.reduce((nodeMap, node) => {
+                            nodeMap[$get('contextPath', node)] = node;
+                            return nodeMap;
+                        }, {}));
+                    });
+                }
+                parentContextPath = parentNodeContextPath(parentContextPath);
+            }
         };
 
         render() {
@@ -122,7 +199,8 @@ const makeFlatNavContainer = OriginalPageTree => {
                                     preset={preset}
                                     fetchNodes={this.makeFetchNodes(presetName)}
                                     resetNodes={this.makeResetNodes(presetName)}
-                                    fetchNewReferenceNodePath={this.makeGetNewReferenceNodePath(presetName)}
+                                    fullReset={this.fullReset}
+                                    fetchNewReference={this.makeGetNewReference(presetName)}
                                     {...this.state[presetName]}
                                 />)}
                                 {preset.type === 'tree' && (<OriginalPageTree />)}
@@ -137,7 +215,8 @@ const makeFlatNavContainer = OriginalPageTree => {
         options: globalRegistry.get('frontendConfiguration').get('Psmb_FlatNav'),
         i18nRegistry: globalRegistry.get('i18n')
     }))(connect($transform({
-        siteNodeContextPath: $get('cr.nodes.siteNode')
+        siteNodeContextPath: $get('cr.nodes.siteNode'),
+        baseWorkspaceName: $get('cr.workspaces.personalWorkspace.baseWorkspace')
     }), {
         merge: actions.CR.Nodes.merge
     })(FlatNavContainer));

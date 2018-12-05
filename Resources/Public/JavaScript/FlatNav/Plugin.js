@@ -443,6 +443,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
@@ -458,6 +460,8 @@ var _neosUiReduxStore = __webpack_require__(6);
 var _neosUiDecorators = __webpack_require__(3);
 
 var _neosUiBackendConnector = __webpack_require__(8);
+
+var _neosUiBackendConnector2 = _interopRequireDefault(_neosUiBackendConnector);
 
 var _FlatNav = __webpack_require__(18);
 
@@ -475,8 +479,30 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+// Taken from here, as it's not exported in the UI
+// https://github.com/neos/neos-ui/blob/b2a52d66a211b192dfc541799779a8be27bf5a31/packages/neos-ui-sagas/src/CR/NodeOperations/helpers.js#L3
+var parentNodeContextPath = function parentNodeContextPath(contextPath) {
+    if (typeof contextPath !== 'string') {
+        return null;
+    }
+
+    var _contextPath$split = contextPath.split('@'),
+        _contextPath$split2 = _slicedToArray(_contextPath$split, 2),
+        path = _contextPath$split2[0],
+        context = _contextPath$split2[1];
+
+    if (path.length === 0) {
+        // We are at top level; so there is no parent anymore!
+        return false;
+    }
+
+    return path.substr(0, path.lastIndexOf('/')) + '@' + context;
+};
+
 var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
-    var FlatNavContainer = function (_Component) {
+    var _class, _temp, _initialiseProps;
+
+    var FlatNavContainer = (_temp = _class = function (_Component) {
         _inherits(FlatNavContainer, _Component);
 
         function FlatNavContainer(props) {
@@ -484,100 +510,24 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
 
             var _this = _possibleConstructorReturn(this, (FlatNavContainer.__proto__ || Object.getPrototypeOf(FlatNavContainer)).call(this, props));
 
-            _this.state = {};
+            _initialiseProps.call(_this);
 
-            _this.makeResetNodes = function (preset) {
-                return function (callback) {
-                    _this.setState(_defineProperty({}, preset, _extends({}, _this.state[preset], {
-                        page: 1,
-                        nodes: [],
-                        moreNodesAvailable: true
-                    })), callback);
-                };
-            };
-
-            _this.makeFetchNodes = function (preset) {
-                return function () {
-                    _this.setState(_defineProperty({}, preset, _extends({}, _this.state[preset], {
-                        isLoading: true,
-                        moreNodesAvailable: true
-                    })));
-                    _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
-                        return {
-                            url: '/flatnav/query?nodeContextPath=' + _this.props.siteNodeContextPath + '&preset=' + preset + '&page=' + _this.state[preset].page,
-                            method: 'GET',
-                            credentials: 'include',
-                            headers: {
-                                'X-Flow-Csrftoken': csrfToken,
-                                'Content-Type': 'application/json'
-                            }
-                        };
-                    }).then(function (response) {
-                        return response && response.json();
-                    }).then(function (nodes) {
-                        if (nodes.length > 0) {
-                            var nodesMap = nodes.reduce(function (result, node) {
-                                result[node.contextPath] = node;
-                                return result;
-                            }, {});
-                            _this.props.merge(nodesMap);
-                            _this.setState(_defineProperty({}, preset, _extends({}, _this.state[preset], {
-                                page: _this.state[preset].page + 1,
-                                isLoading: false,
-                                nodes: [].concat(_toConsumableArray(_this.state[preset].nodes), _toConsumableArray(Object.keys(nodesMap))),
-                                moreNodesAvailable: true
-                            })));
-                        } else {
-                            _this.setState(_defineProperty({}, preset, _extends({}, _this.state[preset], {
-                                isLoading: false,
-                                moreNodesAvailable: false
-                            })));
-                        }
-                    });
-                };
-            };
-
-            _this.makeGetNewReferenceNodePath = function (preset) {
-                return function () {
-                    _this.setState(_defineProperty({}, preset, _extends({}, _this.state[preset], {
-                        isLoadingReferenceNodePath: true
-                    })));
-                    _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
-                        return {
-                            url: '/flatnav/getNewReferenceNodePath?nodeContextPath=' + _this.props.siteNodeContextPath + '&preset=' + preset,
-                            method: 'GET',
-                            credentials: 'include',
-                            headers: {
-                                'X-Flow-Csrftoken': csrfToken,
-                                'Content-Type': 'application/json'
-                            }
-                        };
-                    }).then(function (response) {
-                        return response && response.json();
-                    }).then(function (newReferenceNodePath) {
-                        _this.setState(_defineProperty({}, preset, _extends({}, _this.state[preset], {
-                            isLoading: false,
-                            isLoadingReferenceNodePath: false,
-                            newReferenceNodePath: newReferenceNodePath
-                        })));
-                    });
-                };
-            };
-
-            Object.keys(_this.props.options.presets).forEach(function (preset) {
-                _this.state[preset] = {
-                    page: 1,
-                    isLoading: false,
-                    isLoadingReferenceNodePath: false,
-                    nodes: [],
-                    moreNodesAvailable: true,
-                    newReferenceNodePath: ''
-                };
-            });
+            _this.state = _this.buildDefaultState(props);
             return _this;
         }
 
         _createClass(FlatNavContainer, [{
+            key: 'componentDidUpdate',
+            value: function componentDidUpdate(prevProps) {
+                // If the siteNodeContextPath or baseWorkspaceName have changed, fully reset the state
+                if (this.props.siteNodeContextPath !== prevProps.siteNodeContextPath || this.props.baseWorkspaceName !== prevProps.baseWorkspaceName) {
+                    this.fullReset();
+                }
+            }
+
+            // Gets the `newReferenceNodePath` setting and loads that node into state
+
+        }, {
             key: 'render',
             value: function render() {
                 var _this2 = this;
@@ -594,7 +544,8 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                                 preset: preset,
                                 fetchNodes: _this2.makeFetchNodes(presetName),
                                 resetNodes: _this2.makeResetNodes(presetName),
-                                fetchNewReferenceNodePath: _this2.makeGetNewReferenceNodePath(presetName)
+                                fullReset: _this2.fullReset,
+                                fetchNewReference: _this2.makeGetNewReference(presetName)
                             }, _this2.state[presetName])),
                             preset.type === 'tree' && _react2.default.createElement(OriginalPageTree, null)
                         );
@@ -604,7 +555,146 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
         }]);
 
         return FlatNavContainer;
-    }(_react.Component);
+    }(_react.Component), _initialiseProps = function _initialiseProps() {
+        var _this3 = this;
+
+        this.state = {};
+
+        this.buildDefaultState = function (props) {
+            var state = {};
+            Object.keys(props.options.presets).forEach(function (preset) {
+                var newReferenceNodePath = void 0;
+                // If `newReferenceNodePath` is static, append context to it, otherwise set to empty, as it would be fetched later
+                var newReferenceNodePathSetting = (0, _plowJs.$get)(['options', 'presets', preset, 'newReferenceNodePath'], props);
+                if (typeof newReferenceNodePathSetting === 'string' && newReferenceNodePathSetting.indexOf('/') === 0) {
+                    newReferenceNodePath = props.options.presets[preset].newReferenceNodePath;
+                } else {
+                    newReferenceNodePath = '';
+                }
+                state[preset] = {
+                    page: 1,
+                    isLoading: false,
+                    isLoadingReferenceNodePath: false,
+                    nodes: [],
+                    moreNodesAvailable: true,
+                    newReferenceNodePath: newReferenceNodePath
+                };
+            });
+            return state;
+        };
+
+        this.fullReset = function () {
+            var defaultState = _this3.buildDefaultState(_this3.props);
+            _this3.setState(_extends({}, defaultState));
+        };
+
+        this.makeResetNodes = function (preset) {
+            return function (callback) {
+                _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
+                    page: 1,
+                    nodes: [],
+                    moreNodesAvailable: true
+                })), callback);
+            };
+        };
+
+        this.makeFetchNodes = function (preset) {
+            return function () {
+                _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
+                    isLoading: true,
+                    moreNodesAvailable: true
+                })));
+                _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
+                    return {
+                        url: '/flatnav/query?nodeContextPath=' + _this3.props.siteNodeContextPath + '&preset=' + preset + '&page=' + _this3.state[preset].page,
+                        method: 'GET',
+                        credentials: 'include',
+                        headers: {
+                            'X-Flow-Csrftoken': csrfToken,
+                            'Content-Type': 'application/json'
+                        }
+                    };
+                }).then(function (response) {
+                    return response && response.json();
+                }).then(function (nodes) {
+                    if (nodes.length > 0) {
+                        var nodesMap = nodes.reduce(function (result, node) {
+                            result[node.contextPath] = node;
+                            return result;
+                        }, {});
+                        _this3.props.merge(nodesMap);
+                        _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
+                            page: _this3.state[preset].page + 1,
+                            isLoading: false,
+                            nodes: [].concat(_toConsumableArray(_this3.state[preset].nodes), _toConsumableArray(Object.keys(nodesMap))),
+                            moreNodesAvailable: true
+                        })));
+                    } else {
+                        _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
+                            isLoading: false,
+                            moreNodesAvailable: false
+                        })));
+                    }
+                });
+            };
+        };
+
+        this.makeGetNewReference = function (preset) {
+            return function () {
+                if (_this3.state[preset].newReferenceNodePath.indexOf('/') === 0) {
+                    var context = _this3.props.siteNodeContextPath.split('@')[1];
+                    _this3.fetchNodeWithParents(_this3.state[preset].newReferenceNodePath + '@' + context);
+                } else {
+                    _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
+                        isLoadingReferenceNodePath: true
+                    })));
+                    _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
+                        return {
+                            url: '/flatnav/getNewReferenceNodePath?nodeContextPath=' + _this3.props.siteNodeContextPath + '&preset=' + preset,
+                            method: 'GET',
+                            credentials: 'include',
+                            headers: {
+                                'X-Flow-Csrftoken': csrfToken,
+                                'Content-Type': 'application/json'
+                            }
+                        };
+                    }).then(function (response) {
+                        return response && response.json();
+                    }).then(function (newReferenceNodePath) {
+                        _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
+                            newReferenceNodePath: newReferenceNodePath
+                        })));
+                        _this3.fetchNodeWithParents(newReferenceNodePath);
+                    });
+                }
+            };
+        };
+
+        this.fetchNodeWithParents = function (contextPath) {
+            // This is rather a hack. We need to make sure the target NewReferenceNode is loaded
+            // in order to be able to create anything inside it.
+            var siteNodeContextPath = _this3.props.siteNodeContextPath;
+
+            var _backend$get = _neosUiBackendConnector2.default.get(),
+                q = _backend$get.q;
+
+            var parentContextPath = contextPath;
+
+            while (parentContextPath !== siteNodeContextPath) {
+                var node = (0, _plowJs.$get)([parentContextPath], _this3.props.nodeData);
+                // If the given node is not in the state, load it
+                if (!node) {
+                    q(parentContextPath).get().then(function (nodes) {
+                        _this3.props.merge(nodes.reduce(function (nodeMap, node) {
+                            nodeMap[(0, _plowJs.$get)('contextPath', node)] = node;
+                            return nodeMap;
+                        }, {}));
+                    });
+                }
+                parentContextPath = parentNodeContextPath(parentContextPath);
+            }
+        };
+    }, _temp);
 
     return (0, _neosUiDecorators.neos)(function (globalRegistry) {
         return {
@@ -612,7 +702,8 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
             i18nRegistry: globalRegistry.get('i18n')
         };
     })((0, _reactRedux.connect)((0, _plowJs.$transform)({
-        siteNodeContextPath: (0, _plowJs.$get)('cr.nodes.siteNode')
+        siteNodeContextPath: (0, _plowJs.$get)('cr.nodes.siteNode'),
+        baseWorkspaceName: (0, _plowJs.$get)('cr.workspaces.personalWorkspace.baseWorkspace')
     }), {
         merge: _neosUiReduxStore.actions.CR.Nodes.merge
     })(FlatNavContainer));
@@ -635,8 +726,6 @@ exports.default = undefined;
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _dec, _dec2, _class, _class2, _temp2;
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var _react = __webpack_require__(1);
 
@@ -676,10 +765,6 @@ var _RefreshNodes = __webpack_require__(25);
 
 var _RefreshNodes2 = _interopRequireDefault(_RefreshNodes);
 
-var _neosUiBackendConnector = __webpack_require__(8);
-
-var _neosUiBackendConnector2 = _interopRequireDefault(_neosUiBackendConnector);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -690,26 +775,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// Taken from here, as it's not exported in the UI
-// https://github.com/neos/neos-ui/blob/b2a52d66a211b192dfc541799779a8be27bf5a31/packages/neos-ui-sagas/src/CR/NodeOperations/helpers.js#L3
-var parentNodeContextPath = function parentNodeContextPath(contextPath) {
-    if (typeof contextPath !== 'string') {
-        return null;
-    }
-
-    var _contextPath$split = contextPath.split('@'),
-        _contextPath$split2 = _slicedToArray(_contextPath$split, 2),
-        path = _contextPath$split2[0],
-        context = _contextPath$split2[1];
-
-    if (path.length === 0) {
-        // We are at top level; so there is no parent anymore!
-        return false;
-    }
-
-    return path.substr(0, path.lastIndexOf('/')) + '@' + context;
-};
-
 var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     return {
         nodeTypesRegistry: globalRegistry.get('@neos-project/neos-ui-contentrepository'),
@@ -719,8 +784,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
 }), _dec2 = (0, _reactRedux.connect)((0, _plowJs.$transform)({
     nodeData: (0, _plowJs.$get)('cr.nodes.byContextPath'),
     focused: (0, _plowJs.$get)('ui.pageTree.isFocused'),
-    siteNodeContextPath: (0, _plowJs.$get)('cr.nodes.siteNode'),
-    baseWorkspaceName: (0, _plowJs.$get)('cr.workspaces.personalWorkspace.baseWorkspace')
+    siteNodeContextPath: (0, _plowJs.$get)('cr.nodes.siteNode')
 }), {
     setSrc: _neosUiReduxStore.actions.UI.ContentCanvas.setSrc,
     focus: _neosUiReduxStore.actions.UI.PageTree.focus,
@@ -742,7 +806,16 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
             args[_key] = arguments[_key];
         }
 
-        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = FlatNav.__proto__ || Object.getPrototypeOf(FlatNav)).call.apply(_ref, [this].concat(args))), _this), _this.handleNodeWasCreated = function (feedbackPayload, _ref2) {
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = FlatNav.__proto__ || Object.getPrototypeOf(FlatNav)).call.apply(_ref, [this].concat(args))), _this), _this.populateTheState = function () {
+            if (_this.props.nodes.length === 0) {
+                if (!_this.props.isLoading) {
+                    _this.props.fetchNodes();
+                }
+                if (!_this.props.isLoadingReferenceNodePath) {
+                    _this.props.fetchNewReference();
+                }
+            }
+        }, _this.handleNodeWasCreated = function (feedbackPayload, _ref2) {
             var store = _ref2.store;
 
             var state = store.getState();
@@ -756,33 +829,12 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
             }
         }, _this.buildNewReferenceNodePath = function () {
             var context = _this.props.siteNodeContextPath.split('@')[1];
-            return (_this.props.newReferenceNodePath || _this.props.preset.newReferenceNodePath) + '@' + context;
+            return _this.props.newReferenceNodePath + '@' + context;
         }, _this.createNode = function () {
             var contextPath = _this.buildNewReferenceNodePath();
             _this.props.commenceNodeCreation(contextPath, undefined, 'into', _this.props.preset.newNodeType || undefined);
         }, _this.refreshFlatNav = function () {
             _this.props.resetNodes(_this.props.fetchNodes);
-        }, _this.fetchReferenceNode = function () {
-            var siteNodeContextPath = _this.props.siteNodeContextPath;
-
-            var _backend$get = _neosUiBackendConnector2.default.get(),
-                q = _backend$get.q;
-
-            var parentContextPath = _this.buildNewReferenceNodePath();
-
-            while (parentContextPath !== siteNodeContextPath) {
-                var node = (0, _plowJs.$get)([parentContextPath], _this.props.nodeData);
-                // If the given node is not in the state, load it
-                if (!node) {
-                    q(parentContextPath).get().then(function (nodes) {
-                        _this.props.merge(nodes.reduce(function (nodeMap, node) {
-                            nodeMap[(0, _plowJs.$get)('contextPath', node)] = node;
-                            return nodeMap;
-                        }, {}));
-                    });
-                }
-                parentContextPath = parentNodeContextPath(parentContextPath);
-            }
         }, _this.renderNodes = function () {
             return _this.props.nodes.map(function (contextPath) {
                 var item = (0, _plowJs.$get)([contextPath], _this.props.nodeData);
@@ -826,28 +878,14 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     _createClass(FlatNav, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            if (this.props.nodes.length === 0) {
-                this.props.fetchNodes();
-                this.fetchReferenceNode();
-                if (this.props.preset.newReferenceNodePath.indexOf('/') !== 0) {
-                    this.props.fetchNewReferenceNodePath();
-                }
-            }
+            this.populateTheState();
             this.props.serverFeedbackHandlers.set('Neos.Neos.Ui:NodeCreated/DocumentAdded', this.handleNodeWasCreated, 'after Neos.Neos.Ui:NodeCreated/Main');
         }
     }, {
         key: 'componentDidUpdate',
-        value: function componentDidUpdate(prevProps) {
-            // If the siteNodeContextPath or baseWorkspaceName have changed, reload the nodes
-            if (this.props.siteNodeContextPath !== prevProps.siteNodeContextPath || this.props.baseWorkspaceName !== prevProps.baseWorkspaceName) {
-                this.refreshFlatNav();
-                this.fetchReferenceNode();
-            }
+        value: function componentDidUpdate() {
+            this.populateTheState();
         }
-
-        // This is rather a hack. We need to make sure the target NewReferenceNode is loaded
-        // in order to be able to create anything inside it.
-
     }, {
         key: 'render',
         value: function render() {
