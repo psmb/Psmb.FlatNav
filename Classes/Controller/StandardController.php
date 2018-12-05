@@ -81,7 +81,8 @@ class StandardController extends ActionController
         $expression = '${' . $this->presets[$preset]['newReferenceNodePath'] . '}';
         $baseNode = $this->nodeService->getNodeFromContextPath($nodeContextPath, null, null, true);
         $contextVariables = [
-            'node' => $baseNode
+            'node' => $baseNode,
+            'site' => $baseNode
         ];
         $newReferenceNodePath = \Neos\Eel\Utility::evaluateEelExpression($expression, $this->eelEvaluator, $contextVariables, $this->defaultContextConfiguration);
         $this->view->assign('value', $newReferenceNodePath);

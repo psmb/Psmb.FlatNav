@@ -641,8 +641,8 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
 
         this.makeGetNewReference = function (preset) {
             return function () {
+                var context = _this3.props.siteNodeContextPath.split('@')[1];
                 if (_this3.state[preset].newReferenceNodePath.indexOf('/') === 0) {
-                    var context = _this3.props.siteNodeContextPath.split('@')[1];
                     _this3.fetchNodeWithParents(_this3.state[preset].newReferenceNodePath + '@' + context);
                 } else {
                     _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
@@ -664,7 +664,7 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                         _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
                             newReferenceNodePath: newReferenceNodePath
                         })));
-                        _this3.fetchNodeWithParents(newReferenceNodePath);
+                        _this3.fetchNodeWithParents(newReferenceNodePath + '@' + context);
                     });
                 }
             };

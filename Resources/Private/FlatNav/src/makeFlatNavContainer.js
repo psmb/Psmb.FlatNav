@@ -133,8 +133,8 @@ const makeFlatNavContainer = OriginalPageTree => {
 
         // Gets the `newReferenceNodePath` setting and loads that node into state
         makeGetNewReference = preset => () => {
+            const context = this.props.siteNodeContextPath.split('@')[1];
             if (this.state[preset].newReferenceNodePath.indexOf('/') === 0) {
-                const context = this.props.siteNodeContextPath.split('@')[1];
                 this.fetchNodeWithParents(this.state[preset].newReferenceNodePath + '@' + context);
             } else {
                 this.setState({
@@ -160,7 +160,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                                 newReferenceNodePath
                             }
                         });
-                        this.fetchNodeWithParents(newReferenceNodePath);
+                        this.fetchNodeWithParents(newReferenceNodePath + '@' + context);
                     });
             }
         };
