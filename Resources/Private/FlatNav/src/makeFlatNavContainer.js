@@ -157,7 +157,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                     }
                 });
                 fetchWithErrorHandling.withCsrfToken(csrfToken => ({
-                    url: `/flatnav/getNewReferenceNodePath?nodeContextPath=` + encodeURIComponent(this.props.siteNodeContextPath) + `&preset=${preset}`,
+                    url: `/flatnav/getNewReferenceNodePath?nodeContextPath=${encodeURIComponent(this.props.siteNodeContextPath)}&preset=${preset}`,
                     method: 'GET',
                     credentials: 'include',
                     headers: {
