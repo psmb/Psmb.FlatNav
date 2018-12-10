@@ -102,7 +102,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                 }
             });
             fetchWithErrorHandling.withCsrfToken(csrfToken => ({
-                url: `/flatnav/query?nodeContextPath=` + encodeURIComponent(this.props.siteNodeContextPath) + `&preset=${preset}&page=${this.state[preset].page}`,
+                url: `/flatnav/query?nodeContextPath=${encodeURIComponent(this.props.siteNodeContextPath)}&preset=${preset}&page=${this.state[preset].page}`,
                 method: 'GET',
                 credentials: 'include',
                 headers: {
