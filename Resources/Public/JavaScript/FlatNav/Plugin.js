@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -198,28 +198,6 @@ module.exports = (0, _readFromConsumerApi2.default)('vendor')().PropTypes;
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.fetchWithErrorHandling = undefined;
-
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().NeosUiBackendConnectorDefault;
-var fetchWithErrorHandling = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().NeosUiBackendConnector.fetchWithErrorHandling;
-exports.fetchWithErrorHandling = fetchWithErrorHandling;
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 var _readFromConsumerApi = __webpack_require__(0);
 
 var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
@@ -229,7 +207,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 module.exports = (0, _readFromConsumerApi2.default)('vendor')().classnames;
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -279,16 +257,16 @@ if(false) {
 }
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(12);
+__webpack_require__(11);
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -298,11 +276,11 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _neosUiExtensibility = __webpack_require__(13);
+var _neosUiExtensibility = __webpack_require__(12);
 
 var _neosUiExtensibility2 = _interopRequireDefault(_neosUiExtensibility);
 
-var _makeFlatNavContainer = __webpack_require__(17);
+var _makeFlatNavContainer = __webpack_require__(16);
 
 var _makeFlatNavContainer2 = _interopRequireDefault(_makeFlatNavContainer);
 
@@ -334,7 +312,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 });
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -345,7 +323,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.createConsumerApi = undefined;
 
-var _createConsumerApi = __webpack_require__(14);
+var _createConsumerApi = __webpack_require__(13);
 
 var _createConsumerApi2 = _interopRequireDefault(_createConsumerApi);
 
@@ -359,7 +337,7 @@ exports.default = (0, _readFromConsumerApi2.default)('manifest');
 exports.createConsumerApi = _createConsumerApi2.default;
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -370,9 +348,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = createConsumerApi;
 
-var _package = __webpack_require__(15);
+var _package = __webpack_require__(14);
 
-var _manifest = __webpack_require__(16);
+var _manifest = __webpack_require__(15);
 
 var _manifest2 = _interopRequireDefault(_manifest);
 
@@ -401,13 +379,13 @@ function createConsumerApi(manifests, exposureMap) {
 }
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = {"name":"@neos-project/neos-ui-extensibility","version":"1.3.3","description":"Extensibility mechanisms for the Neos CMS UI","main":"./src/index.js","scripts":{"prebuild":"check-dependencies && yarn clean","test":"yarn jest -- -w 2 --coverage","test:watch":"yarn jest -- --watch","build":"exit 0","build:watch":"exit 0","clean":"rimraf ./lib ./dist","lint":"eslint src","jest":"NODE_ENV=test jest"},"devDependencies":{"@neos-project/babel-preset-neos-ui":"1.3.3","@neos-project/jest-preset-neos-ui":"1.3.3"},"dependencies":{"@neos-project/build-essentials":"1.3.3","@neos-project/positional-array-sorter":"1.3.3","babel-core":"^6.13.2","babel-eslint":"^7.1.1","babel-loader":"^7.1.2","babel-plugin-transform-decorators-legacy":"^1.3.4","babel-plugin-transform-object-rest-spread":"^6.20.1","babel-plugin-webpack-alias":"^2.1.1","babel-preset-es2015":"^6.13.2","babel-preset-react":"^6.3.13","babel-preset-stage-0":"^6.3.13","chalk":"^1.1.3","css-loader":"^0.28.4","file-loader":"^1.1.5","json-loader":"^0.5.4","postcss-loader":"^2.0.10","react-dev-utils":"^0.5.0","style-loader":"^0.21.0"},"bin":{"neos-react-scripts":"./bin/neos-react-scripts.js"},"jest":{"preset":"@neos-project/jest-preset-neos-ui"}}
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -429,7 +407,7 @@ exports.default = function (manifests) {
 };
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -459,7 +437,7 @@ var _neosUiReduxStore = __webpack_require__(6);
 
 var _neosUiDecorators = __webpack_require__(3);
 
-var _neosUiBackendConnector = __webpack_require__(8);
+var _neosUiBackendConnector = __webpack_require__(17);
 
 var _neosUiBackendConnector2 = _interopRequireDefault(_neosUiBackendConnector);
 
@@ -614,7 +592,7 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                 })));
                 _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
                     return {
-                        url: '/flatnav/query?nodeContextPath=' + _this3.props.siteNodeContextPath + '&preset=' + preset + '&page=' + _this3.state[preset].page,
+                        url: '/flatnav/query?nodeContextPath=' + encodeURIComponent(_this3.props.siteNodeContextPath) + '&preset=' + preset + '&page=' + _this3.state[preset].page,
                         method: 'GET',
                         credentials: 'include',
                         headers: {
@@ -663,7 +641,7 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                     })));
                     _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
                         return {
-                            url: '/flatnav/getNewReferenceNodePath?nodeContextPath=' + _this3.props.siteNodeContextPath + '&preset=' + preset,
+                            url: '/flatnav/getNewReferenceNodePath?nodeContextPath=' + encodeURIComponent(_this3.props.siteNodeContextPath) + '&preset=' + preset,
                             method: 'GET',
                             credentials: 'include',
                             headers: {
@@ -727,6 +705,28 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
 exports.default = makeFlatNavContainer;
 
 /***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fetchWithErrorHandling = undefined;
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().NeosUiBackendConnectorDefault;
+var fetchWithErrorHandling = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().NeosUiBackendConnector.fetchWithErrorHandling;
+exports.fetchWithErrorHandling = fetchWithErrorHandling;
+
+/***/ }),
 /* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -768,11 +768,11 @@ var _DeleteSelectedNode = __webpack_require__(20);
 
 var _DeleteSelectedNode2 = _interopRequireDefault(_DeleteSelectedNode);
 
-var _classnames = __webpack_require__(9);
+var _classnames = __webpack_require__(8);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _style = __webpack_require__(10);
+var _style = __webpack_require__(9);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -1165,36 +1165,39 @@ exports = module.exports = __webpack_require__(22)(false);
 
 
 // module
-exports.push([module.i, ".style__loadMoreButton___9u14e {\n    width: 100% !important;\n    opacity: 1 !important;\n}\n\n.style__toolbar___Y2z2P {\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__treeWrapper___1Ki9q {\n    padding: 5px 0;\n}\n\n.style__node___37dXu {\n    position: relative;\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    width: 100%;\n    padding: 3px 6px;\n    cursor: pointer;\n}\n\n.style__node--focused___2Ad0k {\n    background-color: #323232;\n}\n\n.style__node--focused___2Ad0k .style__node__label___2ktrO {\n    color: #00ADEE;\n}\n\n.style__node__iconWrapper___32kOo {\n    width: 2em;\n    display: inline-block;\n    position: absolute;\n    text-align: center;\n}\n\n.style__node__label___2ktrO {\n    margin-left: 2em;\n}\n", ""]);
+exports.push([module.i, ".style__loadMoreButton___1B8kP {\r\n    width: 100% !important;\r\n    opacity: 1 !important;\r\n}\r\n\r\n.style__toolbar___ghGPc {\r\n    border-bottom: 1px solid #3f3f3f;\r\n}\r\n\r\n.style__treeWrapper___1sIwt {\r\n    padding: 5px 0;\r\n}\r\n\r\n.style__node___1j1iZ {\r\n    position: relative;\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n    text-overflow: ellipsis;\r\n    width: 100%;\r\n    padding: 3px 6px;\r\n    cursor: pointer;\r\n}\r\n\r\n.style__node--focused___1i0yL {\r\n    background-color: #323232;\r\n}\r\n\r\n.style__node--focused___1i0yL .style__node__label___2Vihm {\r\n    color: #00ADEE;\r\n}\r\n\r\n.style__node__iconWrapper___37PBA {\r\n    width: 2em;\r\n    display: inline-block;\r\n    position: absolute;\r\n    text-align: center;\r\n}\r\n\r\n.style__node__label___2Vihm {\r\n    margin-left: 2em;\r\n}\r\n", ""]);
 
 // exports
 exports.locals = {
-	"loadMoreButton": "style__loadMoreButton___9u14e",
-	"toolbar": "style__toolbar___Y2z2P",
-	"treeWrapper": "style__treeWrapper___1Ki9q",
-	"node": "style__node___37dXu",
-	"node--focused": "style__node--focused___2Ad0k",
-	"node__label": "style__node__label___2ktrO",
-	"node__iconWrapper": "style__node__iconWrapper___32kOo"
+	"loadMoreButton": "style__loadMoreButton___1B8kP",
+	"toolbar": "style__toolbar___ghGPc",
+	"treeWrapper": "style__treeWrapper___1sIwt",
+	"node": "style__node___1j1iZ",
+	"node--focused": "style__node--focused___1i0yL",
+	"node__label": "style__node__label___2Vihm",
+	"node__iconWrapper": "style__node__iconWrapper___37PBA"
 };
 
 /***/ }),
 /* 22 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 
 /*
 	MIT License http://www.opensource.org/licenses/mit-license.php
 	Author Tobias Koppers @sokra
 */
 // css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
+module.exports = function (useSourceMap) {
 	var list = [];
 
 	// return the list of modules as css string
 	list.toString = function toString() {
 		return this.map(function (item) {
 			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
+			if (item[2]) {
 				return "@media " + item[2] + "{" + content + "}";
 			} else {
 				return content;
@@ -1203,25 +1206,23 @@ module.exports = function(useSourceMap) {
 	};
 
 	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
+	list.i = function (modules, mediaQuery) {
+		if (typeof modules === "string") modules = [[null, modules, ""]];
 		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
+		for (var i = 0; i < this.length; i++) {
 			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
+			if (typeof id === "number") alreadyImportedModules[id] = true;
 		}
-		for(i = 0; i < modules.length; i++) {
+		for (i = 0; i < modules.length; i++) {
 			var item = modules[i];
 			// skip already imported module
 			// this implementation is not 100% perfect for weird media query combinations
 			//  when a module is imported multiple times with different media queries.
 			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
+			if (typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if (mediaQuery && !item[2]) {
 					item[2] = mediaQuery;
-				} else if(mediaQuery) {
+				} else if (mediaQuery) {
 					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
 				}
 				list.push(item);
@@ -1241,7 +1242,7 @@ function cssWithMappingToString(item, useSourceMap) {
 	if (useSourceMap && typeof btoa === 'function') {
 		var sourceMapping = toComment(cssMapping);
 		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */';
 		});
 
 		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
@@ -1258,7 +1259,6 @@ function toComment(sourceMap) {
 
 	return '/*# ' + data + ' */';
 }
-
 
 /***/ }),
 /* 23 */
@@ -1648,7 +1648,9 @@ function updateLink (link, options, obj) {
 
 /***/ }),
 /* 24 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 
 
 /**
@@ -1665,64 +1667,63 @@ function updateLink (link, options, obj) {
  */
 
 module.exports = function (css) {
-  // get current location
-  var location = typeof window !== "undefined" && window.location;
+	// get current location
+	var location = typeof window !== "undefined" && window.location;
 
-  if (!location) {
-    throw new Error("fixUrls requires window.location");
-  }
+	if (!location) {
+		throw new Error("fixUrls requires window.location");
+	}
 
 	// blank or null?
 	if (!css || typeof css !== "string") {
-	  return css;
-  }
+		return css;
+	}
 
-  var baseUrl = location.protocol + "//" + location.host;
-  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
+	var baseUrl = location.protocol + "//" + location.host;
+	var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
 
 	// convert each url(...)
 	/*
-	This regular expression is just a way to recursively match brackets within
-	a string.
-
-	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
-	   (  = Start a capturing group
-	     (?:  = Start a non-capturing group
-	         [^)(]  = Match anything that isn't a parentheses
-	         |  = OR
-	         \(  = Match a start parentheses
-	             (?:  = Start another non-capturing groups
-	                 [^)(]+  = Match anything that isn't a parentheses
-	                 |  = OR
-	                 \(  = Match a start parentheses
-	                     [^)(]*  = Match anything that isn't a parentheses
-	                 \)  = Match a end parentheses
-	             )  = End Group
+ This regular expression is just a way to recursively match brackets within
+ a string.
+ 	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
+    (  = Start a capturing group
+      (?:  = Start a non-capturing group
+          [^)(]  = Match anything that isn't a parentheses
+          |  = OR
+          \(  = Match a start parentheses
+              (?:  = Start another non-capturing groups
+                  [^)(]+  = Match anything that isn't a parentheses
+                  |  = OR
+                  \(  = Match a start parentheses
+                      [^)(]*  = Match anything that isn't a parentheses
+                  \)  = Match a end parentheses
+              )  = End Group
               *\) = Match anything and then a close parens
           )  = Close non-capturing group
           *  = Match anything
        )  = Close capturing group
-	 \)  = Match a close parens
-
-	 /gi  = Get all matches, not the first.  Be case insensitive.
-	 */
-	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
+  \)  = Match a close parens
+ 	 /gi  = Get all matches, not the first.  Be case insensitive.
+  */
+	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function (fullMatch, origUrl) {
 		// strip quotes (if they exist)
-		var unquotedOrigUrl = origUrl
-			.trim()
-			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
-			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
+		var unquotedOrigUrl = origUrl.trim().replace(/^"(.*)"$/, function (o, $1) {
+			return $1;
+		}).replace(/^'(.*)'$/, function (o, $1) {
+			return $1;
+		});
 
 		// already a full url? no change
 		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/|\s*$)/i.test(unquotedOrigUrl)) {
-		  return fullMatch;
+			return fullMatch;
 		}
 
 		// convert the url to a full url
 		var newUrl;
 
 		if (unquotedOrigUrl.indexOf("//") === 0) {
-		  	//TODO: should we add protocol?
+			//TODO: should we add protocol?
 			newUrl = unquotedOrigUrl;
 		} else if (unquotedOrigUrl.indexOf("/") === 0) {
 			// path should be relative to the base url
@@ -1739,7 +1740,6 @@ module.exports = function (css) {
 	// send back the fixed css
 	return fixedCss;
 };
-
 
 /***/ }),
 /* 25 */
@@ -1765,7 +1765,7 @@ var _propTypes = __webpack_require__(7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _classnames = __webpack_require__(9);
+var _classnames = __webpack_require__(8);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -1773,7 +1773,7 @@ var _neosUiDecorators = __webpack_require__(3);
 
 var _reactUiComponents = __webpack_require__(2);
 
-var _style = __webpack_require__(10);
+var _style = __webpack_require__(9);
 
 var _style2 = _interopRequireDefault(_style);
 
