@@ -7,6 +7,7 @@ import {neos} from '@neos-project/neos-ui-decorators';
 import {fetchWithErrorHandling} from '@neos-project/neos-ui-backend-connector';
 import backend from '@neos-project/neos-ui-backend-connector';
 import FlatNav from './FlatNav';
+import style from './style.css';
 
 // Taken from here, as it's not exported in the UI
 // https://github.com/neos/neos-ui/blob/b2a52d66a211b192dfc541799779a8be27bf5a31/packages/neos-ui-sagas/src/CR/NodeOperations/helpers.js#L3
@@ -205,11 +206,13 @@ const makeFlatNavContainer = OriginalPageTree => {
 
         render() {
             return (
-                <Tabs>
+                <Tabs theme={{
+                    tabs__content: style.tabs__content
+                }}>
                     {Object.keys(this.props.options.presets).map(presetName => {
                         const preset = this.props.options.presets[presetName];
                         return (
-                            <Tabs.Panel key={presetName} icon={preset.icon} tooltip={this.props.i18nRegistry.translate(preset.label)}>
+                            <Tabs.Panel id={presetName} key={presetName} icon={preset.icon} tooltip={this.props.i18nRegistry.translate(preset.label)}>
                                 {preset.type === 'flat' && (<FlatNav
                                     preset={preset}
                                     fetchNodes={this.makeFetchNodes(presetName)}
