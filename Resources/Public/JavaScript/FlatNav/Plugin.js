@@ -445,6 +445,10 @@ var _FlatNav = __webpack_require__(18);
 
 var _FlatNav2 = _interopRequireDefault(_FlatNav);
 
+var _style = __webpack_require__(9);
+
+var _style2 = _interopRequireDefault(_style);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -516,12 +520,14 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
 
                 return _react2.default.createElement(
                     _reactUiComponents.Tabs,
-                    null,
+                    { theme: {
+                            tabs__content: _style2.default.tabs__content
+                        } },
                     Object.keys(this.props.options.presets).map(function (presetName) {
                         var preset = _this2.props.options.presets[presetName];
                         return _react2.default.createElement(
                             _reactUiComponents.Tabs.Panel,
-                            { key: presetName, icon: preset.icon, tooltip: _this2.props.i18nRegistry.translate(preset.label) },
+                            { id: presetName, key: presetName, icon: preset.icon, tooltip: _this2.props.i18nRegistry.translate(preset.label) },
                             preset.type === 'flat' && _react2.default.createElement(_FlatNav2.default, _extends({
                                 preset: preset,
                                 fetchNodes: _this2.makeFetchNodes(presetName),
@@ -1165,39 +1171,37 @@ exports = module.exports = __webpack_require__(22)(false);
 
 
 // module
-exports.push([module.i, ".style__loadMoreButton___1B8kP {\r\n    width: 100% !important;\r\n    opacity: 1 !important;\r\n}\r\n\r\n.style__toolbar___ghGPc {\r\n    border-bottom: 1px solid #3f3f3f;\r\n}\r\n\r\n.style__treeWrapper___1sIwt {\r\n    padding: 5px 0;\r\n}\r\n\r\n.style__node___1j1iZ {\r\n    position: relative;\r\n    overflow: hidden;\r\n    white-space: nowrap;\r\n    text-overflow: ellipsis;\r\n    width: 100%;\r\n    padding: 3px 6px;\r\n    cursor: pointer;\r\n}\r\n\r\n.style__node--focused___1i0yL {\r\n    background-color: #323232;\r\n}\r\n\r\n.style__node--focused___1i0yL .style__node__label___2Vihm {\r\n    color: #00ADEE;\r\n}\r\n\r\n.style__node__iconWrapper___37PBA {\r\n    width: 2em;\r\n    display: inline-block;\r\n    position: absolute;\r\n    text-align: center;\r\n}\r\n\r\n.style__node__label___2Vihm {\r\n    margin-left: 2em;\r\n}\r\n", ""]);
+exports.push([module.i, ".style__loadMoreButton___9u14e {\n    width: 100% !important;\n    opacity: 1 !important;\n}\n\n.style__tabs__content___pnV9i {\n    height: calc(100% - 41px);\n}\n\n.style__toolbar___Y2z2P {\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__treeWrapper___1Ki9q {\n    padding: 5px 0;\n}\n\n.style__node___37dXu {\n    position: relative;\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    width: 100%;\n    padding: 3px 6px;\n    cursor: pointer;\n}\n\n.style__node--focused___2Ad0k {\n    background-color: #323232;\n}\n\n.style__node--focused___2Ad0k .style__node__label___2ktrO {\n    color: #00ADEE;\n}\n\n.style__node__iconWrapper___32kOo {\n    width: 2em;\n    display: inline-block;\n    position: absolute;\n    text-align: center;\n}\n\n.style__node__label___2ktrO {\n    margin-left: 2em;\n}", ""]);
 
 // exports
 exports.locals = {
-	"loadMoreButton": "style__loadMoreButton___1B8kP",
-	"toolbar": "style__toolbar___ghGPc",
-	"treeWrapper": "style__treeWrapper___1sIwt",
-	"node": "style__node___1j1iZ",
-	"node--focused": "style__node--focused___1i0yL",
-	"node__label": "style__node__label___2Vihm",
-	"node__iconWrapper": "style__node__iconWrapper___37PBA"
+	"loadMoreButton": "style__loadMoreButton___9u14e",
+	"tabs__content": "style__tabs__content___pnV9i",
+	"toolbar": "style__toolbar___Y2z2P",
+	"treeWrapper": "style__treeWrapper___1Ki9q",
+	"node": "style__node___37dXu",
+	"node--focused": "style__node--focused___2Ad0k",
+	"node__label": "style__node__label___2ktrO",
+	"node__iconWrapper": "style__node__iconWrapper___32kOo"
 };
 
 /***/ }),
 /* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
+/***/ (function(module, exports) {
 
 /*
 	MIT License http://www.opensource.org/licenses/mit-license.php
 	Author Tobias Koppers @sokra
 */
 // css base code, injected by the css-loader
-module.exports = function (useSourceMap) {
+module.exports = function(useSourceMap) {
 	var list = [];
 
 	// return the list of modules as css string
 	list.toString = function toString() {
 		return this.map(function (item) {
 			var content = cssWithMappingToString(item, useSourceMap);
-			if (item[2]) {
+			if(item[2]) {
 				return "@media " + item[2] + "{" + content + "}";
 			} else {
 				return content;
@@ -1206,23 +1210,25 @@ module.exports = function (useSourceMap) {
 	};
 
 	// import a list of modules into the list
-	list.i = function (modules, mediaQuery) {
-		if (typeof modules === "string") modules = [[null, modules, ""]];
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
 		var alreadyImportedModules = {};
-		for (var i = 0; i < this.length; i++) {
+		for(var i = 0; i < this.length; i++) {
 			var id = this[i][0];
-			if (typeof id === "number") alreadyImportedModules[id] = true;
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
 		}
-		for (i = 0; i < modules.length; i++) {
+		for(i = 0; i < modules.length; i++) {
 			var item = modules[i];
 			// skip already imported module
 			// this implementation is not 100% perfect for weird media query combinations
 			//  when a module is imported multiple times with different media queries.
 			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if (typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if (mediaQuery && !item[2]) {
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
 					item[2] = mediaQuery;
-				} else if (mediaQuery) {
+				} else if(mediaQuery) {
 					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
 				}
 				list.push(item);
@@ -1242,7 +1248,7 @@ function cssWithMappingToString(item, useSourceMap) {
 	if (useSourceMap && typeof btoa === 'function') {
 		var sourceMapping = toComment(cssMapping);
 		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */';
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
 		});
 
 		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
@@ -1259,6 +1265,7 @@ function toComment(sourceMap) {
 
 	return '/*# ' + data + ' */';
 }
+
 
 /***/ }),
 /* 23 */
@@ -1648,9 +1655,7 @@ function updateLink (link, options, obj) {
 
 /***/ }),
 /* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ (function(module, exports) {
 
 
 /**
@@ -1667,63 +1672,64 @@ function updateLink (link, options, obj) {
  */
 
 module.exports = function (css) {
-	// get current location
-	var location = typeof window !== "undefined" && window.location;
+  // get current location
+  var location = typeof window !== "undefined" && window.location;
 
-	if (!location) {
-		throw new Error("fixUrls requires window.location");
-	}
+  if (!location) {
+    throw new Error("fixUrls requires window.location");
+  }
 
 	// blank or null?
 	if (!css || typeof css !== "string") {
-		return css;
-	}
+	  return css;
+  }
 
-	var baseUrl = location.protocol + "//" + location.host;
-	var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
+  var baseUrl = location.protocol + "//" + location.host;
+  var currentDir = baseUrl + location.pathname.replace(/\/[^\/]*$/, "/");
 
 	// convert each url(...)
 	/*
- This regular expression is just a way to recursively match brackets within
- a string.
- 	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
-    (  = Start a capturing group
-      (?:  = Start a non-capturing group
-          [^)(]  = Match anything that isn't a parentheses
-          |  = OR
-          \(  = Match a start parentheses
-              (?:  = Start another non-capturing groups
-                  [^)(]+  = Match anything that isn't a parentheses
-                  |  = OR
-                  \(  = Match a start parentheses
-                      [^)(]*  = Match anything that isn't a parentheses
-                  \)  = Match a end parentheses
-              )  = End Group
+	This regular expression is just a way to recursively match brackets within
+	a string.
+
+	 /url\s*\(  = Match on the word "url" with any whitespace after it and then a parens
+	   (  = Start a capturing group
+	     (?:  = Start a non-capturing group
+	         [^)(]  = Match anything that isn't a parentheses
+	         |  = OR
+	         \(  = Match a start parentheses
+	             (?:  = Start another non-capturing groups
+	                 [^)(]+  = Match anything that isn't a parentheses
+	                 |  = OR
+	                 \(  = Match a start parentheses
+	                     [^)(]*  = Match anything that isn't a parentheses
+	                 \)  = Match a end parentheses
+	             )  = End Group
               *\) = Match anything and then a close parens
           )  = Close non-capturing group
           *  = Match anything
        )  = Close capturing group
-  \)  = Match a close parens
- 	 /gi  = Get all matches, not the first.  Be case insensitive.
-  */
-	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function (fullMatch, origUrl) {
+	 \)  = Match a close parens
+
+	 /gi  = Get all matches, not the first.  Be case insensitive.
+	 */
+	var fixedCss = css.replace(/url\s*\(((?:[^)(]|\((?:[^)(]+|\([^)(]*\))*\))*)\)/gi, function(fullMatch, origUrl) {
 		// strip quotes (if they exist)
-		var unquotedOrigUrl = origUrl.trim().replace(/^"(.*)"$/, function (o, $1) {
-			return $1;
-		}).replace(/^'(.*)'$/, function (o, $1) {
-			return $1;
-		});
+		var unquotedOrigUrl = origUrl
+			.trim()
+			.replace(/^"(.*)"$/, function(o, $1){ return $1; })
+			.replace(/^'(.*)'$/, function(o, $1){ return $1; });
 
 		// already a full url? no change
 		if (/^(#|data:|http:\/\/|https:\/\/|file:\/\/\/|\s*$)/i.test(unquotedOrigUrl)) {
-			return fullMatch;
+		  return fullMatch;
 		}
 
 		// convert the url to a full url
 		var newUrl;
 
 		if (unquotedOrigUrl.indexOf("//") === 0) {
-			//TODO: should we add protocol?
+		  	//TODO: should we add protocol?
 			newUrl = unquotedOrigUrl;
 		} else if (unquotedOrigUrl.indexOf("/") === 0) {
 			// path should be relative to the base url
@@ -1740,6 +1746,7 @@ module.exports = function (css) {
 	// send back the fixed css
 	return fixedCss;
 };
+
 
 /***/ }),
 /* 25 */
