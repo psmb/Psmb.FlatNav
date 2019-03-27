@@ -34,7 +34,7 @@ export default class RefreshNodes extends PureComponent {
         return (
             <IconButton
                 className={finalClassName}
-                isDisabled={isLoading}
+                disabled={isLoading}
                 onClick={this.handleClick}
                 icon="sync"
                 hoverStyle="clean"

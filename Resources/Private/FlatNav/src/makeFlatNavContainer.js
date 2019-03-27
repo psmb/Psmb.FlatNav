@@ -207,12 +207,15 @@ const makeFlatNavContainer = OriginalPageTree => {
         render() {
             return (
                 <Tabs theme={{
-                    tabs__content: style.tabs__content
+                    tabs__content: style.tabs__content,
+                    tabs__panel: style.tabs__panel
                 }}>
                     {Object.keys(this.props.options.presets).map(presetName => {
                         const preset = this.props.options.presets[presetName];
                         return (
-                            <Tabs.Panel id={presetName} key={presetName} icon={preset.icon} tooltip={this.props.i18nRegistry.translate(preset.label)}>
+                            <Tabs.Panel id={presetName} key={presetName} icon={preset.icon} tooltip={this.props.i18nRegistry.translate(preset.label)} theme={{
+                                panel: style.panel
+                            }}>
                                 {preset.type === 'flat' && (<FlatNav
                                     preset={preset}
                                     fetchNodes={this.makeFetchNodes(presetName)}

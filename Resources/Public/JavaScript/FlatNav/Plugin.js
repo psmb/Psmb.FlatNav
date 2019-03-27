@@ -180,36 +180,6 @@ module.exports = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().Neo
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = (0, _readFromConsumerApi2.default)('vendor')().PropTypes;
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = (0, _readFromConsumerApi2.default)('vendor')().classnames;
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
 
 var content = __webpack_require__(21);
 
@@ -257,6 +227,36 @@ if(false) {
 }
 
 /***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = (0, _readFromConsumerApi2.default)('vendor')().PropTypes;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = (0, _readFromConsumerApi2.default)('vendor')().classnames;
+
+/***/ }),
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -284,6 +284,10 @@ var _makeFlatNavContainer = __webpack_require__(16);
 
 var _makeFlatNavContainer2 = _interopRequireDefault(_makeFlatNavContainer);
 
+var _style = __webpack_require__(7);
+
+var _style2 = _interopRequireDefault(_style);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (0, _neosUiExtensibility2.default)('Psmb.FlatNav:FlatNav', {}, function (globalRegistry) {
@@ -295,7 +299,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     var OriginalTree = function OriginalTree() {
         return _react2.default.createElement(
             'div',
-            null,
+            { className: _style2.default.pageTreeContainer },
             _react2.default.createElement(PageTreeToolbar, null),
             _react2.default.createElement(PageTreeSearchbar, null),
             _react2.default.createElement(PageTree, null)
@@ -445,7 +449,7 @@ var _FlatNav = __webpack_require__(18);
 
 var _FlatNav2 = _interopRequireDefault(_FlatNav);
 
-var _style = __webpack_require__(9);
+var _style = __webpack_require__(7);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -521,13 +525,16 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                 return _react2.default.createElement(
                     _reactUiComponents.Tabs,
                     { theme: {
-                            tabs__content: _style2.default.tabs__content
+                            tabs__content: _style2.default.tabs__content,
+                            tabs__panel: _style2.default.tabs__panel
                         } },
                     Object.keys(this.props.options.presets).map(function (presetName) {
                         var preset = _this2.props.options.presets[presetName];
                         return _react2.default.createElement(
                             _reactUiComponents.Tabs.Panel,
-                            { id: presetName, key: presetName, icon: preset.icon, tooltip: _this2.props.i18nRegistry.translate(preset.label) },
+                            { id: presetName, key: presetName, icon: preset.icon, tooltip: _this2.props.i18nRegistry.translate(preset.label), theme: {
+                                    panel: _style2.default.panel
+                                } },
                             preset.type === 'flat' && _react2.default.createElement(_FlatNav2.default, _extends({
                                 preset: preset,
                                 fetchNodes: _this2.makeFetchNodes(presetName),
@@ -752,7 +759,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(7);
+var _propTypes = __webpack_require__(8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -774,11 +781,11 @@ var _DeleteSelectedNode = __webpack_require__(20);
 
 var _DeleteSelectedNode2 = _interopRequireDefault(_DeleteSelectedNode);
 
-var _classnames = __webpack_require__(8);
+var _classnames = __webpack_require__(9);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _style = __webpack_require__(9);
+var _style = __webpack_require__(7);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -909,7 +916,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
         value: function render() {
             return _react2.default.createElement(
                 'div',
-                { style: { overflow: 'hidden' } },
+                { className: _style2.default.pageTreeContainer },
                 _react2.default.createElement(
                     'div',
                     { className: _style2.default.toolbar },
@@ -929,7 +936,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                         onClick: this.props.fetchNodes,
                         style: 'clean',
                         className: _style2.default.loadMoreButton,
-                        isDisabled: this.props.isLoading
+                        disabled: this.props.isLoading
                     },
                     _react2.default.createElement(
                         'div',
@@ -978,7 +985,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(7);
+var _propTypes = __webpack_require__(8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -1171,13 +1178,16 @@ exports = module.exports = __webpack_require__(22)(false);
 
 
 // module
-exports.push([module.i, ".style__loadMoreButton___9u14e {\n    width: 100% !important;\n    opacity: 1 !important;\n}\n\n.style__tabs__content___pnV9i {\n    height: calc(100% - 41px);\n}\n\n.style__toolbar___Y2z2P {\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__treeWrapper___1Ki9q {\n    padding: 5px 0;\n}\n\n.style__node___37dXu {\n    position: relative;\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    width: 100%;\n    padding: 3px 6px;\n    cursor: pointer;\n}\n\n.style__node--focused___2Ad0k {\n    background-color: #323232;\n}\n\n.style__node--focused___2Ad0k .style__node__label___2ktrO {\n    color: #00ADEE;\n}\n\n.style__node__iconWrapper___32kOo {\n    width: 2em;\n    display: inline-block;\n    position: absolute;\n    text-align: center;\n}\n\n.style__node__label___2ktrO {\n    margin-left: 2em;\n}", ""]);
+exports.push([module.i, ".style__loadMoreButton___9u14e {\n    width: 100% !important;\n    opacity: 1 !important;\n}\n\n.style__tabs__content___pnV9i {\n    height: calc(100% - 41px);\n}\n\n.style__tabs__panel___1f-I- {\n    height: 100%;\n}\n\n.style__panel___8gH6H {\n    height: 100%;\n}\n\n.style__toolbar___Y2z2P {\n    background-color: #222;\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__pageTreeContainer___7tNsg {\n    display: -ms-flexbox;\n    display: flex;\n    -ms-flex-direction: column;\n        flex-direction: column;\n    height: 100%;\n    background-color: #222;\n    border-right: 1px solid #3f3f3f;\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__treeWrapper___1Ki9q {\n    padding: 5px 0;\n}\n\n.style__node___37dXu {\n    position: relative;\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    width: 100%;\n    padding: 3px 6px;\n    cursor: pointer;\n}\n\n.style__node--focused___2Ad0k {\n    background-color: #323232;\n}\n\n.style__node--focused___2Ad0k .style__node__label___2ktrO {\n    color: #00ADEE;\n}\n\n.style__node__iconWrapper___32kOo {\n    width: 2em;\n    display: inline-block;\n    position: absolute;\n    text-align: center;\n}\n\n.style__node__label___2ktrO {\n    margin-left: 2em;\n}", ""]);
 
 // exports
 exports.locals = {
 	"loadMoreButton": "style__loadMoreButton___9u14e",
 	"tabs__content": "style__tabs__content___pnV9i",
+	"tabs__panel": "style__tabs__panel___1f-I-",
+	"panel": "style__panel___8gH6H",
 	"toolbar": "style__toolbar___Y2z2P",
+	"pageTreeContainer": "style__pageTreeContainer___7tNsg",
 	"treeWrapper": "style__treeWrapper___1Ki9q",
 	"node": "style__node___37dXu",
 	"node--focused": "style__node--focused___2Ad0k",
@@ -1768,11 +1778,11 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(7);
+var _propTypes = __webpack_require__(8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _classnames = __webpack_require__(8);
+var _classnames = __webpack_require__(9);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -1780,7 +1790,7 @@ var _neosUiDecorators = __webpack_require__(3);
 
 var _reactUiComponents = __webpack_require__(2);
 
-var _style = __webpack_require__(9);
+var _style = __webpack_require__(7);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -1834,7 +1844,7 @@ var RefreshNodes = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry)
 
             return _react2.default.createElement(_reactUiComponents.IconButton, {
                 className: finalClassName,
-                isDisabled: isLoading,
+                disabled: isLoading,
                 onClick: this.handleClick,
                 icon: 'sync',
                 hoverStyle: 'clean',
