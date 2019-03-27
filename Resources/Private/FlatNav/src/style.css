@@ -3,6 +3,10 @@
     opacity: 1 !important;
 }
 
+.tabs__content {
+    height: calc(100% - 41px);
+}
+
 .toolbar {
     border-bottom: 1px solid var(--colors-ContrastDark);
 }
