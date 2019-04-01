@@ -195,21 +195,6 @@ module.exports = (0, _readFromConsumerApi2.default)('vendor')().PropTypes;
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = (0, _readFromConsumerApi2.default)('vendor')().classnames;
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
 
 var content = __webpack_require__(21);
 
@@ -255,6 +240,21 @@ if(false) {
 
 	module.hot.dispose(function() { update(); });
 }
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = (0, _readFromConsumerApi2.default)('vendor')().classnames;
 
 /***/ }),
 /* 10 */
@@ -445,7 +445,7 @@ var _FlatNav = __webpack_require__(18);
 
 var _FlatNav2 = _interopRequireDefault(_FlatNav);
 
-var _style = __webpack_require__(9);
+var _style = __webpack_require__(8);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -774,11 +774,11 @@ var _DeleteSelectedNode = __webpack_require__(20);
 
 var _DeleteSelectedNode2 = _interopRequireDefault(_DeleteSelectedNode);
 
-var _classnames = __webpack_require__(8);
+var _classnames = __webpack_require__(9);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _style = __webpack_require__(9);
+var _style = __webpack_require__(8);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -806,7 +806,8 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     nodeData: (0, _plowJs.$get)('cr.nodes.byContextPath'),
     focused: (0, _plowJs.$get)('ui.pageTree.isFocused'),
     siteNodeContextPath: (0, _plowJs.$get)('cr.nodes.siteNode'),
-    baseWorkspaceName: (0, _plowJs.$get)('cr.workspaces.personalWorkspace.baseWorkspace')
+    baseWorkspaceName: (0, _plowJs.$get)('cr.workspaces.personalWorkspace.baseWorkspace'),
+    publishableNodes: (0, _plowJs.$get)('cr.workspaces.personalWorkspace.publishableNodes')
 }), {
     setSrc: _neosUiReduxStore.actions.UI.ContentCanvas.setSrc,
     focus: _neosUiReduxStore.actions.UI.PageTree.focus,
@@ -856,19 +857,27 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
         }, _this.renderNodes = function () {
             return _this.props.nodes.map(function (contextPath) {
                 var item = (0, _plowJs.$get)([contextPath], _this.props.nodeData);
+
                 if (item) {
                     var _mergeClassNames;
 
-                    var nodeTypeName = (0, _plowJs.$get)('nodeType', item);
-                    var nodeType = _this.props.nodeTypesRegistry.getNodeType(nodeTypeName);
+                    var isFocused = _this.props.focused === contextPath;
+                    var isDirty = _this.props.publishableNodes.filter(function (i) {
+                        return (0, _plowJs.$get)('contextPath', i) === contextPath || (0, _plowJs.$get)('documentContextPath', i) === contextPath;
+                    }).count() > 0;
+                    var isRemoved = (0, _plowJs.$get)('properties._removed', item);
+                    var nodeIconComponent = _this.getNodeIconComponent(item);
+
                     return _react2.default.createElement(
                         'div',
                         {
-                            className: (0, _classnames2.default)((_mergeClassNames = {}, _defineProperty(_mergeClassNames, _style2.default.node, true), _defineProperty(_mergeClassNames, _style2.default['node--focused'], _this.props.focused === contextPath), _mergeClassNames)),
+                            className: (0, _classnames2.default)((_mergeClassNames = {}, _defineProperty(_mergeClassNames, _style2.default.node, true), _defineProperty(_mergeClassNames, _style2.default['node--focused'], isFocused), _defineProperty(_mergeClassNames, _style2.default['node--dirty'], isDirty), _defineProperty(_mergeClassNames, _style2.default['node--removed'], isRemoved), _mergeClassNames)),
                             key: contextPath,
                             onClick: function onClick() {
-                                _this.props.setSrc((0, _plowJs.$get)('uri', item));
-                                _this.props.focus(contextPath);
+                                if (!isRemoved) {
+                                    _this.props.setSrc((0, _plowJs.$get)('uri', item));
+                                    _this.props.focus(contextPath);
+                                }
                             },
                             role: 'button'
                         },
@@ -876,7 +885,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                             'div',
                             {
                                 className: _style2.default.node__iconWrapper },
-                            _react2.default.createElement(_reactUiComponents.Icon, { icon: (0, _plowJs.$get)('ui.icon', nodeType) })
+                            nodeIconComponent
                         ),
                         _react2.default.createElement(
                             'span',
@@ -903,6 +912,37 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
         key: 'componentDidUpdate',
         value: function componentDidUpdate(prevProps) {
             this.populateTheState();
+        }
+    }, {
+        key: 'getNodeIconComponent',
+        value: function getNodeIconComponent(node) {
+            var nodeTypeName = (0, _plowJs.$get)('nodeType', node);
+            var nodeType = this.props.nodeTypesRegistry.getNodeType(nodeTypeName);
+            var isHidden = (0, _plowJs.$get)('properties._hidden', node);
+            var isHiddenBefore = (0, _plowJs.$get)('properties._hiddenBeforeDateTime', node);
+            var isHiddenAfter = (0, _plowJs.$get)('properties._hiddenAfterDateTime', node);
+
+            if (isHidden) {
+                return _react2.default.createElement(
+                    'span',
+                    { className: 'fa-layers fa-fw' },
+                    _react2.default.createElement(_reactUiComponents.Icon, { icon: (0, _plowJs.$get)('ui.icon', nodeType) }),
+                    _react2.default.createElement(_reactUiComponents.Icon, { icon: 'circle', color: 'error', transform: 'shrink-3 down-6 right-4' }),
+                    _react2.default.createElement(_reactUiComponents.Icon, { icon: 'times', transform: 'shrink-7 down-6 right-4' })
+                );
+            }
+
+            if (isHiddenBefore || isHiddenAfter) {
+                return _react2.default.createElement(
+                    'span',
+                    { className: 'fa-layers fa-fw' },
+                    _react2.default.createElement(_reactUiComponents.Icon, { icon: (0, _plowJs.$get)('ui.icon', nodeType) }),
+                    _react2.default.createElement(_reactUiComponents.Icon, { icon: 'circle', color: 'primaryBlue', transform: 'shrink-5 down-6 right-4' }),
+                    _react2.default.createElement(_reactUiComponents.Icon, { icon: 'clock', transform: 'shrink-9 down-6 right-4' })
+                );
+            }
+
+            return _react2.default.createElement(_reactUiComponents.Icon, { icon: (0, _plowJs.$get)('ui.icon', nodeType) });
         }
     }, {
         key: 'render',
@@ -1171,7 +1211,7 @@ exports = module.exports = __webpack_require__(22)(false);
 
 
 // module
-exports.push([module.i, ".style__loadMoreButton___9u14e {\n    width: 100% !important;\n    opacity: 1 !important;\n}\n\n.style__tabs__content___pnV9i {\n    height: calc(100% - 41px);\n}\n\n.style__toolbar___Y2z2P {\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__treeWrapper___1Ki9q {\n    padding: 5px 0;\n}\n\n.style__node___37dXu {\n    position: relative;\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    width: 100%;\n    padding: 3px 6px;\n    cursor: pointer;\n}\n\n.style__node--focused___2Ad0k {\n    background-color: #323232;\n}\n\n.style__node--focused___2Ad0k .style__node__label___2ktrO {\n    color: #00ADEE;\n}\n\n.style__node__iconWrapper___32kOo {\n    width: 2em;\n    display: inline-block;\n    position: absolute;\n    text-align: center;\n}\n\n.style__node__label___2ktrO {\n    margin-left: 2em;\n}", ""]);
+exports.push([module.i, ".style__loadMoreButton___9u14e {\n    width: 100% !important;\n    opacity: 1 !important;\n}\n\n.style__tabs__content___pnV9i {\n    height: calc(100% - 41px);\n}\n\n.style__toolbar___Y2z2P {\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__treeWrapper___1Ki9q {\n    padding: 5px 0;\n}\n\n.style__node___37dXu {\n    position: relative;\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    width: 100%;\n    padding: 3px 6px;\n    cursor: pointer;\n}\n\n.style__node--focused___2Ad0k {\n    background-color: #323232;\n}\n\n.style__node--focused___2Ad0k .style__node__label___2ktrO {\n    color: #00ADEE;\n}\n\n.style__node--dirty___K2yEx {\n    border-left: 2px solid #ff8700;\n    padding-left: 4px;\n}\n\n.style__node--removed___3ycgN {\n    cursor: not-allowed;\n    border-color: #ff460d;\n}\n\n.style__node--removed___3ycgN .style__node__label___2ktrO,\n.style__node--removed___3ycgN .style__node__iconWrapper___32kOo {\n    opacity: 0.5;\n}\n\n.style__node__iconWrapper___32kOo {\n    width: 2em;\n    display: inline-block;\n    position: absolute;\n    text-align: center;\n}\n\n.style__node__label___2ktrO {\n    margin-left: 2em;\n}", ""]);
 
 // exports
 exports.locals = {
@@ -1182,6 +1222,8 @@ exports.locals = {
 	"node": "style__node___37dXu",
 	"node--focused": "style__node--focused___2Ad0k",
 	"node__label": "style__node__label___2ktrO",
+	"node--dirty": "style__node--dirty___K2yEx",
+	"node--removed": "style__node--removed___3ycgN",
 	"node__iconWrapper": "style__node__iconWrapper___32kOo"
 };
 
@@ -1772,7 +1814,7 @@ var _propTypes = __webpack_require__(7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _classnames = __webpack_require__(8);
+var _classnames = __webpack_require__(9);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -1780,7 +1822,7 @@ var _neosUiDecorators = __webpack_require__(3);
 
 var _reactUiComponents = __webpack_require__(2);
 
-var _style = __webpack_require__(9);
+var _style = __webpack_require__(8);
 
 var _style2 = _interopRequireDefault(_style);
 
