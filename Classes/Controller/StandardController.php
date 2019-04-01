@@ -62,7 +62,14 @@ class StandardController extends ActionController
         ];
         $nodes = \Neos\Eel\Utility::evaluateEelExpression($expression, $this->eelEvaluator, $contextVariables, $this->defaultContextConfiguration);
         $nodeInfoHelper = new NodeInfoHelper();
-        $result = $nodeInfoHelper->renderNodes($nodes, $this->getControllerContext(), true);
+
+        $result = [];
+        foreach ($nodes as $node) {
+            $nodeInfo = $nodeInfoHelper->renderNodeWithMinimalPropertiesAndChildrenInformation($node, $this->getControllerContext());
+            $nodeInfo['properties']['_removed'] = $node->isRemoved();
+            $nodeInfo['properties']['_hidden'] = $node->isHidden();
+            $result[] = $nodeInfo;
+        }
         $this->view->assign('value', $result);
     }
 
