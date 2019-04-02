@@ -124,7 +124,7 @@ export default class FlatNav extends Component {
                     const isDirty = this.props.publishableNodes.filter(i => (
                         $get('contextPath', i) === contextPath ||
                         $get('documentContextPath', i) === contextPath
-                    )).count() > 0;
+                    )).length > 0;
                     const isRemoved = $get('properties._removed', item);
                     const nodeIconComponent = this.getNodeIconComponent(item);
 

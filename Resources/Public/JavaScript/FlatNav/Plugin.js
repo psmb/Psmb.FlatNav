@@ -864,7 +864,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                     var isFocused = _this.props.focused === contextPath;
                     var isDirty = _this.props.publishableNodes.filter(function (i) {
                         return (0, _plowJs.$get)('contextPath', i) === contextPath || (0, _plowJs.$get)('documentContextPath', i) === contextPath;
-                    }).count() > 0;
+                    }).length > 0;
                     var isRemoved = (0, _plowJs.$get)('properties._removed', item);
                     var nodeIconComponent = _this.getNodeIconComponent(item);
 
