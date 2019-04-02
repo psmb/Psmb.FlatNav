@@ -284,6 +284,10 @@ var _makeFlatNavContainer = __webpack_require__(16);
 
 var _makeFlatNavContainer2 = _interopRequireDefault(_makeFlatNavContainer);
 
+var _style = __webpack_require__(8);
+
+var _style2 = _interopRequireDefault(_style);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (0, _neosUiExtensibility2.default)('Psmb.FlatNav:FlatNav', {}, function (globalRegistry) {
@@ -295,7 +299,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     var OriginalTree = function OriginalTree() {
         return _react2.default.createElement(
             'div',
-            null,
+            { className: _style2.default.pageTreeContainer },
             _react2.default.createElement(PageTreeToolbar, null),
             _react2.default.createElement(PageTreeSearchbar, null),
             _react2.default.createElement(PageTree, null)
@@ -521,13 +525,16 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                 return _react2.default.createElement(
                     _reactUiComponents.Tabs,
                     { theme: {
-                            tabs__content: _style2.default.tabs__content
+                            tabs__content: _style2.default.tabs__content,
+                            tabs__panel: _style2.default.tabs__panel
                         } },
                     Object.keys(this.props.options.presets).map(function (presetName) {
                         var preset = _this2.props.options.presets[presetName];
                         return _react2.default.createElement(
                             _reactUiComponents.Tabs.Panel,
-                            { id: presetName, key: presetName, icon: preset.icon, tooltip: _this2.props.i18nRegistry.translate(preset.label) },
+                            { id: presetName, key: presetName, icon: preset.icon, tooltip: _this2.props.i18nRegistry.translate(preset.label), theme: {
+                                    panel: _style2.default.panel
+                                } },
                             preset.type === 'flat' && _react2.default.createElement(_FlatNav2.default, _extends({
                                 preset: preset,
                                 fetchNodes: _this2.makeFetchNodes(presetName),
@@ -864,7 +871,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                     var isFocused = _this.props.focused === contextPath;
                     var isDirty = _this.props.publishableNodes.filter(function (i) {
                         return (0, _plowJs.$get)('contextPath', i) === contextPath || (0, _plowJs.$get)('documentContextPath', i) === contextPath;
-                    }).count() > 0;
+                    }).length > 0;
                     var isRemoved = (0, _plowJs.$get)('properties._removed', item);
                     var nodeIconComponent = _this.getNodeIconComponent(item);
 
@@ -949,7 +956,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
         value: function render() {
             return _react2.default.createElement(
                 'div',
-                { style: { overflow: 'hidden' } },
+                { className: _style2.default.pageTreeContainer },
                 _react2.default.createElement(
                     'div',
                     { className: _style2.default.toolbar },
@@ -969,7 +976,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                         onClick: this.props.fetchNodes,
                         style: 'clean',
                         className: _style2.default.loadMoreButton,
-                        isDisabled: this.props.isLoading
+                        disabled: this.props.isLoading
                     },
                     _react2.default.createElement(
                         'div',
@@ -1211,13 +1218,16 @@ exports = module.exports = __webpack_require__(22)(false);
 
 
 // module
-exports.push([module.i, ".style__loadMoreButton___9u14e {\n    width: 100% !important;\n    opacity: 1 !important;\n}\n\n.style__tabs__content___pnV9i {\n    height: calc(100% - 41px);\n}\n\n.style__toolbar___Y2z2P {\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__treeWrapper___1Ki9q {\n    padding: 5px 0;\n}\n\n.style__node___37dXu {\n    position: relative;\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    width: 100%;\n    padding: 3px 6px;\n    cursor: pointer;\n}\n\n.style__node--focused___2Ad0k {\n    background-color: #323232;\n}\n\n.style__node--focused___2Ad0k .style__node__label___2ktrO {\n    color: #00ADEE;\n}\n\n.style__node--dirty___K2yEx {\n    border-left: 2px solid #ff8700;\n    padding-left: 4px;\n}\n\n.style__node--removed___3ycgN {\n    cursor: not-allowed;\n    border-color: #ff460d;\n}\n\n.style__node--removed___3ycgN .style__node__label___2ktrO,\n.style__node--removed___3ycgN .style__node__iconWrapper___32kOo {\n    opacity: 0.5;\n}\n\n.style__node__iconWrapper___32kOo {\n    width: 2em;\n    display: inline-block;\n    position: absolute;\n    text-align: center;\n}\n\n.style__node__label___2ktrO {\n    margin-left: 2em;\n}", ""]);
+exports.push([module.i, ".style__loadMoreButton___9u14e {\n    width: 100% !important;\n    opacity: 1 !important;\n}\n\n.style__tabs__content___pnV9i {\n    height: calc(100% - 41px);\n}\n\n.style__tabs__panel___1f-I- {\n    height: 100%;\n}\n\n.style__panel___8gH6H {\n    height: 100%;\n}\n\n.style__toolbar___Y2z2P {\n    background-color: #222;\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__pageTreeContainer___7tNsg {\n    display: -ms-flexbox;\n    display: flex;\n    -ms-flex-direction: column;\n        flex-direction: column;\n    height: 100%;\n    background-color: #222;\n    border-right: 1px solid #3f3f3f;\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__treeWrapper___1Ki9q {\n    padding: 5px 0;\n}\n\n.style__node___37dXu {\n    position: relative;\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    width: 100%;\n    padding: 3px 6px;\n    cursor: pointer;\n}\n\n.style__node--focused___2Ad0k {\n    background-color: #323232;\n}\n\n.style__node--focused___2Ad0k .style__node__label___2ktrO {\n    color: #00ADEE;\n}\n\n.style__node--dirty___K2yEx {\n    border-left: 2px solid #ff8700;\n    padding-left: 4px;\n}\n\n.style__node--removed___3ycgN {\n    cursor: not-allowed;\n    border-color: #ff460d;\n}\n\n.style__node--removed___3ycgN .style__node__label___2ktrO,\n.style__node--removed___3ycgN .style__node__iconWrapper___32kOo {\n    opacity: 0.5;\n}\n\n.style__node__iconWrapper___32kOo {\n    width: 2em;\n    display: inline-block;\n    position: absolute;\n    text-align: center;\n}\n\n.style__node__label___2ktrO {\n    margin-left: 2em;\n}\n", ""]);
 
 // exports
 exports.locals = {
 	"loadMoreButton": "style__loadMoreButton___9u14e",
 	"tabs__content": "style__tabs__content___pnV9i",
+	"tabs__panel": "style__tabs__panel___1f-I-",
+	"panel": "style__panel___8gH6H",
 	"toolbar": "style__toolbar___Y2z2P",
+	"pageTreeContainer": "style__pageTreeContainer___7tNsg",
 	"treeWrapper": "style__treeWrapper___1Ki9q",
 	"node": "style__node___37dXu",
 	"node--focused": "style__node--focused___2Ad0k",
@@ -1876,7 +1886,7 @@ var RefreshNodes = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry)
 
             return _react2.default.createElement(_reactUiComponents.IconButton, {
                 className: finalClassName,
-                isDisabled: isLoading,
+                disabled: isLoading,
                 onClick: this.handleClick,
                 icon: 'sync',
                 hoverStyle: 'clean',

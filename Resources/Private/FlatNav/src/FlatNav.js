@@ -124,7 +124,7 @@ export default class FlatNav extends Component {
                     const isDirty = this.props.publishableNodes.filter(i => (
                         $get('contextPath', i) === contextPath ||
                         $get('documentContextPath', i) === contextPath
-                    )).count() > 0;
+                    )).length > 0;
                     const isRemoved = $get('properties._removed', item);
                     const nodeIconComponent = this.getNodeIconComponent(item);
 
@@ -162,7 +162,7 @@ export default class FlatNav extends Component {
 
     render() {
         return (
-            <div style={{overflow: 'hidden'}}>
+            <div className={style.pageTreeContainer}>
                 <div className={style.toolbar}>
                     {!this.props.isLoadingReferenceNodePath && (<IconButton icon="plus" onClick={this.createNode}/>)}
                     <HideSelectedNode/>
@@ -177,7 +177,7 @@ export default class FlatNav extends Component {
                     onClick={this.props.fetchNodes}
                     style="clean"
                     className={style.loadMoreButton}
-                    isDisabled={this.props.isLoading}
+                    disabled={this.props.isLoading}
                 >
                     <div style={{textAlign: 'center'}}>
                         <Icon
