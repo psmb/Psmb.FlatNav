@@ -7,7 +7,25 @@
     height: calc(100% - 41px);
 }
 
+.tabs__panel {
+    height: 100%;
+}
+
+.panel {
+    height: 100%;
+}
+
 .toolbar {
+    background-color: var(--colors-ContrastDarker);
+    border-bottom: 1px solid var(--colors-ContrastDark);
+}
+
+.pageTreeContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--colors-ContrastDarker);
+    border-right: 1px solid var(--colors-ContrastDark);
     border-bottom: 1px solid var(--colors-ContrastDark);
 }
 

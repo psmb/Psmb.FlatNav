@@ -3,7 +3,8 @@
     "type": "neos-package",
     "name": "psmb/flatnav",
     "require": {
-        "neos/neos": ">=3.3"
+        "neos/neos": ">=3.3",
+        "neos/neos-ui": "~2.3 || >=3.3"
     },
     "autoload": {
         "psr-4": {
