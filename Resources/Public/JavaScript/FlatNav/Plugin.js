@@ -180,21 +180,6 @@ module.exports = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().Neo
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = (0, _readFromConsumerApi2.default)('vendor')().PropTypes;
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
 
 var content = __webpack_require__(21);
 
@@ -242,6 +227,21 @@ if(false) {
 }
 
 /***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = (0, _readFromConsumerApi2.default)('vendor')().PropTypes;
+
+/***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -284,7 +284,7 @@ var _makeFlatNavContainer = __webpack_require__(16);
 
 var _makeFlatNavContainer2 = _interopRequireDefault(_makeFlatNavContainer);
 
-var _style = __webpack_require__(8);
+var _style = __webpack_require__(7);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -299,8 +299,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     var OriginalTree = function OriginalTree() {
         return _react2.default.createElement(
             'div',
-            { className: _style2.default.pageTreeContainer },
-            _react2.default.createElement(PageTreeToolbar, null),
+            { className: _style2.default.pageTreeContainerOriginal },
+            _react2.default.createElement(
+                'div',
+                { className: _style2.default.pageTreeToolbarOriginal },
+                _react2.default.createElement(PageTreeToolbar, null)
+            ),
             _react2.default.createElement(PageTreeSearchbar, null),
             _react2.default.createElement(PageTree, null)
         );
@@ -449,7 +453,7 @@ var _FlatNav = __webpack_require__(18);
 
 var _FlatNav2 = _interopRequireDefault(_FlatNav);
 
-var _style = __webpack_require__(8);
+var _style = __webpack_require__(7);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -759,7 +763,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(7);
+var _propTypes = __webpack_require__(8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -785,7 +789,7 @@ var _classnames = __webpack_require__(9);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _style = __webpack_require__(8);
+var _style = __webpack_require__(7);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -967,7 +971,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                 ),
                 _react2.default.createElement(
                     'div',
-                    { className: _style2.default.treeWrapper, style: { overflowY: 'auto' } },
+                    { className: _style2.default.treeWrapper },
                     this.renderNodes()
                 ),
                 !this.props.preset.disablePagination && this.props.moreNodesAvailable && _react2.default.createElement(
@@ -1025,7 +1029,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(7);
+var _propTypes = __webpack_require__(8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -1218,7 +1222,7 @@ exports = module.exports = __webpack_require__(22)(false);
 
 
 // module
-exports.push([module.i, ".style__loadMoreButton___9u14e {\n    width: 100% !important;\n    opacity: 1 !important;\n}\n\n.style__tabs__content___pnV9i {\n    height: calc(100% - 41px);\n}\n\n.style__tabs__panel___1f-I- {\n    height: 100%;\n}\n\n.style__panel___8gH6H {\n    height: 100%;\n}\n\n.style__toolbar___Y2z2P {\n    background-color: #222;\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__pageTreeContainer___7tNsg {\n    display: -ms-flexbox;\n    display: flex;\n    -ms-flex-direction: column;\n        flex-direction: column;\n    height: 100%;\n    background-color: #222;\n    border-right: 1px solid #3f3f3f;\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__treeWrapper___1Ki9q {\n    padding: 5px 0;\n}\n\n.style__node___37dXu {\n    position: relative;\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    width: 100%;\n    padding: 3px 6px;\n    cursor: pointer;\n}\n\n.style__node--focused___2Ad0k {\n    background-color: #323232;\n}\n\n.style__node--focused___2Ad0k .style__node__label___2ktrO {\n    color: #00ADEE;\n}\n\n.style__node--dirty___K2yEx {\n    border-left: 2px solid #ff8700;\n    padding-left: 4px;\n}\n\n.style__node--removed___3ycgN {\n    cursor: not-allowed;\n    border-color: #ff460d;\n}\n\n.style__node--removed___3ycgN .style__node__label___2ktrO,\n.style__node--removed___3ycgN .style__node__iconWrapper___32kOo {\n    opacity: 0.5;\n}\n\n.style__node__iconWrapper___32kOo {\n    width: 2em;\n    display: inline-block;\n    position: absolute;\n    text-align: center;\n}\n\n.style__node__label___2ktrO {\n    margin-left: 2em;\n}\n", ""]);
+exports.push([module.i, ".style__loadMoreButton___9u14e {\n    width: 100% !important;\n    opacity: 1 !important;\n}\n\n.style__tabs__content___pnV9i {\n    height: calc(100% - 41px);\n}\n\n.style__tabs__panel___1f-I- {\n    height: 100%;\n}\n\n.style__panel___8gH6H {\n    height: 100%;\n}\n\n.style__toolbar___Y2z2P {\n    background-color: #222;\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__pageTreeContainer___7tNsg {\n    display: -ms-flexbox;\n    display: flex;\n    -ms-flex-direction: column;\n        flex-direction: column;\n    height: 100%;\n    background-color: #222;\n    border-right: 1px solid #3f3f3f;\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__pageTreeContainerOriginal___dXhKR {\n    display: -ms-flexbox;\n    display: flex;\n    -ms-flex-direction: column;\n        flex-direction: column;\n    height: 100%;\n}\n\n.style__pageTreeToolbarOriginal___3coJx > div > div {\n        border-top: 0;\n    }\n\n.style__treeWrapper___1Ki9q {\n    overflow-y: auto;\n    padding: 5px 0;\n}\n\n.style__node___37dXu {\n    position: relative;\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    width: 100%;\n    padding: 3px 6px;\n    cursor: pointer;\n}\n\n.style__node--focused___2Ad0k {\n    background-color: #323232;\n}\n\n.style__node--focused___2Ad0k .style__node__label___2ktrO {\n    color: #00ADEE;\n}\n\n.style__node--dirty___K2yEx {\n    border-left: 2px solid #ff8700;\n    padding-left: 4px;\n}\n\n.style__node--removed___3ycgN {\n    cursor: not-allowed;\n    border-color: #ff460d;\n}\n\n.style__node--removed___3ycgN .style__node__label___2ktrO,\n.style__node--removed___3ycgN .style__node__iconWrapper___32kOo {\n    opacity: 0.5;\n}\n\n.style__node__iconWrapper___32kOo {\n    width: 2em;\n    display: inline-block;\n    position: absolute;\n    text-align: center;\n}\n\n.style__node__label___2ktrO {\n    margin-left: 2em;\n}\n", ""]);
 
 // exports
 exports.locals = {
@@ -1228,6 +1232,8 @@ exports.locals = {
 	"panel": "style__panel___8gH6H",
 	"toolbar": "style__toolbar___Y2z2P",
 	"pageTreeContainer": "style__pageTreeContainer___7tNsg",
+	"pageTreeContainerOriginal": "style__pageTreeContainerOriginal___dXhKR",
+	"pageTreeToolbarOriginal": "style__pageTreeToolbarOriginal___3coJx",
 	"treeWrapper": "style__treeWrapper___1Ki9q",
 	"node": "style__node___37dXu",
 	"node--focused": "style__node--focused___2Ad0k",
@@ -1820,7 +1826,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(7);
+var _propTypes = __webpack_require__(8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -1832,7 +1838,7 @@ var _neosUiDecorators = __webpack_require__(3);
 
 var _reactUiComponents = __webpack_require__(2);
 
-var _style = __webpack_require__(8);
+var _style = __webpack_require__(7);
 
 var _style2 = _interopRequireDefault(_style);
 

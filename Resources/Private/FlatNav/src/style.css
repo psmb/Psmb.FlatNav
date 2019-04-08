@@ -29,7 +29,20 @@
     border-bottom: 1px solid var(--colors-ContrastDark);
 }
 
+.pageTreeContainerOriginal {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.pageTreeToolbarOriginal {
+    > div > div {
+        border-top: 0;
+    }
+}
+
 .treeWrapper {
+    overflow-y: auto;
     padding: 5px 0;
 }
 
