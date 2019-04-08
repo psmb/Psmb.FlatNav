@@ -180,21 +180,6 @@ module.exports = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().Neo
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = (0, _readFromConsumerApi2.default)('vendor')().PropTypes;
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
 
 var content = __webpack_require__(21);
 
@@ -242,6 +227,21 @@ if(false) {
 }
 
 /***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = (0, _readFromConsumerApi2.default)('vendor')().PropTypes;
+
+/***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -284,7 +284,7 @@ var _makeFlatNavContainer = __webpack_require__(16);
 
 var _makeFlatNavContainer2 = _interopRequireDefault(_makeFlatNavContainer);
 
-var _style = __webpack_require__(8);
+var _style = __webpack_require__(7);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -449,7 +449,7 @@ var _FlatNav = __webpack_require__(18);
 
 var _FlatNav2 = _interopRequireDefault(_FlatNav);
 
-var _style = __webpack_require__(8);
+var _style = __webpack_require__(7);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -759,7 +759,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(7);
+var _propTypes = __webpack_require__(8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -785,7 +785,7 @@ var _classnames = __webpack_require__(9);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _style = __webpack_require__(8);
+var _style = __webpack_require__(7);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -954,6 +954,10 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     }, {
         key: 'render',
         value: function render() {
+            var focused = this.props.focused.split('@')[0];
+            var newReferenceNodePath = this.props.newReferenceNodePath;
+            var parentIsFocused = focused == newReferenceNodePath;
+
             return _react2.default.createElement(
                 'div',
                 { className: _style2.default.pageTreeContainer },
@@ -961,8 +965,8 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                     'div',
                     { className: _style2.default.toolbar },
                     !this.props.isLoadingReferenceNodePath && _react2.default.createElement(_reactUiComponents.IconButton, { icon: 'plus', onClick: this.createNode }),
-                    _react2.default.createElement(_HideSelectedNode2.default, null),
-                    _react2.default.createElement(_DeleteSelectedNode2.default, null),
+                    !parentIsFocused && _react2.default.createElement(_HideSelectedNode2.default, null),
+                    !parentIsFocused && _react2.default.createElement(_DeleteSelectedNode2.default, null),
                     _react2.default.createElement(_RefreshNodes2.default, { onClick: this.refreshFlatNav, isLoading: this.props.isLoading })
                 ),
                 _react2.default.createElement(
@@ -1025,7 +1029,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(7);
+var _propTypes = __webpack_require__(8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -1820,7 +1824,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(7);
+var _propTypes = __webpack_require__(8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -1832,7 +1836,7 @@ var _neosUiDecorators = __webpack_require__(3);
 
 var _reactUiComponents = __webpack_require__(2);
 
-var _style = __webpack_require__(8);
+var _style = __webpack_require__(7);
 
 var _style2 = _interopRequireDefault(_style);
 
