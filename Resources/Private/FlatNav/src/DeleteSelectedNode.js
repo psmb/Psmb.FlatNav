@@ -1,4 +1,5 @@
 import React, {PureComponent} from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {$transform, $get} from 'plow-js';
 import {neos} from '@neos-project/neos-ui-decorators';
@@ -14,17 +15,26 @@ import {selectors, actions} from '@neos-project/neos-ui-redux-store';
     commenceNodeRemoval: actions.CR.Nodes.commenceRemoval
 })
 export default class DeleteSelectedNode extends PureComponent {
+    static propTypes = {
+        node: PropTypes.object,
+        className: PropTypes.string,
+        commenceNodeRemoval: PropTypes.func.isRequired,
+        disabled: PropTypes.bool.isRequired,
+        i18nRegistry: PropTypes.object.isRequired
+    };
+
     handleDeleteSelectedNodeClick = () => {
         const {node, commenceNodeRemoval} = this.props;
         commenceNodeRemoval($get('contextPath', node));
     }
 
     render() {
-        const {className, i18nRegistry} = this.props;
+        const {className, disabled, i18nRegistry} = this.props;
 
         return (
             <IconButton
                 className={className}
+                disabled={disabled}
                 onClick={this.handleDeleteSelectedNodeClick}
                 icon="trash"
                 hoverStyle="clean"

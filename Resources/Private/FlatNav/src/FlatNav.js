@@ -161,13 +161,17 @@ export default class FlatNav extends Component {
     };
 
     render() {
+        const {focused, nodes, isLoadingReferenceNodePath, isLoading} = this.props;
+
+        const focusedInNodes = nodes.includes(focused);
+
         return (
             <div className={style.pageTreeContainer}>
                 <div className={style.toolbar}>
-                    {!this.props.isLoadingReferenceNodePath && (<IconButton icon="plus" onClick={this.createNode}/>)}
-                    <HideSelectedNode/>
-                    <DeleteSelectedNode/>
-                    <RefreshNodes onClick={this.refreshFlatNav} isLoading={this.props.isLoading}/>
+                    <IconButton icon="plus" disabled={isLoadingReferenceNodePath} onClick={this.createNode}/>
+                    <HideSelectedNode disabled={!focusedInNodes}/>
+                    <DeleteSelectedNode disabled={!focusedInNodes}/>
+                    <RefreshNodes disabled={isLoading || isLoadingReferenceNodePath} onClick={this.refreshFlatNav}/>
                 </div>
 
                 <div className={style.treeWrapper} style={{overflowY: 'auto'}}>
@@ -177,14 +181,14 @@ export default class FlatNav extends Component {
                     onClick={this.props.fetchNodes}
                     style="clean"
                     className={style.loadMoreButton}
-                    disabled={this.props.isLoading}
+                    disabled={isLoading}
                 >
                     <div style={{textAlign: 'center'}}>
                         <Icon
-                            spin={this.props.isLoading}
-                            icon={this.props.isLoading ? 'spinner' : 'angle-double-down'}
+                            spin={isLoading}
+                            icon={isLoading ? 'spinner' : 'angle-double-down'}
                         />
-                        &nbsp;{this.props.isLoading ? this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loading') : this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loadMore')}
+                        &nbsp;{isLoading ? this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loading') : this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loadMore')}
                     </div>
                 </Button>)}
             </div>
