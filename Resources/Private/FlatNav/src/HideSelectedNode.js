@@ -22,6 +22,7 @@ export default class HideSelectedNode extends PureComponent {
         className: PropTypes.string,
         hideNode: PropTypes.func.isRequired,
         showNode: PropTypes.func.isRequired,
+        disabled: PropTypes.bool.isRequired,
         i18nRegistry: PropTypes.object.isRequired
     };
 
