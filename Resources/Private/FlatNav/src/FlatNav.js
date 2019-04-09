@@ -161,16 +161,16 @@ export default class FlatNav extends Component {
     };
 
     render() {
-        const focused = this.props.focused.split('@')[0];
-        const newReferenceNodePath = this.props.newReferenceNodePath;
-        const parentIsFocused = focused == newReferenceNodePath;
+        const focused = this.props.focused;
+        const nodes = this.props.nodes;
+        const focusedInNodes = nodes.includes(focused);
 
         return (
             <div className={style.pageTreeContainer}>
                 <div className={style.toolbar}>
                     {!this.props.isLoadingReferenceNodePath && (<IconButton icon="plus" onClick={this.createNode}/>)}
-                    <HideSelectedNode disabled={parentIsFocused}/>
-                    <DeleteSelectedNode disabled={parentIsFocused}/>
+                    <HideSelectedNode disabled={!focusedInNodes}/>
+                    <DeleteSelectedNode disabled={!focusedInNodes}/>
                     <RefreshNodes onClick={this.refreshFlatNav} isLoading={this.props.isLoading}/>
                 </div>
 

@@ -954,9 +954,9 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     }, {
         key: 'render',
         value: function render() {
-            var focused = this.props.focused.split('@')[0];
-            var newReferenceNodePath = this.props.newReferenceNodePath;
-            var parentIsFocused = focused == newReferenceNodePath;
+            var focused = this.props.focused;
+            var nodes = this.props.nodes;
+            var focusedInNodes = nodes.includes(focused);
 
             return _react2.default.createElement(
                 'div',
@@ -965,8 +965,8 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                     'div',
                     { className: _style2.default.toolbar },
                     !this.props.isLoadingReferenceNodePath && _react2.default.createElement(_reactUiComponents.IconButton, { icon: 'plus', onClick: this.createNode }),
-                    _react2.default.createElement(_HideSelectedNode2.default, { disabled: parentIsFocused }),
-                    _react2.default.createElement(_DeleteSelectedNode2.default, { disabled: parentIsFocused }),
+                    _react2.default.createElement(_HideSelectedNode2.default, { disabled: !focusedInNodes }),
+                    _react2.default.createElement(_DeleteSelectedNode2.default, { disabled: !focusedInNodes }),
                     _react2.default.createElement(_RefreshNodes2.default, { onClick: this.refreshFlatNav, isLoading: this.props.isLoading })
                 ),
                 _react2.default.createElement(
