@@ -168,7 +168,7 @@ export default class FlatNav extends Component {
         return (
             <div className={style.pageTreeContainer}>
                 <div className={style.toolbar}>
-                    {!this.props.isLoadingReferenceNodePath && (<IconButton icon="plus" onClick={this.createNode}/>)}
+                    <IconButton icon="plus" disabled={this.props.isLoadingReferenceNodePath} onClick={this.createNode}/>
                     <HideSelectedNode disabled={!focusedInNodes}/>
                     <DeleteSelectedNode disabled={!focusedInNodes}/>
                     <RefreshNodes onClick={this.refreshFlatNav} isLoading={this.props.isLoading}/>

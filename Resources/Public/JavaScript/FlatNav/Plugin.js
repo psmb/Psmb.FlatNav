@@ -964,7 +964,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                 _react2.default.createElement(
                     'div',
                     { className: _style2.default.toolbar },
-                    !this.props.isLoadingReferenceNodePath && _react2.default.createElement(_reactUiComponents.IconButton, { icon: 'plus', onClick: this.createNode }),
+                    _react2.default.createElement(_reactUiComponents.IconButton, { icon: 'plus', disabled: this.props.isLoadingReferenceNodePath, onClick: this.createNode }),
                     _react2.default.createElement(_HideSelectedNode2.default, { disabled: !focusedInNodes }),
                     _react2.default.createElement(_DeleteSelectedNode2.default, { disabled: !focusedInNodes }),
                     _react2.default.createElement(_RefreshNodes2.default, { onClick: this.refreshFlatNav, isLoading: this.props.isLoading })
