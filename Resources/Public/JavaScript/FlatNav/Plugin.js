@@ -180,6 +180,21 @@ module.exports = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().Neo
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = (0, _readFromConsumerApi2.default)('vendor')().PropTypes;
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
 
 var content = __webpack_require__(21);
 
@@ -227,21 +242,6 @@ if(false) {
 }
 
 /***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = (0, _readFromConsumerApi2.default)('vendor')().PropTypes;
-
-/***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -284,7 +284,7 @@ var _makeFlatNavContainer = __webpack_require__(16);
 
 var _makeFlatNavContainer2 = _interopRequireDefault(_makeFlatNavContainer);
 
-var _style = __webpack_require__(7);
+var _style = __webpack_require__(8);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -453,7 +453,7 @@ var _FlatNav = __webpack_require__(18);
 
 var _FlatNav2 = _interopRequireDefault(_FlatNav);
 
-var _style = __webpack_require__(7);
+var _style = __webpack_require__(8);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -763,7 +763,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(8);
+var _propTypes = __webpack_require__(7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -789,7 +789,7 @@ var _classnames = __webpack_require__(9);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _style = __webpack_require__(7);
+var _style = __webpack_require__(8);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -958,16 +958,25 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     }, {
         key: 'render',
         value: function render() {
+            var _props = this.props,
+                focused = _props.focused,
+                nodes = _props.nodes,
+                isLoadingReferenceNodePath = _props.isLoadingReferenceNodePath,
+                isLoading = _props.isLoading;
+
+
+            var focusedInNodes = nodes.includes(focused);
+
             return _react2.default.createElement(
                 'div',
                 { className: _style2.default.pageTreeContainer },
                 _react2.default.createElement(
                     'div',
                     { className: _style2.default.toolbar },
-                    !this.props.isLoadingReferenceNodePath && _react2.default.createElement(_reactUiComponents.IconButton, { icon: 'plus', onClick: this.createNode }),
-                    _react2.default.createElement(_HideSelectedNode2.default, null),
-                    _react2.default.createElement(_DeleteSelectedNode2.default, null),
-                    _react2.default.createElement(_RefreshNodes2.default, { onClick: this.refreshFlatNav, isLoading: this.props.isLoading })
+                    _react2.default.createElement(_reactUiComponents.IconButton, { icon: 'plus', disabled: isLoadingReferenceNodePath, onClick: this.createNode }),
+                    _react2.default.createElement(_HideSelectedNode2.default, { disabled: !focusedInNodes }),
+                    _react2.default.createElement(_DeleteSelectedNode2.default, { disabled: !focusedInNodes }),
+                    _react2.default.createElement(_RefreshNodes2.default, { disabled: isLoading || isLoadingReferenceNodePath, onClick: this.refreshFlatNav })
                 ),
                 _react2.default.createElement(
                     'div',
@@ -980,17 +989,17 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                         onClick: this.props.fetchNodes,
                         style: 'clean',
                         className: _style2.default.loadMoreButton,
-                        disabled: this.props.isLoading
+                        disabled: isLoading
                     },
                     _react2.default.createElement(
                         'div',
                         { style: { textAlign: 'center' } },
                         _react2.default.createElement(_reactUiComponents.Icon, {
-                            spin: this.props.isLoading,
-                            icon: this.props.isLoading ? 'spinner' : 'angle-double-down'
+                            spin: isLoading,
+                            icon: isLoading ? 'spinner' : 'angle-double-down'
                         }),
                         '\xA0',
-                        this.props.isLoading ? this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loading') : this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loadMore')
+                        isLoading ? this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loading') : this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loadMore')
                     )
                 )
             );
@@ -1029,7 +1038,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(8);
+var _propTypes = __webpack_require__(7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -1096,6 +1105,7 @@ var HideSelectedNode = (_dec = (0, _neosUiDecorators.neos)(function (globalRegis
         value: function render() {
             var _props = this.props,
                 className = _props.className,
+                disabled = _props.disabled,
                 node = _props.node,
                 i18nRegistry = _props.i18nRegistry;
 
@@ -1103,6 +1113,7 @@ var HideSelectedNode = (_dec = (0, _neosUiDecorators.neos)(function (globalRegis
 
             return _react2.default.createElement(_reactUiComponents.IconButton, {
                 className: className,
+                disabled: disabled,
                 isActive: isHidden,
                 onClick: isHidden ? this.handleShowNode : this.handleHideNode,
                 icon: 'eye-slash',
@@ -1118,6 +1129,7 @@ var HideSelectedNode = (_dec = (0, _neosUiDecorators.neos)(function (globalRegis
     className: _propTypes2.default.string,
     hideNode: _propTypes2.default.func.isRequired,
     showNode: _propTypes2.default.func.isRequired,
+    disabled: _propTypes2.default.bool.isRequired,
     i18nRegistry: _propTypes2.default.object.isRequired
 }, _temp2)) || _class) || _class);
 exports.default = HideSelectedNode;
@@ -1136,11 +1148,15 @@ exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _dec, _dec2, _class;
+var _dec, _dec2, _class, _class2, _temp2;
 
 var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(7);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactRedux = __webpack_require__(5);
 
@@ -1168,7 +1184,7 @@ var DeleteSelectedNode = (_dec = (0, _neosUiDecorators.neos)(function (globalReg
     node: _neosUiReduxStore.selectors.CR.Nodes.focusedSelector
 }), {
     commenceNodeRemoval: _neosUiReduxStore.actions.CR.Nodes.commenceRemoval
-}), _dec(_class = _dec2(_class = function (_PureComponent) {
+}), _dec(_class = _dec2(_class = (_temp2 = _class2 = function (_PureComponent) {
     _inherits(DeleteSelectedNode, _PureComponent);
 
     function DeleteSelectedNode() {
@@ -1196,11 +1212,13 @@ var DeleteSelectedNode = (_dec = (0, _neosUiDecorators.neos)(function (globalReg
         value: function render() {
             var _props = this.props,
                 className = _props.className,
+                disabled = _props.disabled,
                 i18nRegistry = _props.i18nRegistry;
 
 
             return _react2.default.createElement(_reactUiComponents.IconButton, {
                 className: className,
+                disabled: disabled,
                 onClick: this.handleDeleteSelectedNodeClick,
                 icon: 'trash',
                 hoverStyle: 'clean',
@@ -1210,7 +1228,13 @@ var DeleteSelectedNode = (_dec = (0, _neosUiDecorators.neos)(function (globalReg
     }]);
 
     return DeleteSelectedNode;
-}(_react.PureComponent)) || _class) || _class);
+}(_react.PureComponent), _class2.propTypes = {
+    node: _propTypes2.default.object,
+    className: _propTypes2.default.string,
+    commenceNodeRemoval: _propTypes2.default.func.isRequired,
+    disabled: _propTypes2.default.bool.isRequired,
+    i18nRegistry: _propTypes2.default.object.isRequired
+}, _temp2)) || _class) || _class);
 exports.default = DeleteSelectedNode;
 
 /***/ }),
@@ -1826,7 +1850,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(8);
+var _propTypes = __webpack_require__(7);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -1838,7 +1862,7 @@ var _neosUiDecorators = __webpack_require__(3);
 
 var _reactUiComponents = __webpack_require__(2);
 
-var _style = __webpack_require__(7);
+var _style = __webpack_require__(8);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -1881,18 +1905,16 @@ var RefreshNodes = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry)
     _createClass(RefreshNodes, [{
         key: 'render',
         value: function render() {
-            var _mergeClassNames;
-
             var _props = this.props,
-                isLoading = _props.isLoading,
+                disabled = _props.disabled,
                 className = _props.className,
                 i18nRegistry = _props.i18nRegistry;
 
-            var finalClassName = (0, _classnames2.default)((_mergeClassNames = {}, _defineProperty(_mergeClassNames, _style2.default.spinning, isLoading), _defineProperty(_mergeClassNames, className, className && className.length), _mergeClassNames));
+            var finalClassName = (0, _classnames2.default)(_defineProperty({}, className, className && className.length));
 
             return _react2.default.createElement(_reactUiComponents.IconButton, {
                 className: finalClassName,
-                disabled: isLoading,
+                disabled: disabled,
                 onClick: this.handleClick,
                 icon: 'sync',
                 hoverStyle: 'clean',
@@ -1906,7 +1928,7 @@ var RefreshNodes = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry)
     node: _propTypes2.default.object,
     className: _propTypes2.default.string,
     onClick: _propTypes2.default.func.isRequired,
-    isLoading: _propTypes2.default.bool.isRequired,
+    disabled: _propTypes2.default.bool.isRequired,
     i18nRegistry: _propTypes2.default.object.isRequired
 }, _temp2)) || _class);
 exports.default = RefreshNodes;
