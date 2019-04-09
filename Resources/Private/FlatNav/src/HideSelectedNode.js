@@ -38,12 +38,13 @@ export default class HideSelectedNode extends PureComponent {
     }
 
     render() {
-        const {className, node, i18nRegistry} = this.props;
+        const {className, disabled, node, i18nRegistry} = this.props;
         const isHidden = $get('properties._hidden', node);
 
         return (
             <IconButton
                 className={className}
+                disabled={disabled}
                 isActive={isHidden}
                 onClick={isHidden ? this.handleShowNode : this.handleHideNode}
                 icon="eye-slash"

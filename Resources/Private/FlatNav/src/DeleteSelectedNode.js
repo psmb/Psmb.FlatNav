@@ -20,11 +20,12 @@ export default class DeleteSelectedNode extends PureComponent {
     }
 
     render() {
-        const {className, i18nRegistry} = this.props;
+        const {className, disabled, i18nRegistry} = this.props;
 
         return (
             <IconButton
                 className={className}
+                disabled={disabled}
                 onClick={this.handleDeleteSelectedNodeClick}
                 icon="trash"
                 hoverStyle="clean"

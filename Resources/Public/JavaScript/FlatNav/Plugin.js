@@ -965,8 +965,8 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                     'div',
                     { className: _style2.default.toolbar },
                     !this.props.isLoadingReferenceNodePath && _react2.default.createElement(_reactUiComponents.IconButton, { icon: 'plus', onClick: this.createNode }),
-                    !parentIsFocused && _react2.default.createElement(_HideSelectedNode2.default, null),
-                    !parentIsFocused && _react2.default.createElement(_DeleteSelectedNode2.default, null),
+                    _react2.default.createElement(_HideSelectedNode2.default, { disabled: parentIsFocused }),
+                    _react2.default.createElement(_DeleteSelectedNode2.default, { disabled: parentIsFocused }),
                     _react2.default.createElement(_RefreshNodes2.default, { onClick: this.refreshFlatNav, isLoading: this.props.isLoading })
                 ),
                 _react2.default.createElement(
@@ -1096,6 +1096,7 @@ var HideSelectedNode = (_dec = (0, _neosUiDecorators.neos)(function (globalRegis
         value: function render() {
             var _props = this.props,
                 className = _props.className,
+                disabled = _props.disabled,
                 node = _props.node,
                 i18nRegistry = _props.i18nRegistry;
 
@@ -1103,6 +1104,7 @@ var HideSelectedNode = (_dec = (0, _neosUiDecorators.neos)(function (globalRegis
 
             return _react2.default.createElement(_reactUiComponents.IconButton, {
                 className: className,
+                disabled: disabled,
                 isActive: isHidden,
                 onClick: isHidden ? this.handleShowNode : this.handleHideNode,
                 icon: 'eye-slash',
@@ -1196,11 +1198,13 @@ var DeleteSelectedNode = (_dec = (0, _neosUiDecorators.neos)(function (globalReg
         value: function render() {
             var _props = this.props,
                 className = _props.className,
+                disabled = _props.disabled,
                 i18nRegistry = _props.i18nRegistry;
 
 
             return _react2.default.createElement(_reactUiComponents.IconButton, {
                 className: className,
+                disabled: disabled,
                 onClick: this.handleDeleteSelectedNodeClick,
                 icon: 'trash',
                 hoverStyle: 'clean',
