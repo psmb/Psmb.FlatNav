@@ -174,7 +174,7 @@ export default class FlatNav extends Component {
                     <RefreshNodes disabled={isLoading || isLoadingReferenceNodePath} onClick={this.refreshFlatNav}/>
                 </div>
 
-                <div className={style.treeWrapper} style={{overflowY: 'auto'}}>
+                <div className={style.treeWrapper}>
                     {this.renderNodes()}
                 </div>
                 {!this.props.preset.disablePagination && this.props.moreNodesAvailable && (<Button
