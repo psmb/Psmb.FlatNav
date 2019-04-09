@@ -10,8 +10,10 @@ manifest('Psmb.FlatNav:FlatNav', {}, globalRegistry => {
     const PageTree = containerRegistry.get('LeftSideBar/Top/PageTree');
 
     const OriginalTree = () => (
-        <div className={style.pageTreeContainer}>
-            <PageTreeToolbar/>
+        <div className={style.pageTreeContainerOriginal}>
+            <div className={style.pageTreeToolbarOriginal}>
+                <PageTreeToolbar/>
+            </div>
             <PageTreeSearchbar/>
             <PageTree/>
         </div>
