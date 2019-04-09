@@ -14,7 +14,7 @@ export default class RefreshNodes extends PureComponent {
         node: PropTypes.object,
         className: PropTypes.string,
         onClick: PropTypes.func.isRequired,
-        isLoading: PropTypes.bool.isRequired,
+        disabled: PropTypes.bool.isRequired,
         i18nRegistry: PropTypes.object.isRequired
     };
 
@@ -25,16 +25,15 @@ export default class RefreshNodes extends PureComponent {
     }
 
     render() {
-        const {isLoading, className, i18nRegistry} = this.props;
+        const {disabled, className, i18nRegistry} = this.props;
         const finalClassName = mergeClassNames({
-            [style.spinning]: isLoading,
             [className]: className && className.length
         });
 
         return (
             <IconButton
                 className={finalClassName}
-                disabled={isLoading}
+                disabled={disabled}
                 onClick={this.handleClick}
                 icon="sync"
                 hoverStyle="clean"
