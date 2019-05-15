@@ -609,7 +609,7 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                 })));
                 _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
                     return {
-                        url: '/flatnav/query?nodeContextPath=' + encodeURIComponent(_this3.props.siteNodeContextPath) + '&preset=' + preset + '&page=' + _this3.state[preset].page,
+                        url: '/neos/flatnav/query?nodeContextPath=' + encodeURIComponent(_this3.props.siteNodeContextPath) + '&preset=' + preset + '&page=' + _this3.state[preset].page,
                         method: 'GET',
                         credentials: 'include',
                         headers: {
@@ -658,7 +658,7 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                     })));
                     _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
                         return {
-                            url: '/flatnav/getNewReferenceNodePath?nodeContextPath=' + encodeURIComponent(_this3.props.siteNodeContextPath) + '&preset=' + preset,
+                            url: '/neos/flatnav/getNewReferenceNodePath?nodeContextPath=' + encodeURIComponent(_this3.props.siteNodeContextPath) + '&preset=' + preset,
                             method: 'GET',
                             credentials: 'include',
                             headers: {
