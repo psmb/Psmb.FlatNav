@@ -103,7 +103,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                 }
             });
             fetchWithErrorHandling.withCsrfToken(csrfToken => ({
-                url: `/flatnav/query?nodeContextPath=${encodeURIComponent(this.props.siteNodeContextPath)}&preset=${preset}&page=${this.state[preset].page}`,
+                url: `/neos/flatnav/query?nodeContextPath=${encodeURIComponent(this.props.siteNodeContextPath)}&preset=${preset}&page=${this.state[preset].page}`,
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -158,7 +158,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                     }
                 });
                 fetchWithErrorHandling.withCsrfToken(csrfToken => ({
-                    url: `/flatnav/getNewReferenceNodePath?nodeContextPath=${encodeURIComponent(this.props.siteNodeContextPath)}&preset=${preset}`,
+                    url: `/neos/flatnav/getNewReferenceNodePath?nodeContextPath=${encodeURIComponent(this.props.siteNodeContextPath)}&preset=${preset}`,
                     method: 'GET',
                     credentials: 'include',
                     headers: {
