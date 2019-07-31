@@ -1,6 +1,6 @@
 -
   name: 'Psmb.FlatNav'
-  uriPattern: 'flatnav/{@action}'
+  uriPattern: 'neos/flatnav/{@action}'
   defaults:
     '@package':    'Psmb.FlatNav'
     '@controller': 'Standard'
