@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file original="" source-language="en" target-language="de" datatype="plaintext">
+		<body>
+			<trans-unit id="loading">
+				<source>Loading...</source>
+				<target>Wird geladen...</target>
+			</trans-unit>
+			<trans-unit id="loadMore">
+				<source>Load more</source>
+				<target>Mehr laden</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
