@@ -1,22 +1,21 @@
 <?php
 namespace Psmb\FlatNav\Controller;
 
+use Neos\Eel\Utility;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Mvc\Controller\ActionController;
 use Neos\Flow\Mvc\View\JsonView;
-use Neos\Eel\FlowQuery\FlowQuery;
 use Neos\Neos\Ui\Fusion\Helper\NodeInfoHelper;
 use Neos\Neos\Ui\ContentRepository\Service\NodeService;
 
 class StandardController extends ActionController
 {
-
     /**
      * @var array
      */
-    protected $viewFormatToObjectNameMap = array(
+    protected $viewFormatToObjectNameMap = [
         'html' => JsonView::class
-    );
+    ];
 
     /**
      * @Flow\Inject
@@ -47,6 +46,7 @@ class StandardController extends ActionController
      * @param string $nodeContextPath The context path of the node that will be available as `node` context var in Eel
      * @param integer $page Page parameter used for pagination
      * @return void
+     * @throws \Neos\Eel\Exception
      * @Flow\SkipCsrfProtection
      */
     public function queryAction($preset, $nodeContextPath, $page = 1)
@@ -60,7 +60,7 @@ class StandardController extends ActionController
             'node' => $baseNode,
             'page' => $page
         ];
-        $nodes = \Neos\Eel\Utility::evaluateEelExpression($expression, $this->eelEvaluator, $contextVariables, $this->defaultContextConfiguration);
+        $nodes = Utility::evaluateEelExpression($expression, $this->eelEvaluator, $contextVariables, $this->defaultContextConfiguration);
         $nodeInfoHelper = new NodeInfoHelper();
 
         $result = [];
@@ -76,8 +76,8 @@ class StandardController extends ActionController
     /**
      * @param string $preset The preset, configured in Settings.yaml
      * @param string $nodeContextPath The context path of the node that will be available as `node` context var in Eel
-     * @param integer $page Page parameter used for pagination
      * @return void
+     * @throws \Neos\Eel\Exception
      * @Flow\SkipCsrfProtection
      */
     public function getNewReferenceNodePathAction($preset, $nodeContextPath)
@@ -91,7 +91,7 @@ class StandardController extends ActionController
             'node' => $baseNode,
             'site' => $baseNode
         ];
-        $newReferenceNodePath = \Neos\Eel\Utility::evaluateEelExpression($expression, $this->eelEvaluator, $contextVariables, $this->defaultContextConfiguration);
+        $newReferenceNodePath = Utility::evaluateEelExpression($expression, $this->eelEvaluator, $contextVariables, $this->defaultContextConfiguration);
         $this->view->assign('value', $newReferenceNodePath);
     }
 }
