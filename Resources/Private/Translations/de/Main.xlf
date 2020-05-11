@@ -3,12 +3,20 @@
 	<file original="" source-language="en" target-language="de" datatype="plaintext">
 		<body>
 			<trans-unit id="loading">
-				<source>Loading...</source>
-				<target>Wird geladen...</target>
+				<source>Loading…</source>
+				<target>Wird geladen…</target>
 			</trans-unit>
 			<trans-unit id="loadMore">
 				<source>Load more</source>
 				<target>Mehr laden</target>
+			</trans-unit>
+			<trans-unit id="search">
+				<source>Search…</source>
+				<target>Suchen…</target>
+			</trans-unit>
+			<trans-unit id="noResults">
+				<source>No results found</source>
+				<target>Keine Ergebnisse</target>
 			</trans-unit>
 		</body>
 	</file>

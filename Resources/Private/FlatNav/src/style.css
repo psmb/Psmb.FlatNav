@@ -18,6 +18,30 @@
 .toolbar {
     background-color: var(--colors-ContrastDarker);
     border-bottom: 1px solid var(--colors-ContrastDark);
+    display: flex;
+}
+.toolbarButtons {
+    flex-shrink: 0;
+}
+
+.toolbarSearch {
+    margin-left: 5px;
+    display: flex;
+    align-items: center;
+}
+.toolbarSearchInput {
+    border-radius: 0;
+
+    &:focus {
+        background-color: var(--colors-ContrastDark);
+        color: var(--colors-ContrastBrightest);
+    }
+}
+.toolbarSearchClearButton {
+    background-color: var(--colors-ContrastDark);
+}
+.toolbarSearchNoResults {
+    padding: 5px 10px;
 }
 
 .pageTreeContainer {

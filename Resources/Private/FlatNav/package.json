@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@neos-project/eslint-config-neos": "^2.1.2",
+    "lodash.debounce": "^4.0.8",
     "lodash.upperfirst": "^4.3.1"
   }
 }

@@ -45,21 +45,36 @@ class StandardController extends ActionController
      * @param string $preset The preset, configured in Settings.yaml
      * @param string $nodeContextPath The context path of the node that will be available as `node` context var in Eel
      * @param integer $page Page parameter used for pagination
+     * @param string $searchTerm Search term
      * @return void
      * @throws \Neos\Eel\Exception
      * @Flow\SkipCsrfProtection
      */
-    public function queryAction($preset, $nodeContextPath, $page = 1)
+    public function queryAction($preset, $nodeContextPath, $page = 1, $searchTerm = null)
     {
         if (!isset($this->presets[$preset])) {
             throw new \Exception('Invalid preset name');
         }
-        $expression = '${' . $this->presets[$preset]['query'] . '}';
+        $isSearch = $searchTerm && $this->presets[$preset]['searchQuery'];
+        if ($isSearch) {
+            $expression = '${' . $this->presets[$preset]['searchQuery'] . '}';
+        } else {
+            $expression = '${' . $this->presets[$preset]['query'] . '}';
+        }
         $baseNode = $this->nodeService->getNodeFromContextPath($nodeContextPath, null, null, true);
-        $contextVariables = [
-            'node' => $baseNode,
-            'page' => $page
-        ];
+        if ($isSearch) {
+            $contextVariables = [
+                'node' => $baseNode,
+                'page' => $page,
+                'searchTerm' => $searchTerm
+            ];
+        } else {
+            $contextVariables = [
+                'node' => $baseNode,
+                'page' => $page
+            ];
+        }
+        
         $nodes = Utility::evaluateEelExpression($expression, $this->eelEvaluator, $contextVariables, $this->defaultContextConfiguration);
         $nodeInfoHelper = new NodeInfoHelper();
 

@@ -3,10 +3,16 @@
     <file original="" source-language="en" datatype="plaintext">
         <body>
             <trans-unit id="loading">
-              <source>Loading...</source>
+              <source>Loading…</source>
             </trans-unit>
             <trans-unit id="loadMore">
                 <source>Load more</source>
+            </trans-unit>
+            <trans-unit id="search">
+                <source>Search…</source>
+            </trans-unit>
+            <trans-unit id="noResults">
+                <source>No results found</source>
             </trans-unit>
         </body>
     </file>

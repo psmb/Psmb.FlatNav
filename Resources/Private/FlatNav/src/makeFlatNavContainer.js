@@ -8,6 +8,7 @@ import {fetchWithErrorHandling} from '@neos-project/neos-ui-backend-connector';
 import backend from '@neos-project/neos-ui-backend-connector';
 import FlatNav from './FlatNav';
 import style from './style.css';
+import debounce from 'lodash.debounce';
 
 // Taken from here, as it's not exported in the UI
 // https://github.com/neos/neos-ui/blob/b2a52d66a211b192dfc541799779a8be27bf5a31/packages/neos-ui-sagas/src/CR/NodeOperations/helpers.js#L3
@@ -65,6 +66,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                     isLoading: false,
                     isLoadingReferenceNodePath: false,
                     nodes: [],
+                    searchTerm: '',
                     moreNodesAvailable: true,
                     newReferenceNodePath
                 };
@@ -79,7 +81,7 @@ const makeFlatNavContainer = OriginalPageTree => {
             });
         }
 
-        makeResetNodes = preset => callback => {
+        makeResetNodes = (preset, fetchNodes) => () => {
             this.setState({
                 [preset]: {
                     ...this.state[preset],
@@ -87,14 +89,16 @@ const makeFlatNavContainer = OriginalPageTree => {
                     nodes: [],
                     moreNodesAvailable: true
                 }
-            }, callback);
+            }, fetchNodes);
         }
 
-        makeFetchNodes = preset => () => {
-            if (this.loadingLock[preset]) {
+        makeFetchNodes = preset => (loadMore = false) => {
+            const searchTerm = this.state[preset].searchTerm;
+            const url = `/neos/flatnav/query?nodeContextPath=${encodeURIComponent(this.props.siteNodeContextPath)}&preset=${preset}&page=${this.state[preset].page}${searchTerm ? `&searchTerm=${searchTerm}` : ''}`
+            if (this.loadingLock[url]) {
                 return;
             }
-            this.loadingLock[preset] = true;
+            this.loadingLock[url] = true;
             this.setState({
                 [preset]: {
                     ...this.state[preset],
@@ -102,8 +106,9 @@ const makeFlatNavContainer = OriginalPageTree => {
                     moreNodesAvailable: true
                 }
             });
+
             fetchWithErrorHandling.withCsrfToken(csrfToken => ({
-                url: `/neos/flatnav/query?nodeContextPath=${encodeURIComponent(this.props.siteNodeContextPath)}&preset=${preset}&page=${this.state[preset].page}`,
+                url,
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -122,9 +127,9 @@ const makeFlatNavContainer = OriginalPageTree => {
                         this.setState({
                             [preset]: {
                                 ...this.state[preset],
-                                page: this.state[preset].page + 1,
                                 isLoading: false,
-                                nodes: [...this.state[preset].nodes, ...Object.keys(nodesMap)],
+                                nodes: loadMore ? [...this.state[preset].nodes, ...Object.keys(nodesMap)] : Object.keys(nodesMap),
+                                page: loadMore ? this.state[preset].page + 1 : 1,
                                 moreNodesAvailable: true
                             }
                         });
@@ -133,13 +138,26 @@ const makeFlatNavContainer = OriginalPageTree => {
                             [preset]: {
                                 ...this.state[preset],
                                 isLoading: false,
-                                moreNodesAvailable: false
+                                moreNodesAvailable: false,
+                                nodes: loadMore ? this.state[preset].nodes : [],
                             }
                         });
                     }
-                    this.loadingLock[preset] = false;
+                    this.loadingLock[url] = false;
                 });
         };
+
+        makeSetSearchTerm = (preset, fetchNodes) => searchTerm => {
+            this.setState({
+                [preset]: {
+                    ...this.state[preset],
+                    nodes: [],
+                    page: 1,
+                    isLoading: true,
+                    searchTerm
+                }
+            }, fetchNodes);
+        }
 
         // Gets the `newReferenceNodePath` setting and loads that node into state
         makeGetNewReference = preset => () => {
@@ -212,16 +230,22 @@ const makeFlatNavContainer = OriginalPageTree => {
                 }}>
                     {Object.keys(this.props.options.presets).map(presetName => {
                         const preset = this.props.options.presets[presetName];
+                        const fetchNodes = this.makeFetchNodes(presetName)
+                        const resetNodes = this.makeResetNodes(presetName, fetchNodes)
+                        const debouncedFetchNodes = debounce(fetchNodes, 400);
+                        const setSearchTerm = this.makeSetSearchTerm(presetName, debouncedFetchNodes)
+                        const fetchNewReference = this.makeGetNewReference(presetName)
                         return (
                             <Tabs.Panel id={presetName} key={presetName} icon={preset.icon} tooltip={this.props.i18nRegistry.translate(preset.label)} theme={{
                                 panel: style.panel
                             }}>
                                 {preset.type === 'flat' && (<FlatNav
                                     preset={preset}
-                                    fetchNodes={this.makeFetchNodes(presetName)}
-                                    resetNodes={this.makeResetNodes(presetName)}
+                                    fetchNodes={fetchNodes}
+                                    resetNodes={resetNodes}
+                                    setSearchTerm={setSearchTerm}
                                     fullReset={this.fullReset}
-                                    fetchNewReference={this.makeGetNewReference(presetName)}
+                                    fetchNewReference={fetchNewReference}
                                     {...this.state[presetName]}
                                 />)}
                                 {preset.type === 'tree' && (<OriginalPageTree />)}

@@ -457,6 +457,10 @@ var _style = __webpack_require__(8);
 
 var _style2 = _interopRequireDefault(_style);
 
+var _lodash = __webpack_require__(27);
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -534,6 +538,11 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                         } },
                     Object.keys(this.props.options.presets).map(function (presetName) {
                         var preset = _this2.props.options.presets[presetName];
+                        var fetchNodes = _this2.makeFetchNodes(presetName);
+                        var resetNodes = _this2.makeResetNodes(presetName, fetchNodes);
+                        var debouncedFetchNodes = (0, _lodash2.default)(fetchNodes, 400);
+                        var setSearchTerm = _this2.makeSetSearchTerm(presetName, debouncedFetchNodes);
+                        var fetchNewReference = _this2.makeGetNewReference(presetName);
                         return _react2.default.createElement(
                             _reactUiComponents.Tabs.Panel,
                             { id: presetName, key: presetName, icon: preset.icon, tooltip: _this2.props.i18nRegistry.translate(preset.label), theme: {
@@ -541,10 +550,11 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                                 } },
                             preset.type === 'flat' && _react2.default.createElement(_FlatNav2.default, _extends({
                                 preset: preset,
-                                fetchNodes: _this2.makeFetchNodes(presetName),
-                                resetNodes: _this2.makeResetNodes(presetName),
+                                fetchNodes: fetchNodes,
+                                resetNodes: resetNodes,
+                                setSearchTerm: setSearchTerm,
                                 fullReset: _this2.fullReset,
-                                fetchNewReference: _this2.makeGetNewReference(presetName)
+                                fetchNewReference: fetchNewReference
                             }, _this2.state[presetName])),
                             preset.type === 'tree' && _react2.default.createElement(OriginalPageTree, null)
                         );
@@ -575,6 +585,7 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                     isLoading: false,
                     isLoadingReferenceNodePath: false,
                     nodes: [],
+                    searchTerm: '',
                     moreNodesAvailable: true,
                     newReferenceNodePath: newReferenceNodePath
                 };
@@ -587,29 +598,34 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
             _this3.setState(_extends({}, defaultState));
         };
 
-        this.makeResetNodes = function (preset) {
-            return function (callback) {
+        this.makeResetNodes = function (preset, fetchNodes) {
+            return function () {
                 _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
                     page: 1,
                     nodes: [],
                     moreNodesAvailable: true
-                })), callback);
+                })), fetchNodes);
             };
         };
 
         this.makeFetchNodes = function (preset) {
             return function () {
-                if (_this3.loadingLock[preset]) {
+                var loadMore = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+                var searchTerm = _this3.state[preset].searchTerm;
+                var url = '/neos/flatnav/query?nodeContextPath=' + encodeURIComponent(_this3.props.siteNodeContextPath) + '&preset=' + preset + '&page=' + _this3.state[preset].page + (searchTerm ? '&searchTerm=' + searchTerm : '');
+                if (_this3.loadingLock[url]) {
                     return;
                 }
-                _this3.loadingLock[preset] = true;
+                _this3.loadingLock[url] = true;
                 _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
                     isLoading: true,
                     moreNodesAvailable: true
                 })));
+
                 _neosUiBackendConnector.fetchWithErrorHandling.withCsrfToken(function (csrfToken) {
                     return {
-                        url: '/neos/flatnav/query?nodeContextPath=' + encodeURIComponent(_this3.props.siteNodeContextPath) + '&preset=' + preset + '&page=' + _this3.state[preset].page,
+                        url: url,
                         method: 'GET',
                         credentials: 'include',
                         headers: {
@@ -627,19 +643,31 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                         }, {});
                         _this3.props.merge(nodesMap);
                         _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
-                            page: _this3.state[preset].page + 1,
                             isLoading: false,
-                            nodes: [].concat(_toConsumableArray(_this3.state[preset].nodes), _toConsumableArray(Object.keys(nodesMap))),
+                            nodes: loadMore ? [].concat(_toConsumableArray(_this3.state[preset].nodes), _toConsumableArray(Object.keys(nodesMap))) : Object.keys(nodesMap),
+                            page: loadMore ? _this3.state[preset].page + 1 : 1,
                             moreNodesAvailable: true
                         })));
                     } else {
                         _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
                             isLoading: false,
-                            moreNodesAvailable: false
+                            moreNodesAvailable: false,
+                            nodes: loadMore ? _this3.state[preset].nodes : []
                         })));
                     }
-                    _this3.loadingLock[preset] = false;
+                    _this3.loadingLock[url] = false;
                 });
+            };
+        };
+
+        this.makeSetSearchTerm = function (preset, fetchNodes) {
+            return function (searchTerm) {
+                _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
+                    nodes: [],
+                    page: 1,
+                    isLoading: true,
+                    searchTerm: searchTerm
+                })), fetchNodes);
             };
         };
 
@@ -797,6 +825,10 @@ var _RefreshNodes = __webpack_require__(25);
 
 var _RefreshNodes2 = _interopRequireDefault(_RefreshNodes);
 
+var _SearchInput = __webpack_require__(26);
+
+var _SearchInput2 = _interopRequireDefault(_SearchInput);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -864,8 +896,15 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
             var contextPath = _this.buildNewReferenceNodePath();
             _this.props.commenceNodeCreation(contextPath, undefined, 'into', _this.props.preset.newNodeType || undefined);
         }, _this.refreshFlatNav = function () {
-            _this.props.resetNodes(_this.props.fetchNodes);
+            _this.props.resetNodes();
         }, _this.renderNodes = function () {
+            if (_this.props.searchTerm && !_this.props.isLoading && _this.props.nodes.length === 0) {
+                return _react2.default.createElement(
+                    'span',
+                    { className: _style2.default.toolbarSearchNoResults },
+                    _this.props.i18nRegistry.translate('Psmb.FlatNav:Main:noResults')
+                );
+            }
             return _this.props.nodes.map(function (contextPath) {
                 var item = (0, _plowJs.$get)([contextPath], _this.props.nodeData);
 
@@ -922,7 +961,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     }, {
         key: 'componentDidUpdate',
         value: function componentDidUpdate(prevProps) {
-            this.populateTheState();
+            // this.populateTheState();
         }
     }, {
         key: 'getNodeIconComponent',
@@ -958,14 +997,19 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     }, {
         key: 'render',
         value: function render() {
+            var _this2 = this;
+
             var _props = this.props,
                 focused = _props.focused,
                 nodes = _props.nodes,
                 isLoadingReferenceNodePath = _props.isLoadingReferenceNodePath,
-                isLoading = _props.isLoading;
+                isLoading = _props.isLoading,
+                preset = _props.preset;
 
 
             var focusedInNodes = nodes.includes(focused);
+
+            var searchEnabled = Boolean(preset.searchQuery);
 
             return _react2.default.createElement(
                 'div',
@@ -973,10 +1017,15 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                 _react2.default.createElement(
                     'div',
                     { className: _style2.default.toolbar },
-                    _react2.default.createElement(_reactUiComponents.IconButton, { icon: 'plus', disabled: isLoadingReferenceNodePath, onClick: this.createNode }),
-                    _react2.default.createElement(_HideSelectedNode2.default, { disabled: !focusedInNodes }),
-                    _react2.default.createElement(_DeleteSelectedNode2.default, { disabled: !focusedInNodes }),
-                    _react2.default.createElement(_RefreshNodes2.default, { disabled: isLoading || isLoadingReferenceNodePath, onClick: this.refreshFlatNav })
+                    _react2.default.createElement(
+                        'div',
+                        { className: _style2.default.toolbarButtons },
+                        _react2.default.createElement(_reactUiComponents.IconButton, { icon: 'plus', disabled: isLoadingReferenceNodePath, onClick: this.createNode }),
+                        _react2.default.createElement(_HideSelectedNode2.default, { disabled: !focusedInNodes }),
+                        _react2.default.createElement(_DeleteSelectedNode2.default, { disabled: !focusedInNodes }),
+                        _react2.default.createElement(_RefreshNodes2.default, { disabled: isLoading || isLoadingReferenceNodePath, onClick: this.refreshFlatNav })
+                    ),
+                    searchEnabled && _react2.default.createElement(_SearchInput2.default, { searchTerm: this.props.searchTerm, onChange: this.props.setSearchTerm, placeholder: this.props.i18nRegistry.translate('Psmb.FlatNav:Main:search') })
                 ),
                 _react2.default.createElement(
                     'div',
@@ -986,7 +1035,9 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                 !this.props.preset.disablePagination && this.props.moreNodesAvailable && _react2.default.createElement(
                     _reactUiComponents.Button,
                     {
-                        onClick: this.props.fetchNodes,
+                        onClick: function onClick() {
+                            return _this2.props.fetchNodes(true);
+                        },
                         style: 'clean',
                         className: _style2.default.loadMoreButton,
                         disabled: isLoading
@@ -1246,7 +1297,7 @@ exports = module.exports = __webpack_require__(22)(false);
 
 
 // module
-exports.push([module.i, ".style__loadMoreButton___9u14e {\n    width: 100% !important;\n    opacity: 1 !important;\n}\n\n.style__tabs__content___pnV9i {\n    height: calc(100% - 41px);\n}\n\n.style__tabs__panel___1f-I- {\n    height: 100%;\n}\n\n.style__panel___8gH6H {\n    height: 100%;\n}\n\n.style__toolbar___Y2z2P {\n    background-color: #222;\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__pageTreeContainer___7tNsg {\n    display: -ms-flexbox;\n    display: flex;\n    -ms-flex-direction: column;\n        flex-direction: column;\n    height: 100%;\n    background-color: #222;\n    border-right: 1px solid #3f3f3f;\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__pageTreeContainerOriginal___dXhKR {\n    display: -ms-flexbox;\n    display: flex;\n    -ms-flex-direction: column;\n        flex-direction: column;\n    height: 100%;\n}\n\n.style__pageTreeToolbarOriginal___3coJx div {\n        border-top: 0;\n    }\n\n.style__treeWrapper___1Ki9q {\n    overflow-y: auto;\n    padding: 5px 0;\n}\n\n.style__node___37dXu {\n    position: relative;\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    width: 100%;\n    padding: 3px 6px;\n    cursor: pointer;\n}\n\n.style__node--focused___2Ad0k {\n    background-color: #323232;\n}\n\n.style__node--focused___2Ad0k .style__node__label___2ktrO {\n    color: #00ADEE;\n}\n\n.style__node--dirty___K2yEx {\n    border-left: 2px solid #ff8700;\n    padding-left: 4px;\n}\n\n.style__node--removed___3ycgN {\n    cursor: not-allowed;\n    border-color: #ff460d;\n}\n\n.style__node--removed___3ycgN .style__node__label___2ktrO,\n.style__node--removed___3ycgN .style__node__iconWrapper___32kOo {\n    opacity: 0.5;\n}\n\n.style__node__iconWrapper___32kOo {\n    width: 2em;\n    display: inline-block;\n    position: absolute;\n    text-align: center;\n}\n\n.style__node__label___2ktrO {\n    margin-left: 2em;\n}\n", ""]);
+exports.push([module.i, ".style__loadMoreButton___9u14e {\n    width: 100% !important;\n    opacity: 1 !important;\n}\n\n.style__tabs__content___pnV9i {\n    height: calc(100% - 41px);\n}\n\n.style__tabs__panel___1f-I- {\n    height: 100%;\n}\n\n.style__panel___8gH6H {\n    height: 100%;\n}\n\n.style__toolbar___Y2z2P {\n    background-color: #222;\n    border-bottom: 1px solid #3f3f3f;\n    display: -ms-flexbox;\n    display: flex;\n}\n\n.style__toolbarButtons___2DkPs {\n    -ms-flex-negative: 0;\n        flex-shrink: 0;\n}\n\n.style__toolbarSearch___VoCND {\n    margin-left: 5px;\n    display: -ms-flexbox;\n    display: flex;\n    -ms-flex-align: center;\n        align-items: center;\n}\n\n.style__toolbarSearchInput___3iqrB {\n    border-radius: 0;\n}\n\n.style__toolbarSearchInput___3iqrB:focus {\n        background-color: #3f3f3f;\n        color: #FFF;\n    }\n\n.style__toolbarSearchClearButton___2zsD3 {\n    background-color: #3f3f3f;\n}\n\n.style__toolbarSearchNoResults___1mTrz {\n    padding: 5px 10px;\n}\n\n.style__pageTreeContainer___7tNsg {\n    display: -ms-flexbox;\n    display: flex;\n    -ms-flex-direction: column;\n        flex-direction: column;\n    height: 100%;\n    background-color: #222;\n    border-right: 1px solid #3f3f3f;\n    border-bottom: 1px solid #3f3f3f;\n}\n\n.style__pageTreeContainerOriginal___dXhKR {\n    display: -ms-flexbox;\n    display: flex;\n    -ms-flex-direction: column;\n        flex-direction: column;\n    height: 100%;\n}\n\n.style__pageTreeToolbarOriginal___3coJx div {\n        border-top: 0;\n    }\n\n.style__treeWrapper___1Ki9q {\n    overflow-y: auto;\n    padding: 5px 0;\n}\n\n.style__node___37dXu {\n    position: relative;\n    overflow: hidden;\n    white-space: nowrap;\n    text-overflow: ellipsis;\n    width: 100%;\n    padding: 3px 6px;\n    cursor: pointer;\n}\n\n.style__node--focused___2Ad0k {\n    background-color: #323232;\n}\n\n.style__node--focused___2Ad0k .style__node__label___2ktrO {\n    color: #00ADEE;\n}\n\n.style__node--dirty___K2yEx {\n    border-left: 2px solid #ff8700;\n    padding-left: 4px;\n}\n\n.style__node--removed___3ycgN {\n    cursor: not-allowed;\n    border-color: #ff460d;\n}\n\n.style__node--removed___3ycgN .style__node__label___2ktrO,\n.style__node--removed___3ycgN .style__node__iconWrapper___32kOo {\n    opacity: 0.5;\n}\n\n.style__node__iconWrapper___32kOo {\n    width: 2em;\n    display: inline-block;\n    position: absolute;\n    text-align: center;\n}\n\n.style__node__label___2ktrO {\n    margin-left: 2em;\n}\n", ""]);
 
 // exports
 exports.locals = {
@@ -1255,6 +1306,11 @@ exports.locals = {
 	"tabs__panel": "style__tabs__panel___1f-I-",
 	"panel": "style__panel___8gH6H",
 	"toolbar": "style__toolbar___Y2z2P",
+	"toolbarButtons": "style__toolbarButtons___2DkPs",
+	"toolbarSearch": "style__toolbarSearch___VoCND",
+	"toolbarSearchInput": "style__toolbarSearchInput___3iqrB",
+	"toolbarSearchClearButton": "style__toolbarSearchClearButton___2zsD3",
+	"toolbarSearchNoResults": "style__toolbarSearchNoResults___1mTrz",
 	"pageTreeContainer": "style__pageTreeContainer___7tNsg",
 	"pageTreeContainerOriginal": "style__pageTreeContainerOriginal___dXhKR",
 	"pageTreeToolbarOriginal": "style__pageTreeToolbarOriginal___3coJx",
@@ -1932,6 +1988,456 @@ var RefreshNodes = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry)
     i18nRegistry: _propTypes2.default.object.isRequired
 }, _temp2)) || _class);
 exports.default = RefreshNodes;
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _style = __webpack_require__(8);
+
+var _style2 = _interopRequireDefault(_style);
+
+var _reactUiComponents = __webpack_require__(2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var SearchInput = function SearchInput(_ref) {
+  var onChange = _ref.onChange,
+      searchTerm = _ref.searchTerm,
+      placeholder = _ref.placeholder;
+
+  return _react2.default.createElement(
+    'div',
+    { className: _style2.default.toolbarSearch },
+    _react2.default.createElement(_reactUiComponents.TextInput, { className: _style2.default.toolbarSearchInput, value: searchTerm, placeholder: placeholder, onChange: onChange, onEnterKey: onChange }),
+    searchTerm ? _react2.default.createElement(_reactUiComponents.IconButton, { icon: 'times', onClick: function onClick() {
+        return onChange('');
+      }, className: _style2.default.toolbarSearchClearButton }) : null
+  );
+};
+exports.default = SearchInput;
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {/**
+ * lodash (Custom Build) <https://lodash.com/>
+ * Build: `lodash modularize exports="npm" -o ./`
+ * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+ * Released under MIT license <https://lodash.com/license>
+ * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+ * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+ */
+
+/** Used as the `TypeError` message for "Functions" methods. */
+var FUNC_ERROR_TEXT = 'Expected a function';
+
+/** Used as references for various `Number` constants. */
+var NAN = 0 / 0;
+
+/** `Object#toString` result references. */
+var symbolTag = '[object Symbol]';
+
+/** Used to match leading and trailing whitespace. */
+var reTrim = /^\s+|\s+$/g;
+
+/** Used to detect bad signed hexadecimal string values. */
+var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
+
+/** Used to detect binary string values. */
+var reIsBinary = /^0b[01]+$/i;
+
+/** Used to detect octal string values. */
+var reIsOctal = /^0o[0-7]+$/i;
+
+/** Built-in method references without a dependency on `root`. */
+var freeParseInt = parseInt;
+
+/** Detect free variable `global` from Node.js. */
+var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var objectToString = objectProto.toString;
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeMax = Math.max,
+    nativeMin = Math.min;
+
+/**
+ * Gets the timestamp of the number of milliseconds that have elapsed since
+ * the Unix epoch (1 January 1970 00:00:00 UTC).
+ *
+ * @static
+ * @memberOf _
+ * @since 2.4.0
+ * @category Date
+ * @returns {number} Returns the timestamp.
+ * @example
+ *
+ * _.defer(function(stamp) {
+ *   console.log(_.now() - stamp);
+ * }, _.now());
+ * // => Logs the number of milliseconds it took for the deferred invocation.
+ */
+var now = function() {
+  return root.Date.now();
+};
+
+/**
+ * Creates a debounced function that delays invoking `func` until after `wait`
+ * milliseconds have elapsed since the last time the debounced function was
+ * invoked. The debounced function comes with a `cancel` method to cancel
+ * delayed `func` invocations and a `flush` method to immediately invoke them.
+ * Provide `options` to indicate whether `func` should be invoked on the
+ * leading and/or trailing edge of the `wait` timeout. The `func` is invoked
+ * with the last arguments provided to the debounced function. Subsequent
+ * calls to the debounced function return the result of the last `func`
+ * invocation.
+ *
+ * **Note:** If `leading` and `trailing` options are `true`, `func` is
+ * invoked on the trailing edge of the timeout only if the debounced function
+ * is invoked more than once during the `wait` timeout.
+ *
+ * If `wait` is `0` and `leading` is `false`, `func` invocation is deferred
+ * until to the next tick, similar to `setTimeout` with a timeout of `0`.
+ *
+ * See [David Corbacho's article](https://css-tricks.com/debouncing-throttling-explained-examples/)
+ * for details over the differences between `_.debounce` and `_.throttle`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Function
+ * @param {Function} func The function to debounce.
+ * @param {number} [wait=0] The number of milliseconds to delay.
+ * @param {Object} [options={}] The options object.
+ * @param {boolean} [options.leading=false]
+ *  Specify invoking on the leading edge of the timeout.
+ * @param {number} [options.maxWait]
+ *  The maximum time `func` is allowed to be delayed before it's invoked.
+ * @param {boolean} [options.trailing=true]
+ *  Specify invoking on the trailing edge of the timeout.
+ * @returns {Function} Returns the new debounced function.
+ * @example
+ *
+ * // Avoid costly calculations while the window size is in flux.
+ * jQuery(window).on('resize', _.debounce(calculateLayout, 150));
+ *
+ * // Invoke `sendMail` when clicked, debouncing subsequent calls.
+ * jQuery(element).on('click', _.debounce(sendMail, 300, {
+ *   'leading': true,
+ *   'trailing': false
+ * }));
+ *
+ * // Ensure `batchLog` is invoked once after 1 second of debounced calls.
+ * var debounced = _.debounce(batchLog, 250, { 'maxWait': 1000 });
+ * var source = new EventSource('/stream');
+ * jQuery(source).on('message', debounced);
+ *
+ * // Cancel the trailing debounced invocation.
+ * jQuery(window).on('popstate', debounced.cancel);
+ */
+function debounce(func, wait, options) {
+  var lastArgs,
+      lastThis,
+      maxWait,
+      result,
+      timerId,
+      lastCallTime,
+      lastInvokeTime = 0,
+      leading = false,
+      maxing = false,
+      trailing = true;
+
+  if (typeof func != 'function') {
+    throw new TypeError(FUNC_ERROR_TEXT);
+  }
+  wait = toNumber(wait) || 0;
+  if (isObject(options)) {
+    leading = !!options.leading;
+    maxing = 'maxWait' in options;
+    maxWait = maxing ? nativeMax(toNumber(options.maxWait) || 0, wait) : maxWait;
+    trailing = 'trailing' in options ? !!options.trailing : trailing;
+  }
+
+  function invokeFunc(time) {
+    var args = lastArgs,
+        thisArg = lastThis;
+
+    lastArgs = lastThis = undefined;
+    lastInvokeTime = time;
+    result = func.apply(thisArg, args);
+    return result;
+  }
+
+  function leadingEdge(time) {
+    // Reset any `maxWait` timer.
+    lastInvokeTime = time;
+    // Start the timer for the trailing edge.
+    timerId = setTimeout(timerExpired, wait);
+    // Invoke the leading edge.
+    return leading ? invokeFunc(time) : result;
+  }
+
+  function remainingWait(time) {
+    var timeSinceLastCall = time - lastCallTime,
+        timeSinceLastInvoke = time - lastInvokeTime,
+        result = wait - timeSinceLastCall;
+
+    return maxing ? nativeMin(result, maxWait - timeSinceLastInvoke) : result;
+  }
+
+  function shouldInvoke(time) {
+    var timeSinceLastCall = time - lastCallTime,
+        timeSinceLastInvoke = time - lastInvokeTime;
+
+    // Either this is the first call, activity has stopped and we're at the
+    // trailing edge, the system time has gone backwards and we're treating
+    // it as the trailing edge, or we've hit the `maxWait` limit.
+    return (lastCallTime === undefined || (timeSinceLastCall >= wait) ||
+      (timeSinceLastCall < 0) || (maxing && timeSinceLastInvoke >= maxWait));
+  }
+
+  function timerExpired() {
+    var time = now();
+    if (shouldInvoke(time)) {
+      return trailingEdge(time);
+    }
+    // Restart the timer.
+    timerId = setTimeout(timerExpired, remainingWait(time));
+  }
+
+  function trailingEdge(time) {
+    timerId = undefined;
+
+    // Only invoke if we have `lastArgs` which means `func` has been
+    // debounced at least once.
+    if (trailing && lastArgs) {
+      return invokeFunc(time);
+    }
+    lastArgs = lastThis = undefined;
+    return result;
+  }
+
+  function cancel() {
+    if (timerId !== undefined) {
+      clearTimeout(timerId);
+    }
+    lastInvokeTime = 0;
+    lastArgs = lastCallTime = lastThis = timerId = undefined;
+  }
+
+  function flush() {
+    return timerId === undefined ? result : trailingEdge(now());
+  }
+
+  function debounced() {
+    var time = now(),
+        isInvoking = shouldInvoke(time);
+
+    lastArgs = arguments;
+    lastThis = this;
+    lastCallTime = time;
+
+    if (isInvoking) {
+      if (timerId === undefined) {
+        return leadingEdge(lastCallTime);
+      }
+      if (maxing) {
+        // Handle invocations in a tight loop.
+        timerId = setTimeout(timerExpired, wait);
+        return invokeFunc(lastCallTime);
+      }
+    }
+    if (timerId === undefined) {
+      timerId = setTimeout(timerExpired, wait);
+    }
+    return result;
+  }
+  debounced.cancel = cancel;
+  debounced.flush = flush;
+  return debounced;
+}
+
+/**
+ * Checks if `value` is the
+ * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+ * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(_.noop);
+ * // => true
+ *
+ * _.isObject(null);
+ * // => false
+ */
+function isObject(value) {
+  var type = typeof value;
+  return !!value && (type == 'object' || type == 'function');
+}
+
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return !!value && typeof value == 'object';
+}
+
+/**
+ * Checks if `value` is classified as a `Symbol` primitive or object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
+ * @example
+ *
+ * _.isSymbol(Symbol.iterator);
+ * // => true
+ *
+ * _.isSymbol('abc');
+ * // => false
+ */
+function isSymbol(value) {
+  return typeof value == 'symbol' ||
+    (isObjectLike(value) && objectToString.call(value) == symbolTag);
+}
+
+/**
+ * Converts `value` to a number.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to process.
+ * @returns {number} Returns the number.
+ * @example
+ *
+ * _.toNumber(3.2);
+ * // => 3.2
+ *
+ * _.toNumber(Number.MIN_VALUE);
+ * // => 5e-324
+ *
+ * _.toNumber(Infinity);
+ * // => Infinity
+ *
+ * _.toNumber('3.2');
+ * // => 3.2
+ */
+function toNumber(value) {
+  if (typeof value == 'number') {
+    return value;
+  }
+  if (isSymbol(value)) {
+    return NAN;
+  }
+  if (isObject(value)) {
+    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
+    value = isObject(other) ? (other + '') : other;
+  }
+  if (typeof value != 'string') {
+    return value === 0 ? value : +value;
+  }
+  value = value.replace(reTrim, '');
+  var isBinary = reIsBinary.test(value);
+  return (isBinary || reIsOctal.test(value))
+    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
+    : (reIsBadHex.test(value) ? NAN : +value);
+}
+
+module.exports = debounce;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(28)))
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
 
 /***/ })
 /******/ ]);

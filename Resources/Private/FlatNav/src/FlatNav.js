@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {$get, $transform} from 'plow-js';
-import {Button, Icon, IconButton} from '@neos-project/react-ui-components';
+import {Button, Icon, IconButton, TextInput} from '@neos-project/react-ui-components';
 import {connect} from 'react-redux';
 import {actions, selectors} from '@neos-project/neos-ui-redux-store';
 import {neos} from '@neos-project/neos-ui-decorators';
@@ -10,6 +10,7 @@ import DeleteSelectedNode from './DeleteSelectedNode';
 import mergeClassNames from 'classnames';
 import style from './style.css';
 import RefreshNodes from "./RefreshNodes";
+import SearchInput from "./SearchInput";
 @neos(globalRegistry => ({
     nodeTypesRegistry: globalRegistry.get('@neos-project/neos-ui-contentrepository'),
     serverFeedbackHandlers: globalRegistry.get('serverFeedbackHandlers'),
@@ -46,7 +47,7 @@ export default class FlatNav extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        this.populateTheState();
+        // this.populateTheState();
     }
 
     populateTheState = () => {
@@ -79,7 +80,7 @@ export default class FlatNav extends Component {
     }
 
     refreshFlatNav = () => {
-        this.props.resetNodes(this.props.fetchNodes);
+        this.props.resetNodes();
     }
 
     getNodeIconComponent(node) {
@@ -115,6 +116,9 @@ export default class FlatNav extends Component {
     }
 
     renderNodes = () => {
+        if (this.props.searchTerm && !this.props.isLoading &&  this.props.nodes.length === 0) {
+        return <span className={style.toolbarSearchNoResults}>{this.props.i18nRegistry.translate('Psmb.FlatNav:Main:noResults')}</span>
+        }
         return this.props.nodes
             .map(contextPath => {
                 const item = $get([contextPath], this.props.nodeData);
@@ -161,24 +165,29 @@ export default class FlatNav extends Component {
     };
 
     render() {
-        const {focused, nodes, isLoadingReferenceNodePath, isLoading} = this.props;
+        const {focused, nodes, isLoadingReferenceNodePath, isLoading, preset} = this.props;
 
         const focusedInNodes = nodes.includes(focused);
+
+        const searchEnabled = Boolean(preset.searchQuery)
 
         return (
             <div className={style.pageTreeContainer}>
                 <div className={style.toolbar}>
-                    <IconButton icon="plus" disabled={isLoadingReferenceNodePath} onClick={this.createNode}/>
-                    <HideSelectedNode disabled={!focusedInNodes}/>
-                    <DeleteSelectedNode disabled={!focusedInNodes}/>
-                    <RefreshNodes disabled={isLoading || isLoadingReferenceNodePath} onClick={this.refreshFlatNav}/>
+                    <div className={style.toolbarButtons}>
+                        <IconButton icon="plus" disabled={isLoadingReferenceNodePath} onClick={this.createNode}/>
+                        <HideSelectedNode disabled={!focusedInNodes}/>
+                        <DeleteSelectedNode disabled={!focusedInNodes}/>
+                        <RefreshNodes disabled={isLoading || isLoadingReferenceNodePath} onClick={this.refreshFlatNav}/>
+                    </div>
+                    {searchEnabled && <SearchInput searchTerm={this.props.searchTerm} onChange={this.props.setSearchTerm} placeholder={this.props.i18nRegistry.translate('Psmb.FlatNav:Main:search')}/>}
                 </div>
 
                 <div className={style.treeWrapper}>
                     {this.renderNodes()}
                 </div>
                 {!this.props.preset.disablePagination && this.props.moreNodesAvailable && (<Button
-                    onClick={this.props.fetchNodes}
+                    onClick={() => this.props.fetchNodes(true)}
                     style="clean"
                     className={style.loadMoreButton}
                     disabled={isLoading}
