@@ -52,7 +52,7 @@ Neos:
             #   type: flat
             #   query: 'q(node).find("[instanceof Your.Namespace:Tag]").sort("title", "ASC").slice((page - 1) * 20, page * 20).get()'
             #   # NB! This query would give case sensitive results, it's just an example!
-            #   searchQuery: 'q(node).find("[instanceof Your.Namespace:Tag][title*=\"" + searchTerm + "\"]").sort("title", "ASC").slice((page - 1) * 20, page * 20).get()'
+            #   searchQuery: 'q(node).find("[instanceof Your.Namespace:Tag][title*=\"" + searchTerm + "\"]").sort("title", "ASC").get()'
             #   newReferenceNodePath: 'q(node).find("[instanceof Your.Namespace:NewsList]").first().get(0).path'
             #   newNodeType: 'Your.Namespace:Tag'
             #   disablePagination: false

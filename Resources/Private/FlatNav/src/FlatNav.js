@@ -185,21 +185,21 @@ export default class FlatNav extends Component {
 
                 <div className={style.treeWrapper}>
                     {this.renderNodes()}
+                    {!this.props.preset.disablePagination && this.props.moreNodesAvailable && !this.props.searchTerm && (<Button
+                        onClick={() => this.props.fetchNodes(true)}
+                        style="clean"
+                        className={style.loadMoreButton}
+                        disabled={isLoading}
+                    >
+                        <div style={{textAlign: 'center'}}>
+                            <Icon
+                                spin={isLoading}
+                                icon={isLoading ? 'spinner' : 'angle-double-down'}
+                            />
+                            &nbsp;{isLoading ? this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loading') : this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loadMore')}
+                        </div>
+                    </Button>)}
                 </div>
-                {!this.props.preset.disablePagination && this.props.moreNodesAvailable && (<Button
-                    onClick={() => this.props.fetchNodes(true)}
-                    style="clean"
-                    className={style.loadMoreButton}
-                    disabled={isLoading}
-                >
-                    <div style={{textAlign: 'center'}}>
-                        <Icon
-                            spin={isLoading}
-                            icon={isLoading ? 'spinner' : 'angle-double-down'}
-                        />
-                        &nbsp;{isLoading ? this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loading') : this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loadMore')}
-                    </div>
-                </Button>)}
             </div>
         );
     }

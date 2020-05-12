@@ -135,66 +135,6 @@ module.exports = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().Neo
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = (0, _readFromConsumerApi2.default)('vendor')().plow;
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = (0, _readFromConsumerApi2.default)('vendor')().reactRedux;
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().NeosUiReduxStore;
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _readFromConsumerApi = __webpack_require__(0);
-
-var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = (0, _readFromConsumerApi2.default)('vendor')().PropTypes;
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
 
 var content = __webpack_require__(21);
 
@@ -242,6 +182,66 @@ if(false) {
 }
 
 /***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = (0, _readFromConsumerApi2.default)('vendor')().plow;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = (0, _readFromConsumerApi2.default)('vendor')().reactRedux;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = (0, _readFromConsumerApi2.default)('NeosProjectPackages')().NeosUiReduxStore;
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _readFromConsumerApi = __webpack_require__(0);
+
+var _readFromConsumerApi2 = _interopRequireDefault(_readFromConsumerApi);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = (0, _readFromConsumerApi2.default)('vendor')().PropTypes;
+
+/***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -284,7 +284,7 @@ var _makeFlatNavContainer = __webpack_require__(16);
 
 var _makeFlatNavContainer2 = _interopRequireDefault(_makeFlatNavContainer);
 
-var _style = __webpack_require__(8);
+var _style = __webpack_require__(4);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -435,13 +435,13 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _plowJs = __webpack_require__(4);
+var _plowJs = __webpack_require__(5);
 
 var _reactUiComponents = __webpack_require__(2);
 
-var _reactRedux = __webpack_require__(5);
+var _reactRedux = __webpack_require__(6);
 
-var _neosUiReduxStore = __webpack_require__(6);
+var _neosUiReduxStore = __webpack_require__(7);
 
 var _neosUiDecorators = __webpack_require__(3);
 
@@ -453,7 +453,7 @@ var _FlatNav = __webpack_require__(18);
 
 var _FlatNav2 = _interopRequireDefault(_FlatNav);
 
-var _style = __webpack_require__(8);
+var _style = __webpack_require__(4);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -613,7 +613,8 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                 var loadMore = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
                 var searchTerm = _this3.state[preset].searchTerm;
-                var url = '/neos/flatnav/query?nodeContextPath=' + encodeURIComponent(_this3.props.siteNodeContextPath) + '&preset=' + preset + '&page=' + _this3.state[preset].page + (searchTerm ? '&searchTerm=' + searchTerm : '');
+                var page = loadMore ? _this3.state[preset].page + 1 : 1;
+                var url = '/neos/flatnav/query?nodeContextPath=' + encodeURIComponent(_this3.props.siteNodeContextPath) + '&preset=' + preset + '&page=' + page + (searchTerm ? '&searchTerm=' + searchTerm : '');
                 if (_this3.loadingLock[url]) {
                     return;
                 }
@@ -645,7 +646,7 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                         _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
                             isLoading: false,
                             nodes: loadMore ? [].concat(_toConsumableArray(_this3.state[preset].nodes), _toConsumableArray(Object.keys(nodesMap))) : Object.keys(nodesMap),
-                            page: loadMore ? _this3.state[preset].page + 1 : 1,
+                            page: page,
                             moreNodesAvailable: true
                         })));
                     } else {
@@ -791,17 +792,17 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(7);
+var _propTypes = __webpack_require__(8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _plowJs = __webpack_require__(4);
+var _plowJs = __webpack_require__(5);
 
 var _reactUiComponents = __webpack_require__(2);
 
-var _reactRedux = __webpack_require__(5);
+var _reactRedux = __webpack_require__(6);
 
-var _neosUiReduxStore = __webpack_require__(6);
+var _neosUiReduxStore = __webpack_require__(7);
 
 var _neosUiDecorators = __webpack_require__(3);
 
@@ -817,7 +818,7 @@ var _classnames = __webpack_require__(9);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _style = __webpack_require__(8);
+var _style = __webpack_require__(4);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -1030,27 +1031,27 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                 _react2.default.createElement(
                     'div',
                     { className: _style2.default.treeWrapper },
-                    this.renderNodes()
-                ),
-                !this.props.preset.disablePagination && this.props.moreNodesAvailable && _react2.default.createElement(
-                    _reactUiComponents.Button,
-                    {
-                        onClick: function onClick() {
-                            return _this2.props.fetchNodes(true);
+                    this.renderNodes(),
+                    !this.props.preset.disablePagination && this.props.moreNodesAvailable && !this.props.searchTerm && _react2.default.createElement(
+                        _reactUiComponents.Button,
+                        {
+                            onClick: function onClick() {
+                                return _this2.props.fetchNodes(true);
+                            },
+                            style: 'clean',
+                            className: _style2.default.loadMoreButton,
+                            disabled: isLoading
                         },
-                        style: 'clean',
-                        className: _style2.default.loadMoreButton,
-                        disabled: isLoading
-                    },
-                    _react2.default.createElement(
-                        'div',
-                        { style: { textAlign: 'center' } },
-                        _react2.default.createElement(_reactUiComponents.Icon, {
-                            spin: isLoading,
-                            icon: isLoading ? 'spinner' : 'angle-double-down'
-                        }),
-                        '\xA0',
-                        isLoading ? this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loading') : this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loadMore')
+                        _react2.default.createElement(
+                            'div',
+                            { style: { textAlign: 'center' } },
+                            _react2.default.createElement(_reactUiComponents.Icon, {
+                                spin: isLoading,
+                                icon: isLoading ? 'spinner' : 'angle-double-down'
+                            }),
+                            '\xA0',
+                            isLoading ? this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loading') : this.props.i18nRegistry.translate('Psmb.FlatNav:Main:loadMore')
+                        )
                     )
                 )
             );
@@ -1089,19 +1090,19 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(7);
+var _propTypes = __webpack_require__(8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactRedux = __webpack_require__(5);
+var _reactRedux = __webpack_require__(6);
 
 var _neosUiDecorators = __webpack_require__(3);
 
-var _plowJs = __webpack_require__(4);
+var _plowJs = __webpack_require__(5);
 
 var _reactUiComponents = __webpack_require__(2);
 
-var _neosUiReduxStore = __webpack_require__(6);
+var _neosUiReduxStore = __webpack_require__(7);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1205,19 +1206,19 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(7);
+var _propTypes = __webpack_require__(8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactRedux = __webpack_require__(5);
+var _reactRedux = __webpack_require__(6);
 
-var _plowJs = __webpack_require__(4);
+var _plowJs = __webpack_require__(5);
 
 var _neosUiDecorators = __webpack_require__(3);
 
 var _reactUiComponents = __webpack_require__(2);
 
-var _neosUiReduxStore = __webpack_require__(6);
+var _neosUiReduxStore = __webpack_require__(7);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1906,7 +1907,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(7);
+var _propTypes = __webpack_require__(8);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
@@ -1918,7 +1919,7 @@ var _neosUiDecorators = __webpack_require__(3);
 
 var _reactUiComponents = __webpack_require__(2);
 
-var _style = __webpack_require__(8);
+var _style = __webpack_require__(4);
 
 var _style2 = _interopRequireDefault(_style);
 
@@ -2004,7 +2005,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _style = __webpack_require__(8);
+var _style = __webpack_require__(4);
 
 var _style2 = _interopRequireDefault(_style);
 
