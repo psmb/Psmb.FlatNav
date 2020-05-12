@@ -94,7 +94,8 @@ const makeFlatNavContainer = OriginalPageTree => {
 
         makeFetchNodes = preset => (loadMore = false) => {
             const searchTerm = this.state[preset].searchTerm;
-            const url = `/neos/flatnav/query?nodeContextPath=${encodeURIComponent(this.props.siteNodeContextPath)}&preset=${preset}&page=${this.state[preset].page}${searchTerm ? `&searchTerm=${searchTerm}` : ''}`
+            const page = loadMore ? this.state[preset].page + 1 : 1
+            const url = `/neos/flatnav/query?nodeContextPath=${encodeURIComponent(this.props.siteNodeContextPath)}&preset=${preset}&page=${page}${searchTerm ? `&searchTerm=${searchTerm}` : ''}`
             if (this.loadingLock[url]) {
                 return;
             }
@@ -129,7 +130,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                                 ...this.state[preset],
                                 isLoading: false,
                                 nodes: loadMore ? [...this.state[preset].nodes, ...Object.keys(nodesMap)] : Object.keys(nodesMap),
-                                page: loadMore ? this.state[preset].page + 1 : 1,
+                                page,
                                 moreNodesAvailable: true
                             }
                         });
