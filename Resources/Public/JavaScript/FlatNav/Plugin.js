@@ -1032,7 +1032,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                     'div',
                     { className: _style2.default.treeWrapper },
                     this.renderNodes(),
-                    !this.props.preset.disablePagination && this.props.moreNodesAvailable && !this.props.searchTerm && _react2.default.createElement(
+                    (isLoading || !this.props.preset.disablePagination && this.props.moreNodesAvailable && !this.props.searchTerm) && _react2.default.createElement(
                         _reactUiComponents.Button,
                         {
                             onClick: function onClick() {
