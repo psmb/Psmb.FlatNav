@@ -2018,10 +2018,13 @@ var SearchInput = function SearchInput(_ref) {
       searchTerm = _ref.searchTerm,
       placeholder = _ref.placeholder;
 
+  var onEnterKey = function onEnterKey() {
+    return onChange(searchTerm);
+  };
   return _react2.default.createElement(
     'div',
     { className: _style2.default.toolbarSearch },
-    _react2.default.createElement(_reactUiComponents.TextInput, { className: _style2.default.toolbarSearchInput, value: searchTerm, placeholder: placeholder, onChange: onChange, onEnterKey: onChange }),
+    _react2.default.createElement(_reactUiComponents.TextInput, { className: _style2.default.toolbarSearchInput, value: searchTerm, placeholder: placeholder, onChange: onChange, onEnterKey: onEnterKey }),
     searchTerm ? _react2.default.createElement(_reactUiComponents.IconButton, { icon: 'times', onClick: function onClick() {
         return onChange('');
       }, className: _style2.default.toolbarSearchClearButton }) : null
