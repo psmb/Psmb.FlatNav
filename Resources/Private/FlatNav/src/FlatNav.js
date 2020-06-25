@@ -42,25 +42,25 @@ export default class FlatNav extends Component {
     };
 
     componentDidMount() {
-        this.populateTheState();
+        if (
+            // No node paths in state on initial load
+            this.props.nodes.length === 0
+        ) {
+            this.props.fetchNodes();
+            this.props.fetchNewReference();
+        }
         this.props.serverFeedbackHandlers.set('Neos.Neos.Ui:NodeCreated/DocumentAdded', this.handleNodeWasCreated, 'after Neos.Neos.Ui:NodeCreated/Main');
     }
 
     componentDidUpdate() {
-        this.populateTheState();
-    }
-
-    populateTheState = () => {
         if (
-            // No node paths in state
-            this.props.nodes.length === 0 ||
-            // Node data note available for some nodes (e.g. after tree reload)
+            // Node data not available for some nodes (e.g. after tree reload)
             !this.props.nodes.every(contextPath => $get([contextPath], this.props.nodeData))
         ) {
             this.props.fetchNodes();
             this.props.fetchNewReference();
-        } 
-    };
+        }
+    }
 
     handleNodeWasCreated = (feedbackPayload, {store}) => {
         const state = store.getState();
@@ -122,7 +122,7 @@ export default class FlatNav extends Component {
 
     renderNodes = () => {
         if (this.props.searchTerm && !this.props.isLoading &&  this.props.nodes.length === 0) {
-        return <span className={style.toolbarSearchNoResults}>{this.props.i18nRegistry.translate('Psmb.FlatNav:Main:noResults')}</span>
+            return <span className={style.toolbarSearchNoResults}>{this.props.i18nRegistry.translate('Psmb.FlatNav:Main:noResults')}</span>
         }
         return this.props.nodes
             .map(contextPath => {
