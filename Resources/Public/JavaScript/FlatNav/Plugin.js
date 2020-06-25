@@ -874,7 +874,13 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
         }
 
         return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = FlatNav.__proto__ || Object.getPrototypeOf(FlatNav)).call.apply(_ref, [this].concat(args))), _this), _this.populateTheState = function () {
-            if (_this.props.nodes.length === 0) {
+            if (
+            // No node paths in state
+            _this.props.nodes.length === 0 ||
+            // Node data note available for some nodes (e.g. after tree reload)
+            !_this.props.nodes.every(function (contextPath) {
+                return (0, _plowJs.$get)([contextPath], _this.props.nodeData);
+            })) {
                 _this.props.fetchNodes();
                 _this.props.fetchNewReference();
             }
@@ -961,8 +967,8 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
         }
     }, {
         key: 'componentDidUpdate',
-        value: function componentDidUpdate(prevProps) {
-            // this.populateTheState();
+        value: function componentDidUpdate() {
+            this.populateTheState();
         }
     }, {
         key: 'getNodeIconComponent',

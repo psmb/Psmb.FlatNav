@@ -46,15 +46,20 @@ export default class FlatNav extends Component {
         this.props.serverFeedbackHandlers.set('Neos.Neos.Ui:NodeCreated/DocumentAdded', this.handleNodeWasCreated, 'after Neos.Neos.Ui:NodeCreated/Main');
     }
 
-    componentDidUpdate(prevProps) {
-        // this.populateTheState();
+    componentDidUpdate() {
+        this.populateTheState();
     }
 
     populateTheState = () => {
-        if (this.props.nodes.length === 0) {
+        if (
+            // No node paths in state
+            this.props.nodes.length === 0 ||
+            // Node data note available for some nodes (e.g. after tree reload)
+            !this.props.nodes.every(contextPath => $get([contextPath], this.props.nodeData))
+        ) {
             this.props.fetchNodes();
             this.props.fetchNewReference();
-        }
+        } 
     };
 
     handleNodeWasCreated = (feedbackPayload, {store}) => {
