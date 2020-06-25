@@ -119,32 +119,35 @@ const makeFlatNavContainer = OriginalPageTree => {
             }))
                 .then(response => response && response.json())
                 .then(nodes => {
-                    if (nodes.length > 0) {
-                        const nodesMap = nodes.reduce((result, node) => {
-                            result[node.contextPath] = node;
-                            return result;
-                        }, {});
-                        this.props.merge(nodesMap);
-                        this.setState({
-                            [preset]: {
-                                ...this.state[preset],
-                                isLoading: false,
-                                nodes: loadMore ? [...this.state[preset].nodes, ...Object.keys(nodesMap)] : Object.keys(nodesMap),
-                                page,
-                                moreNodesAvailable: true
-                            }
-                        });
-                    } else {
-                        this.setState({
-                            [preset]: {
-                                ...this.state[preset],
-                                isLoading: false,
-                                moreNodesAvailable: false,
-                                nodes: loadMore ? this.state[preset].nodes : [],
-                            }
-                        });
+                    // Ignore the response if the searchTerm has changed while request was running
+                    if (searchTerm === this.state[preset].searchTerm) {
+                        if (nodes.length > 0) {
+                            const nodesMap = nodes.reduce((result, node) => {
+                                result[node.contextPath] = node;
+                                return result;
+                            }, {});
+                            this.props.merge(nodesMap);
+                            this.setState({
+                                [preset]: {
+                                    ...this.state[preset],
+                                    isLoading: false,
+                                    nodes: loadMore ? [...this.state[preset].nodes, ...Object.keys(nodesMap)] : Object.keys(nodesMap),
+                                    page,
+                                    moreNodesAvailable: true
+                                }
+                            });
+                        } else {
+                            this.setState({
+                                [preset]: {
+                                    ...this.state[preset],
+                                    isLoading: false,
+                                    moreNodesAvailable: false,
+                                    nodes: loadMore ? this.state[preset].nodes : [],
+                                }
+                            });
+                        }
+                        this.loadingLock[url] = false;
                     }
-                    this.loadingLock[url] = false;
                 });
         };
 

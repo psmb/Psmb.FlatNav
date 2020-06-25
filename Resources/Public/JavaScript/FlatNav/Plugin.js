@@ -637,26 +637,29 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                 }).then(function (response) {
                     return response && response.json();
                 }).then(function (nodes) {
-                    if (nodes.length > 0) {
-                        var nodesMap = nodes.reduce(function (result, node) {
-                            result[node.contextPath] = node;
-                            return result;
-                        }, {});
-                        _this3.props.merge(nodesMap);
-                        _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
-                            isLoading: false,
-                            nodes: loadMore ? [].concat(_toConsumableArray(_this3.state[preset].nodes), _toConsumableArray(Object.keys(nodesMap))) : Object.keys(nodesMap),
-                            page: page,
-                            moreNodesAvailable: true
-                        })));
-                    } else {
-                        _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
-                            isLoading: false,
-                            moreNodesAvailable: false,
-                            nodes: loadMore ? _this3.state[preset].nodes : []
-                        })));
+                    // Ignore the response if the searchTerm has changed while request was running
+                    if (searchTerm === _this3.state[preset].searchTerm) {
+                        if (nodes.length > 0) {
+                            var nodesMap = nodes.reduce(function (result, node) {
+                                result[node.contextPath] = node;
+                                return result;
+                            }, {});
+                            _this3.props.merge(nodesMap);
+                            _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
+                                isLoading: false,
+                                nodes: loadMore ? [].concat(_toConsumableArray(_this3.state[preset].nodes), _toConsumableArray(Object.keys(nodesMap))) : Object.keys(nodesMap),
+                                page: page,
+                                moreNodesAvailable: true
+                            })));
+                        } else {
+                            _this3.setState(_defineProperty({}, preset, _extends({}, _this3.state[preset], {
+                                isLoading: false,
+                                moreNodesAvailable: false,
+                                nodes: loadMore ? _this3.state[preset].nodes : []
+                            })));
+                        }
+                        _this3.loadingLock[url] = false;
                     }
-                    _this3.loadingLock[url] = false;
                 });
             };
         };
@@ -873,18 +876,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
             args[_key] = arguments[_key];
         }
 
-        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = FlatNav.__proto__ || Object.getPrototypeOf(FlatNav)).call.apply(_ref, [this].concat(args))), _this), _this.populateTheState = function () {
-            if (
-            // No node paths in state
-            _this.props.nodes.length === 0 ||
-            // Node data note available for some nodes (e.g. after tree reload)
-            !_this.props.nodes.every(function (contextPath) {
-                return (0, _plowJs.$get)([contextPath], _this.props.nodeData);
-            })) {
-                _this.props.fetchNodes();
-                _this.props.fetchNewReference();
-            }
-        }, _this.handleNodeWasCreated = function (feedbackPayload, _ref2) {
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = FlatNav.__proto__ || Object.getPrototypeOf(FlatNav)).call.apply(_ref, [this].concat(args))), _this), _this.handleNodeWasCreated = function (feedbackPayload, _ref2) {
             var store = _ref2.store;
 
             var state = store.getState();
@@ -962,13 +954,27 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     _createClass(FlatNav, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            this.populateTheState();
+            if (
+            // No node paths in state on initial load
+            this.props.nodes.length === 0) {
+                this.props.fetchNodes();
+                this.props.fetchNewReference();
+            }
             this.props.serverFeedbackHandlers.set('Neos.Neos.Ui:NodeCreated/DocumentAdded', this.handleNodeWasCreated, 'after Neos.Neos.Ui:NodeCreated/Main');
         }
     }, {
         key: 'componentDidUpdate',
         value: function componentDidUpdate() {
-            this.populateTheState();
+            var _this2 = this;
+
+            if (
+            // Node data not available for some nodes (e.g. after tree reload)
+            !this.props.nodes.every(function (contextPath) {
+                return (0, _plowJs.$get)([contextPath], _this2.props.nodeData);
+            })) {
+                this.props.fetchNodes();
+                this.props.fetchNewReference();
+            }
         }
     }, {
         key: 'getNodeIconComponent',
@@ -1004,7 +1010,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
+            var _this3 = this;
 
             var _props = this.props,
                 focused = _props.focused,
@@ -1042,7 +1048,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                         _reactUiComponents.Button,
                         {
                             onClick: function onClick() {
-                                return _this2.props.fetchNodes(true);
+                                return _this3.props.fetchNodes(true);
                             },
                             style: 'clean',
                             className: _style2.default.loadMoreButton,
