@@ -849,13 +849,34 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
         serverFeedbackHandlers: globalRegistry.get('serverFeedbackHandlers'),
         i18nRegistry: globalRegistry.get('i18n')
     };
-}), _dec2 = (0, _reactRedux.connect)((0, _plowJs.$transform)({
-    nodeData: (0, _plowJs.$get)('cr.nodes.byContextPath'),
-    focused: (0, _plowJs.$get)('ui.pageTree.isFocused'),
-    siteNodeContextPath: (0, _plowJs.$get)('cr.nodes.siteNode'),
-    baseWorkspaceName: (0, _plowJs.$get)('cr.workspaces.personalWorkspace.baseWorkspace'),
-    publishableNodes: (0, _plowJs.$get)('cr.workspaces.personalWorkspace.publishableNodes')
-}), {
+}), _dec2 = (0, _reactRedux.connect)(function (state, _ref) {
+    var nodeTypesRegistry = _ref.nodeTypesRegistry;
+
+    var isAllowedToAddChildOrSiblingNodesSelector = _neosUiReduxStore.selectors.CR.Nodes.makeIsAllowedToAddChildOrSiblingNodes(nodeTypesRegistry);
+    return function (state, _ref2) {
+        var newReferenceNodePath = _ref2.newReferenceNodePath;
+
+        var focusedNodeContextPath = _neosUiReduxStore.selectors.UI.PageTree.getFocused(state);
+        var getNodeByContextPathSelector = _neosUiReduxStore.selectors.CR.Nodes.makeGetNodeByContextPathSelector(focusedNodeContextPath);
+        var focusedNode = getNodeByContextPathSelector(state);
+        var canBeDeleted = (0, _plowJs.$get)('policy.canRemove', focusedNode) || false;
+        var canBeEdited = (0, _plowJs.$get)('policy.canEdit', focusedNode) || false;
+        var context = focusedNodeContextPath.split('@')[1];
+        var isAllowedToAddChildOrSiblingNodes = isAllowedToAddChildOrSiblingNodesSelector(state, {
+            reference: newReferenceNodePath + '@' + context
+        });
+        return {
+            nodeData: (0, _plowJs.$get)('cr.nodes.byContextPath', state),
+            focused: (0, _plowJs.$get)('ui.pageTree.isFocused', state),
+            siteNodeContextPath: (0, _plowJs.$get)('cr.nodes.siteNode', state),
+            baseWorkspaceName: (0, _plowJs.$get)('cr.workspaces.personalWorkspace.baseWorkspace', state),
+            publishableNodes: (0, _plowJs.$get)('cr.workspaces.personalWorkspace.publishableNodes', state),
+            isAllowedToAddChildOrSiblingNodes: isAllowedToAddChildOrSiblingNodes,
+            canBeDeleted: canBeDeleted,
+            canBeEdited: canBeEdited
+        };
+    };
+}, {
     setSrc: _neosUiReduxStore.actions.UI.ContentCanvas.setSrc,
     focus: _neosUiReduxStore.actions.UI.PageTree.focus,
     openNodeCreationDialog: _neosUiReduxStore.actions.UI.NodeCreationDialog.open,
@@ -866,7 +887,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
     _inherits(FlatNav, _Component);
 
     function FlatNav() {
-        var _ref;
+        var _ref3;
 
         var _temp, _this, _ret;
 
@@ -876,8 +897,8 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
             args[_key] = arguments[_key];
         }
 
-        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = FlatNav.__proto__ || Object.getPrototypeOf(FlatNav)).call.apply(_ref, [this].concat(args))), _this), _this.handleNodeWasCreated = function (feedbackPayload, _ref2) {
-            var store = _ref2.store;
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref3 = FlatNav.__proto__ || Object.getPrototypeOf(FlatNav)).call.apply(_ref3, [this].concat(args))), _this), _this.handleNodeWasCreated = function (feedbackPayload, _ref4) {
+            var store = _ref4.store;
 
             var state = store.getState();
 
@@ -1017,7 +1038,10 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                 nodes = _props.nodes,
                 isLoadingReferenceNodePath = _props.isLoadingReferenceNodePath,
                 isLoading = _props.isLoading,
-                preset = _props.preset;
+                preset = _props.preset,
+                isAllowedToAddChildOrSiblingNodes = _props.isAllowedToAddChildOrSiblingNodes,
+                canBeDeleted = _props.canBeDeleted,
+                canBeEdited = _props.canBeEdited;
 
 
             var focusedInNodes = nodes.includes(focused);
@@ -1033,9 +1057,9 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                     _react2.default.createElement(
                         'div',
                         { className: _style2.default.toolbarButtons },
-                        _react2.default.createElement(_reactUiComponents.IconButton, { icon: 'plus', disabled: isLoadingReferenceNodePath, onClick: this.createNode }),
-                        _react2.default.createElement(_HideSelectedNode2.default, { disabled: !focusedInNodes }),
-                        _react2.default.createElement(_DeleteSelectedNode2.default, { disabled: !focusedInNodes }),
+                        _react2.default.createElement(_reactUiComponents.IconButton, { icon: 'plus', disabled: isLoadingReferenceNodePath || !isAllowedToAddChildOrSiblingNodes, onClick: this.createNode }),
+                        _react2.default.createElement(_HideSelectedNode2.default, { disabled: !focusedInNodes || !canBeEdited }),
+                        _react2.default.createElement(_DeleteSelectedNode2.default, { disabled: !focusedInNodes || !canBeDeleted || !canBeEdited }),
                         _react2.default.createElement(_RefreshNodes2.default, { disabled: isLoading || isLoadingReferenceNodePath, onClick: this.refreshFlatNav })
                     ),
                     searchEnabled && _react2.default.createElement(_SearchInput2.default, { searchTerm: this.props.searchTerm, onChange: this.props.setSearchTerm, placeholder: this.props.i18nRegistry.translate('Psmb.FlatNav:Main:search') })

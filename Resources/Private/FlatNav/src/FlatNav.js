@@ -16,13 +16,32 @@ import SearchInput from "./SearchInput";
     serverFeedbackHandlers: globalRegistry.get('serverFeedbackHandlers'),
     i18nRegistry: globalRegistry.get('i18n')
 }))
-@connect($transform({
-    nodeData: $get('cr.nodes.byContextPath'),
-    focused: $get('ui.pageTree.isFocused'),
-    siteNodeContextPath: $get('cr.nodes.siteNode'),
-    baseWorkspaceName: $get('cr.workspaces.personalWorkspace.baseWorkspace'),
-    publishableNodes: $get('cr.workspaces.personalWorkspace.publishableNodes')
-}), {
+@connect(
+    (state, {nodeTypesRegistry}) => {
+        const isAllowedToAddChildOrSiblingNodesSelector = selectors.CR.Nodes.makeIsAllowedToAddChildOrSiblingNodes(nodeTypesRegistry);
+        return (state, {newReferenceNodePath}) => {
+            const focusedNodeContextPath = selectors.UI.PageTree.getFocused(state);
+            const getNodeByContextPathSelector = selectors.CR.Nodes.makeGetNodeByContextPathSelector(focusedNodeContextPath);
+            const focusedNode = getNodeByContextPathSelector(state);
+            const canBeDeleted = $get('policy.canRemove', focusedNode) || false;
+            const canBeEdited = $get('policy.canEdit', focusedNode) || false;
+            const context = focusedNodeContextPath.split('@')[1];
+            const isAllowedToAddChildOrSiblingNodes = isAllowedToAddChildOrSiblingNodesSelector(state, {
+                reference: newReferenceNodePath + '@' + context
+            });
+            return {
+                nodeData: $get('cr.nodes.byContextPath', state),
+                focused: $get('ui.pageTree.isFocused', state),
+                siteNodeContextPath: $get('cr.nodes.siteNode', state),
+                baseWorkspaceName: $get('cr.workspaces.personalWorkspace.baseWorkspace', state),
+                publishableNodes: $get('cr.workspaces.personalWorkspace.publishableNodes', state),
+                isAllowedToAddChildOrSiblingNodes,
+                canBeDeleted,
+                canBeEdited
+            }
+        }
+    }
+, {
     setSrc: actions.UI.ContentCanvas.setSrc,
     focus: actions.UI.PageTree.focus,
     openNodeCreationDialog: actions.UI.NodeCreationDialog.open,
@@ -170,7 +189,7 @@ export default class FlatNav extends Component {
     };
 
     render() {
-        const {focused, nodes, isLoadingReferenceNodePath, isLoading, preset} = this.props;
+        const {focused, nodes, isLoadingReferenceNodePath, isLoading, preset, isAllowedToAddChildOrSiblingNodes, canBeDeleted, canBeEdited} = this.props;
 
         const focusedInNodes = nodes.includes(focused);
 
@@ -180,9 +199,9 @@ export default class FlatNav extends Component {
             <div className={style.pageTreeContainer}>
                 <div className={style.toolbar}>
                     <div className={style.toolbarButtons}>
-                        <IconButton icon="plus" disabled={isLoadingReferenceNodePath} onClick={this.createNode}/>
-                        <HideSelectedNode disabled={!focusedInNodes}/>
-                        <DeleteSelectedNode disabled={!focusedInNodes}/>
+                        <IconButton icon="plus" disabled={isLoadingReferenceNodePath || !isAllowedToAddChildOrSiblingNodes} onClick={this.createNode}/>
+                        <HideSelectedNode disabled={!focusedInNodes || !canBeEdited}/>
+                        <DeleteSelectedNode disabled={!focusedInNodes || !canBeDeleted || !canBeEdited}/>
                         <RefreshNodes disabled={isLoading || isLoadingReferenceNodePath} onClick={this.refreshFlatNav}/>
                     </div>
                     {searchEnabled && <SearchInput searchTerm={this.props.searchTerm} onChange={this.props.setSearchTerm} placeholder={this.props.i18nRegistry.translate('Psmb.FlatNav:Main:search')}/>}
