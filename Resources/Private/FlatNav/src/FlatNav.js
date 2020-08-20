@@ -31,8 +31,8 @@ import SearchInput from "./SearchInput";
             });
             return {
                 nodeData: $get('cr.nodes.byContextPath', state),
-                focused: $get('ui.pageTree.isFocused', state),
-                siteNodeContextPath: $get('cr.nodes.siteNode', state),
+                focused: selectors.CR.Nodes.focusedNodePathSelector(state),
+                siteNodeContextPath: selectors.CR.Nodes.siteNodeContextPathSelector(state),
                 baseWorkspaceName: $get('cr.workspaces.personalWorkspace.baseWorkspace', state),
                 publishableNodes: $get('cr.workspaces.personalWorkspace.publishableNodes', state),
                 isAllowedToAddChildOrSiblingNodes,
@@ -149,6 +149,7 @@ export default class FlatNav extends Component {
 
                 if (item) {
                     const isFocused = this.props.focused === contextPath;
+                    console.log(this.props.focused, contextPath)
                     const isDirty = this.props.publishableNodes.filter(i => (
                         $get('contextPath', i) === contextPath ||
                         $get('documentContextPath', i) === contextPath

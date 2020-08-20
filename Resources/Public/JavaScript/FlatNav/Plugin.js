@@ -867,8 +867,8 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
         });
         return {
             nodeData: (0, _plowJs.$get)('cr.nodes.byContextPath', state),
-            focused: (0, _plowJs.$get)('ui.pageTree.isFocused', state),
-            siteNodeContextPath: (0, _plowJs.$get)('cr.nodes.siteNode', state),
+            focused: _neosUiReduxStore.selectors.CR.Nodes.focusedNodePathSelector(state),
+            siteNodeContextPath: _neosUiReduxStore.selectors.CR.Nodes.siteNodeContextPathSelector(state),
             baseWorkspaceName: (0, _plowJs.$get)('cr.workspaces.personalWorkspace.baseWorkspace', state),
             publishableNodes: (0, _plowJs.$get)('cr.workspaces.personalWorkspace.publishableNodes', state),
             isAllowedToAddChildOrSiblingNodes: isAllowedToAddChildOrSiblingNodes,
@@ -932,6 +932,7 @@ var FlatNav = (_dec = (0, _neosUiDecorators.neos)(function (globalRegistry) {
                     var _mergeClassNames;
 
                     var isFocused = _this.props.focused === contextPath;
+                    console.log(_this.props.focused, contextPath);
                     var isDirty = _this.props.publishableNodes.filter(function (i) {
                         return (0, _plowJs.$get)('contextPath', i) === contextPath || (0, _plowJs.$get)('documentContextPath', i) === contextPath;
                     }).length > 0;
