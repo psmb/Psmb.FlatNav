@@ -52,16 +52,20 @@ const makeFlatNavContainer = OriginalPageTree => {
 
         buildDefaultState = props => {
             const state = {};
-            Object.keys(props.options.presets).forEach(preset => {
+            Object.keys(props.options.presets).forEach(presetName => {
+                const preset = props.options.presets[presetName];
+                if (!presetName) {
+                    return null;
+                }
                 let newReferenceNodePath;
                 // If `newReferenceNodePath` is static, append context to it, otherwise set to empty, as it would be fetched later
-                const newReferenceNodePathSetting = $get(['options', 'presets', preset, 'newReferenceNodePath'], props);
+                const newReferenceNodePathSetting = $get(['options', 'presets', presetName, 'newReferenceNodePath'], props);
                 if (typeof newReferenceNodePathSetting === 'string' && newReferenceNodePathSetting.indexOf('/') === 0) {
-                    newReferenceNodePath = props.options.presets[preset].newReferenceNodePath;
+                    newReferenceNodePath = preset.newReferenceNodePath;
                 } else {
                     newReferenceNodePath = '';
                 }
-                state[preset] = {
+                state[presetName] = {
                     page: 1,
                     isLoading: false,
                     isLoadingReferenceNodePath: false,
@@ -234,6 +238,9 @@ const makeFlatNavContainer = OriginalPageTree => {
                 }}>
                     {Object.keys(this.props.options.presets).map(presetName => {
                         const preset = this.props.options.presets[presetName];
+                        if (!preset) {
+                            return null;
+                        }
                         const fetchNodes = this.makeFetchNodes(presetName)
                         const resetNodes = this.makeResetNodes(presetName, fetchNodes)
                         const debouncedFetchNodes = debounce(fetchNodes, 400);
@@ -255,7 +262,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                                 {preset.type === 'tree' && (<OriginalPageTree />)}
                             </Tabs.Panel>
                         );
-                    })}
+                    }).filter(Boolean)}
                 </Tabs>
             );
         }
