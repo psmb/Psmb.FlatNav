@@ -538,6 +538,9 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                         } },
                     Object.keys(this.props.options.presets).map(function (presetName) {
                         var preset = _this2.props.options.presets[presetName];
+                        if (!preset) {
+                            return null;
+                        }
                         var fetchNodes = _this2.makeFetchNodes(presetName);
                         var resetNodes = _this2.makeResetNodes(presetName, fetchNodes);
                         var debouncedFetchNodes = (0, _lodash2.default)(fetchNodes, 400);
@@ -558,7 +561,7 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                             }, _this2.state[presetName])),
                             preset.type === 'tree' && _react2.default.createElement(OriginalPageTree, null)
                         );
-                    })
+                    }).filter(Boolean)
                 );
             }
         }]);
@@ -571,16 +574,20 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
 
         this.buildDefaultState = function (props) {
             var state = {};
-            Object.keys(props.options.presets).forEach(function (preset) {
+            Object.keys(props.options.presets).forEach(function (presetName) {
+                var preset = props.options.presets[presetName];
+                if (!presetName) {
+                    return null;
+                }
                 var newReferenceNodePath = void 0;
                 // If `newReferenceNodePath` is static, append context to it, otherwise set to empty, as it would be fetched later
-                var newReferenceNodePathSetting = (0, _plowJs.$get)(['options', 'presets', preset, 'newReferenceNodePath'], props);
+                var newReferenceNodePathSetting = (0, _plowJs.$get)(['options', 'presets', presetName, 'newReferenceNodePath'], props);
                 if (typeof newReferenceNodePathSetting === 'string' && newReferenceNodePathSetting.indexOf('/') === 0) {
-                    newReferenceNodePath = props.options.presets[preset].newReferenceNodePath;
+                    newReferenceNodePath = preset.newReferenceNodePath;
                 } else {
                     newReferenceNodePath = '';
                 }
-                state[preset] = {
+                state[presetName] = {
                     page: 1,
                     isLoading: false,
                     isLoadingReferenceNodePath: false,
