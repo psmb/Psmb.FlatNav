@@ -241,6 +241,9 @@ const makeFlatNavContainer = OriginalPageTree => {
                         if (!preset) {
                             return null;
                         }
+                        if (preset.disabled) {
+                            return null;
+                        }
                         const fetchNodes = this.makeFetchNodes(presetName)
                         const resetNodes = this.makeResetNodes(presetName, fetchNodes)
                         const debouncedFetchNodes = debounce(fetchNodes, 400);
