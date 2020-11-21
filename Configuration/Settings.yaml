@@ -27,6 +27,8 @@ Neos:
             #   # If now `newNodeType` is defined, then the nodetype selection dialog would be shown
             #   newNodeType: 'Your.Namespace:News'
             #   disablePagination: false
+            #   # Disable this preset for non-admins
+            #   disabled: '${!Security.hasRole("Neos.Neos:Administrator")}'
             ## Example without pagination
             # newsWithoutPagination:
             #   label: News

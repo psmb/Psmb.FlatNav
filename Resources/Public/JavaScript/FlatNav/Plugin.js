@@ -541,6 +541,9 @@ var makeFlatNavContainer = function makeFlatNavContainer(OriginalPageTree) {
                         if (!preset) {
                             return null;
                         }
+                        if (preset.disabled) {
+                            return null;
+                        }
                         var fetchNodes = _this2.makeFetchNodes(presetName);
                         var resetNodes = _this2.makeResetNodes(presetName, fetchNodes);
                         var debouncedFetchNodes = (0, _lodash2.default)(fetchNodes, 400);
