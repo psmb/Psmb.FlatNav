@@ -4,7 +4,7 @@ privilegeTargets:
       matcher: 'method(Psmb\FlatNav\Controller\StandardController->(.*)Action())'
 
 roles:
-  'Neos.Neos:Editor':
+  'Neos.Neos:AbstractEditor':
     privileges:
       -
         privilegeTarget: 'Psmb.FlatNav:Backend'
