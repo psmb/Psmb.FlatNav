@@ -149,7 +149,6 @@ export default class FlatNav extends Component {
 
                 if (item) {
                     const isFocused = this.props.focused === contextPath;
-                    console.log(this.props.focused, contextPath)
                     const isDirty = this.props.publishableNodes.filter(i => (
                         $get('contextPath', i) === contextPath ||
                         $get('documentContextPath', i) === contextPath
