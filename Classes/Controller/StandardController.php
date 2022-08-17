@@ -36,7 +36,7 @@ class StandardController extends ActionController
     protected $defaultContextConfiguration;
 
     /**
-     * @Flow\Inject
+     * @Flow\Inject(lazy=false)
      * @var \Neos\Eel\EelEvaluatorInterface
      */
     protected $eelEvaluator;
@@ -74,7 +74,7 @@ class StandardController extends ActionController
                 'page' => $page
             ];
         }
-        
+
         $nodes = Utility::evaluateEelExpression($expression, $this->eelEvaluator, $contextVariables, $this->defaultContextConfiguration);
         $nodeInfoHelper = new NodeInfoHelper();
 
