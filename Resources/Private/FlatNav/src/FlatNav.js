@@ -7,7 +7,7 @@ import {neos} from '@neos-project/neos-ui-decorators';
 import HideSelectedNode from './HideSelectedNode';
 import DeleteSelectedNode from './DeleteSelectedNode';
 import mergeClassNames from 'classnames';
-import style from './style.modules.css';
+import style from './style.module.css';
 import RefreshNodes from "./RefreshNodes";
 import SearchInput from "./SearchInput";
 @neos(globalRegistry => ({

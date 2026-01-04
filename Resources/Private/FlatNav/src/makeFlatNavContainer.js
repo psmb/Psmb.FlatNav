@@ -6,7 +6,7 @@ import {neos} from '@neos-project/neos-ui-decorators';
 import {fetchWithErrorHandling} from '@neos-project/neos-ui-backend-connector';
 import backend from '@neos-project/neos-ui-backend-connector';
 import FlatNav from './FlatNav';
-import style from './style.modules.css';
+import style from './style.module.css';
 import debounce from './Helper/debounce';
 
 // Taken from here, as it's not exported in the UI

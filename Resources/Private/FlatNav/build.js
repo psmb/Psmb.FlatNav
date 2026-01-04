@@ -1,5 +1,4 @@
 const esbuild = require('esbuild');
-const CssModulesPlugin = require('esbuild-css-modules-plugin');
 const extensibilityMap = require('@neos-project/neos-ui-extensibility/extensibilityMap.json');
 const isWatch = process.argv.includes('--watch');
 
@@ -7,23 +6,14 @@ const isWatch = process.argv.includes('--watch');
 const options = {
     logLevel: 'info',
     bundle: true,
+		minify: !isWatch,
     target: 'es2020',
     entryPoints: {Plugin: 'src/index.js'},
     loader: {
-        '.js': 'tsx',
-        '.css': 'css'
+        '.js': 'tsx'
     },
     outdir: '../../Public/JavaScript/FlatNav',
-    alias: extensibilityMap,
-    plugins: [
-        CssModulesPlugin({
-            force: true,
-            emitDeclarationFile: true,
-            localsConvention: 'camelCaseOnly',
-            namedExports: true,
-            inject: false
-        })
-    ]
+    alias: extensibilityMap
 };
 
 if (isWatch) {

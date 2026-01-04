@@ -7,7 +7,7 @@
   },
   "devDependencies": {
     "@neos-project/neos-ui-extensibility": "^8.3.0",
-    "esbuild": "^0.17.0",
-    "esbuild-css-modules-plugin": "^3.1.2"
-  }
+    "esbuild": "~0.27.0"
+  },
+  "packageManager": "yarn@3.2.0"
 }

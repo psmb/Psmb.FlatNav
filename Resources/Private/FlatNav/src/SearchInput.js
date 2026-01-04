@@ -1,5 +1,5 @@
 import React from 'react'
-import style from './style.modules.css';
+import style from './style.module.css';
 import {IconButton, TextInput} from '@neos-project/react-ui-components';
 
 const SearchInput = ({onChange, searchTerm, placeholder}) => {

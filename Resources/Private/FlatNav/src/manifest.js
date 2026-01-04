@@ -1,7 +1,7 @@
 import React from 'react';
 import manifest from '@neos-project/neos-ui-extensibility';
 import makeFlatNavContainer from './makeFlatNavContainer';
-import style from './style.modules.css';
+import style from './style.module.css';
 
 manifest('Psmb.FlatNav:FlatNav', {}, globalRegistry => {
     const containerRegistry = globalRegistry.get('containers');
@@ -10,7 +10,7 @@ manifest('Psmb.FlatNav:FlatNav', {}, globalRegistry => {
     const PageTree = containerRegistry.get('LeftSideBar/Top/PageTree');
 
     const OriginalTree = () => (
-        <div className={style.pageTreeContainerOriginal}>
+        <div>
             <div className={style.pageTreeToolbarOriginal}>
                 <PageTreeToolbar/>
             </div>
