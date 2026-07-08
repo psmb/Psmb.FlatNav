@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {$get, $transform} from 'plow-js';
 import {Tabs} from '@neos-project/react-ui-components';
 import {connect} from 'react-redux';
 import {actions} from '@neos-project/neos-ui-redux-store';
@@ -7,8 +6,8 @@ import {neos} from '@neos-project/neos-ui-decorators';
 import {fetchWithErrorHandling} from '@neos-project/neos-ui-backend-connector';
 import backend from '@neos-project/neos-ui-backend-connector';
 import FlatNav from './FlatNav';
-import style from './style.css';
-import debounce from 'lodash.debounce';
+import style from './style.module.css';
+import debounce from './Helper/debounce';
 
 // Taken from here, as it's not exported in the UI
 // https://github.com/neos/neos-ui/blob/b2a52d66a211b192dfc541799779a8be27bf5a31/packages/neos-ui-sagas/src/CR/NodeOperations/helpers.js#L3
@@ -59,7 +58,7 @@ const makeFlatNavContainer = OriginalPageTree => {
                 }
                 let newReferenceNodePath;
                 // If `newReferenceNodePath` is static, append context to it, otherwise set to empty, as it would be fetched later
-                const newReferenceNodePathSetting = $get(['options', 'presets', presetName, 'newReferenceNodePath'], props);
+                const newReferenceNodePathSetting = props?.options?.presets?.[presetName]?.newReferenceNodePath;
                 if (typeof newReferenceNodePathSetting === 'string' && newReferenceNodePathSetting.indexOf('/') === 0) {
                     newReferenceNodePath = preset.newReferenceNodePath;
                 } else {
@@ -216,12 +215,12 @@ const makeFlatNavContainer = OriginalPageTree => {
             let parentContextPath = contextPath;
 
             while (parentContextPath !== siteNodeContextPath) {
-                const node = $get([parentContextPath], this.props.nodeData);
+                const node = this.props.nodeData?.[parentContextPath];
                 // If the given node is not in the state, load it
                 if (!node) {
                     q(parentContextPath).get().then(nodes => {
                         this.props.merge(nodes.reduce((nodeMap, node) => {
-                            nodeMap[$get('contextPath', node)] = node;
+                            nodeMap[node?.contextPath] = node;
                             return nodeMap;
                         }, {}));
                     });
@@ -233,8 +232,8 @@ const makeFlatNavContainer = OriginalPageTree => {
         render() {
             return (
                 <Tabs theme={{
-                    tabs__content: style.tabs__content,
-                    tabs__panel: style.tabs__panel
+                    tabs__content: style.tabsContent,
+                    tabs__panel: style.tabsPanel
                 }}>
                     {Object.keys(this.props.options.presets).map(presetName => {
                         const preset = this.props.options.presets[presetName];
@@ -273,9 +272,9 @@ const makeFlatNavContainer = OriginalPageTree => {
     return neos(globalRegistry => ({
         options: globalRegistry.get('frontendConfiguration').get('Psmb_FlatNav'),
         i18nRegistry: globalRegistry.get('i18n')
-    }))(connect($transform({
-        siteNodeContextPath: $get('cr.nodes.siteNode'),
-        baseWorkspaceName: $get('cr.workspaces.personalWorkspace.baseWorkspace')
+    }))(connect(state => ({
+        siteNodeContextPath: state?.cr?.nodes?.siteNode,
+        baseWorkspaceName: state?.cr?.workspaces?.personalWorkspace?.baseWorkspace
     }), {
         merge: actions.CR.Nodes.merge
     })(FlatNavContainer));

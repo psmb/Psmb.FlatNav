@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {$get, $transform} from 'plow-js';
 import {Button, Icon, IconButton, TextInput} from '@neos-project/react-ui-components';
 import {connect} from 'react-redux';
 import {actions, selectors} from '@neos-project/neos-ui-redux-store';
@@ -8,7 +7,7 @@ import {neos} from '@neos-project/neos-ui-decorators';
 import HideSelectedNode from './HideSelectedNode';
 import DeleteSelectedNode from './DeleteSelectedNode';
 import mergeClassNames from 'classnames';
-import style from './style.css';
+import style from './style.module.css';
 import RefreshNodes from "./RefreshNodes";
 import SearchInput from "./SearchInput";
 @neos(globalRegistry => ({
@@ -23,18 +22,18 @@ import SearchInput from "./SearchInput";
             const focusedNodeContextPath = selectors.UI.PageTree.getFocused(state);
             const getNodeByContextPathSelector = selectors.CR.Nodes.makeGetNodeByContextPathSelector(focusedNodeContextPath);
             const focusedNode = getNodeByContextPathSelector(state);
-            const canBeDeleted = $get('policy.canRemove', focusedNode) || false;
-            const canBeEdited = $get('policy.canEdit', focusedNode) || false;
+            const canBeDeleted = focusedNode?.policy?.canRemove || false;
+            const canBeEdited = focusedNode?.policy?.canEdit || false;
             const context = focusedNodeContextPath.split('@')[1];
             const isAllowedToAddChildOrSiblingNodes = isAllowedToAddChildOrSiblingNodesSelector(state, {
                 reference: newReferenceNodePath + '@' + context
             });
             return {
-                nodeData: $get('cr.nodes.byContextPath', state),
+                nodeData: state?.cr?.nodes?.byContextPath,
                 focused: selectors.CR.Nodes.focusedNodePathSelector(state),
                 siteNodeContextPath: selectors.CR.Nodes.siteNodeContextPathSelector(state),
-                baseWorkspaceName: $get('cr.workspaces.personalWorkspace.baseWorkspace', state),
-                publishableNodes: $get('cr.workspaces.personalWorkspace.publishableNodes', state),
+                baseWorkspaceName: state?.cr?.workspaces?.personalWorkspace?.baseWorkspace,
+                publishableNodes: state?.cr?.workspaces?.personalWorkspace?.publishableNodes,
                 isAllowedToAddChildOrSiblingNodes,
                 canBeDeleted,
                 canBeEdited
@@ -74,7 +73,7 @@ export default class FlatNav extends Component {
     componentDidUpdate() {
         if (
             // Node data not available for some nodes (e.g. after tree reload)
-            !this.props.nodes.every(contextPath => $get([contextPath], this.props.nodeData))
+            !this.props.nodes.every(contextPath => this.props.nodeData?.[contextPath])
         ) {
             this.props.fetchNodes();
             this.props.fetchNewReference();
@@ -86,7 +85,7 @@ export default class FlatNav extends Component {
 
         const getNodeByContextPathSelector = selectors.CR.Nodes.makeGetNodeByContextPathSelector(feedbackPayload.contextPath);
         const node = getNodeByContextPathSelector(state);
-        const nodeTypeName = $get('nodeType', node);
+        const nodeTypeName = node?.nodeType;
 
         if (nodeTypeName === this.props.preset.newNodeType) {
             this.refreshFlatNav();
@@ -108,16 +107,17 @@ export default class FlatNav extends Component {
     }
 
     getNodeIconComponent(node) {
-        const nodeTypeName = $get('nodeType', node);
+        const nodeTypeName = node?.nodeType;
         const nodeType = this.props.nodeTypesRegistry.getNodeType(nodeTypeName);
-        const isHidden = $get('properties._hidden', node);
-        const isHiddenBefore = $get('properties._hiddenBeforeDateTime', node);
-        const isHiddenAfter = $get('properties._hiddenAfterDateTime', node);
+        const isHidden = node?.properties?._hidden;
+        const isHiddenBefore = node?.properties?._hiddenBeforeDateTime;
+        const isHiddenAfter = node?.properties?._hiddenAfterDateTime;
+        const nodeTypeIcon = nodeType?.ui?.icon;
 
         if (isHidden) {
             return (
                 <span className="fa-layers fa-fw">
-                    <Icon icon={$get('ui.icon', nodeType)} />
+                    <Icon icon={nodeTypeIcon} className={style.baseIcon} />
                     <Icon icon="circle" color="error" transform="shrink-3 down-6 right-4" />
                     <Icon icon="times" transform="shrink-7 down-6 right-4" />
                 </span>
@@ -127,7 +127,7 @@ export default class FlatNav extends Component {
         if (isHiddenBefore || isHiddenAfter) {
             return (
                 <span className="fa-layers fa-fw">
-                    <Icon icon={$get('ui.icon', nodeType)} />
+                    <Icon icon={nodeTypeIcon} className={style.baseIcon} />
                     <Icon icon="circle" color="primaryBlue" transform="shrink-5 down-6 right-4" />
                     <Icon icon="clock" transform="shrink-9 down-6 right-4" />
                 </span>
@@ -135,7 +135,7 @@ export default class FlatNav extends Component {
         }
 
         return (
-            <Icon icon={$get('ui.icon', nodeType)} />
+            <Icon icon={nodeTypeIcon} className={style.baseIcon} />
         );
     }
 
@@ -145,41 +145,42 @@ export default class FlatNav extends Component {
         }
         return this.props.nodes
             .map(contextPath => {
-                const item = $get([contextPath], this.props.nodeData);
+                const item = this.props.nodeData?.[contextPath];
 
                 if (item) {
                     const isFocused = this.props.focused === contextPath;
                     const isDirty = this.props.publishableNodes.filter(i => (
-                        $get('contextPath', i) === contextPath ||
-                        $get('documentContextPath', i) === contextPath
+                        i?.contextPath === contextPath ||
+                        i?.documentContextPath === contextPath
                     )).length > 0;
-                    const isRemoved = $get('properties._removed', item);
+                    const isRemoved = item?.properties?._removed;
                     const nodeIconComponent = this.getNodeIconComponent(item);
+                    const nodeItemClassNames = mergeClassNames({
+                        [style.node]: true,
+                        [style.nodeFocused]: isFocused,
+                        [style.nodeDirty]: isDirty,
+                        [style.nodeRemoved]: isRemoved
+                    })
 
                     return (
                         <div
-                            className={mergeClassNames({
-                                [style.node]: true,
-                                [style['node--focused']]: isFocused,
-                                [style['node--dirty']]: isDirty,
-                                [style['node--removed']]: isRemoved
-                            })}
+                            className={nodeItemClassNames}
                             key={contextPath}
                             onClick={() => {
                                 if ( ! isRemoved) {
-                                    this.props.setSrc($get('uri', item));
+                                    this.props.setSrc(item?.uri);
                                     this.props.focus(contextPath);
                                 }
                             }}
                             role="button"
                             >
                             <div
-                                className={style.node__iconWrapper}>
+                                className={style.nodeIconWrapper}>
                                 {nodeIconComponent}
                             </div>
                             <span
-                                className={style.node__label}>
-                                {$get('label', item)}
+                                className={style.nodeLabel}>
+                                {item?.label}
                             </span>
                         </div>
                     );

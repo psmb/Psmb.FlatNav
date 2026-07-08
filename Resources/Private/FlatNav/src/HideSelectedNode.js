@@ -2,7 +2,6 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {neos} from '@neos-project/neos-ui-decorators';
-import {$transform, $get} from 'plow-js';
 import {IconButton} from '@neos-project/react-ui-components';
 
 import {selectors, actions} from '@neos-project/neos-ui-redux-store';
@@ -10,8 +9,8 @@ import {selectors, actions} from '@neos-project/neos-ui-redux-store';
 @neos(globalRegistry => ({
     i18nRegistry: globalRegistry.get('i18n')
 }))
-@connect($transform({
-    node: selectors.CR.Nodes.focusedSelector
+@connect(state => ({
+    node: selectors.CR.Nodes.focusedSelector(state)
 }), {
     hideNode: actions.CR.Nodes.hide,
     showNode: actions.CR.Nodes.show
@@ -29,18 +28,18 @@ export default class HideSelectedNode extends PureComponent {
     handleHideNode = () => {
         const {node, hideNode} = this.props;
 
-        hideNode($get('contextPath', node));
+        hideNode(node?.contextPath);
     }
 
     handleShowNode = () => {
         const {node, showNode} = this.props;
 
-        showNode($get('contextPath', node));
+        showNode(node?.contextPath);
     }
 
     render() {
         const {className, disabled, node, i18nRegistry} = this.props;
-        const isHidden = $get('properties._hidden', node);
+        const isHidden = node?.properties?._hidden;
 
         return (
             <IconButton

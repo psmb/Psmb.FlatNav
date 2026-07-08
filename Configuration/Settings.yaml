@@ -10,6 +10,9 @@ Neos:
         javascript:
           'Psmb.FlatNav:FlatNav':
             resource: resource://Psmb.FlatNav/Public/JavaScript/FlatNav/Plugin.js
+        stylesheets:
+          'Psmb.FlatNav:FlatNav':
+              resource: resource://Psmb.FlatNav/Public/JavaScript/FlatNav/Plugin.css
       frontendConfiguration:
         Psmb_FlatNav:
           presets:
