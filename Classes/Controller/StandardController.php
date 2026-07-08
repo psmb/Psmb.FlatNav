@@ -101,8 +101,6 @@ class StandardController extends ActionController
             throw new \Exception('Invalid preset name', 1660762934);
         }
 
-        $baseNode = $this->nodeService->getNodeFromContextPath($nodeContextPath, null, null, true);
-
         if(isset($this->presets[$preset]['newReferenceNodePath'])) {
             $expression = '${' . $this->presets[$preset]['newReferenceNodePath'] . '}';
             $baseNode = $this->nodeService->getNodeFromContextPath($nodeContextPath, null, null, true);
@@ -112,7 +110,7 @@ class StandardController extends ActionController
             ];
             $newReferenceNodePath = Utility::evaluateEelExpression($expression, $this->eelEvaluator, $contextVariables, $this->defaultContextConfiguration);
         } else {
-            $newReferenceNodePath = $baseNode;
+            $newReferenceNodePath = null;
         }
 
         $this->view->assign('value', $newReferenceNodePath);
